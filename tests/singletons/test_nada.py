@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from dtools.fp.singletons import Nada
+from pythonic_fp.fptools.singletons import Nada
 
 nada = Nada()
 

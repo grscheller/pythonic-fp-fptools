@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dtools.fp.state import State
+from pythonic_fp.fptools.state import State
 
 class Test_simple:
     def test_simple_counter(self) -> None:

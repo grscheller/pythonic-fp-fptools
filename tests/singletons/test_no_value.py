@@ -15,7 +15,7 @@
 from __future__ import annotations
 
 from typing import Final
-from dtools.fp.singletons import NoValue
+from pythonic_fp.fptools.singletons import NoValue
 
 _noValue: Final[NoValue] = NoValue()
 

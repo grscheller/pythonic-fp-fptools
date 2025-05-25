@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module fp.lazy - lazy function evaluation
+"""Pythonic FP - Lazy function evaluation
 
 Delayed function evaluations. FP tools for "non-strict" function evaluations.
 Useful to delay a function's evaluation until some inner scope.
@@ -28,8 +28,8 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from typing import Any, Final, Never, TypeVar, ParamSpec
-from dtools.containers.maybe import MayBe as MB
-from dtools.containers.xor import Xor, LEFT, RIGHT
+from pythonic_fp.containers.maybe import MayBe as MB
+from pythonic_fp.containers.xor import Xor, LEFT, RIGHT
 from .function import sequenced
 
 __all__ = ['Lazy', 'lazy', 'real_lazy']

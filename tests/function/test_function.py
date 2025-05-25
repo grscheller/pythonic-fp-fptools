@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from dtools.circular_array import ca, CA
-from dtools.fp.function import partial, sequenced, swap, it
-from dtools.iterables import mb_fold_left, take
+from pythonic_fp.circulararray import ca, CA
+from pythonic_fp.fptools.function import partial, sequenced, swap, it
+from pythonic_fp.iterables import mb_fold_left, take
 
 class Test_function:
     def test_same_type(self) -> None:

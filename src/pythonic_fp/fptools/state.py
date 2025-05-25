@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module fp.state - state monad
+"""Pythonic FP - State Monad
 
 Handling state functionally.
 
@@ -39,7 +39,7 @@ __all__ = ['State']
 
 from collections.abc import Callable
 from typing import TypeVar
-from dtools.circular_array import CA
+from pythonic_fp.circulararray import CA
 
 S = TypeVar('S')    # Needed only for pdoc documentation generation.
 A = TypeVar('A')    # Otherwise, ignored by both MyPy and Python. Makes

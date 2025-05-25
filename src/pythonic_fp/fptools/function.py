@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module fp.function - FP tools for functions
+"""Pythonic FP - FP tools for functions
 
 Not a replacement for the std library's `functools` which is more about
 modifying function behavior through decorators than functional composition

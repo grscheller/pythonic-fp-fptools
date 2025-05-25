@@ -1,14 +1,16 @@
-# Developer Tools - Pythonic functional programming
+# Pythonic FP - Pythonic functional programming
 
 Functional programming tools which endeavor to be Pythonic. This project
-is part of the [Developer Tools for Python][4] **dtools** namespace
-project.
+is part of the [Pythonic FP][1] **pythonic-fp** PyPI namespace projects.
 
 - **Repositories**
-  - [dtools.fp][1] project on *PyPI*
-  - [Source code][2] on *GitHub*
-- Detailed documentation for dtools.fp
-  - [Detailed API documentation][3] on *GH-Pages*
+  - [pythonic-fp.fptools][2] project on *PyPI*
+  - [Source code][3] on *GitHub*
+- Detailed documentation for pythonic-fp.fptools
+  - [Detailed API documentation][4] on *GH-Pages*
+
+**Warning:** The maintainer intends to break up the pythonic-fp.fptools
+repo sometime in the near future.
 
 ## Overview
 
@@ -17,42 +19,57 @@ project.
   - avoid hard to refactor exception driven code paths
   - data sharing becomes trivial when immutability leveraged
 
-The dtools.fp package consists of 4 modules.
+The `pythonic_fp.fptools` package consists of 5 modules.
+___
 
-______________________________________________________________________
+### Subclassable Boolean datatype
+
+  - *module* `pythonic_fp.fptools.bool`
+    - Python bool cannot be Subclassed
+    - this version can
+      - *class* `Bool` is subclassable
+        - *class* `Truth` instantiates "truthy" objects 
+        - *class* `Lie` instantiates "falsy" objects 
+    - can have different "flavors" of truths and lies
+      - each being a singleton
+      - compare with
+        - `==` and `!=` for purely boolean comparisons
+        - `is` and `is not` if the type of truth matters
+
+___
 
 ### Functions as first class objects
 
-  - dtools.fp.function
+  - *module* `pythonic_fp.fptools.function`
     - utilities to manipulate and partially apply functions
 
-______________________________________________________________________
+___
 
 ### Lazy function evaluation
 
-- dtools.fp.lazy
+- *module* `pythonic_fp.fptools.lazy`
   - lazy (non-strict) function evaluation
 
-______________________________________________________________________
+___
 
 ### Singletons
 
-- dtools.fp.singletons
+- *module* `pythonic_fp.fptools.singletons`
   - 3 singleton classes representing
     - a missing value (actually missing, not potentially missing)
     - a sentinel value
     - a failed calculation
 
-______________________________________________________________________
+___
 
 ### State monad implementation
 
-- dtools.fp.state
+- *module* `pythonic_fp.fptools.state`
   - pure FP handling of state (the state monad)
 
-______________________________________________________________________
+___
 
-[1]: https://pypi.org/project/dtools.fp/
-[2]: https://github.com/grscheller/dtools-fp/
-[3]: https://grscheller.github.io/dtools-namespace-projects/fp/
-[4]: https://github.com/grscheller/dtools-namespace-projects/blob/main/README.md
+[1]: https://github.com/grscheller/pythonic-fp/blob/main/README.md
+[2]: https://pypi.org/project/pythonic-fp.fptools/
+[3]: https://github.com/grscheller/pythonic-fp-fptools/
+[4]: https://grscheller.github.io/pythonic-fp/maintained/fptools/

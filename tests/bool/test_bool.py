@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from dtools.fp.bool import Bool, Truth, Lie, TRUTH, LIE
+from pythonic_fp.fptools.bool import Bool, Truth, Lie, TRUTH, LIE
 
 class Testbool:
-    """Test class dtools.fp.bool"""
+    """Test class pythonic_fp.fptools.bool"""
     def test_equality(self) -> None:
         assert TRUTH == TRUTH
         assert LIE == LIE

@@ -75,7 +75,7 @@ class Truth(Bool):
         self._truth = truth
 
     def __repr__(self) -> str:
-        return f'Truth("{self._truth}")'
+        return f"Truth('{self._truth}')"
 
 
 class Lie(Bool):
@@ -95,7 +95,7 @@ class Lie(Bool):
         self._lie = lie
 
     def __repr__(self) -> str:
-        return f'Lie("{self._lie}")'
+        return f"Lie('{self._lie}')"
 
 
 TRUTH: Final[Truth] = Truth()

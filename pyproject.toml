@@ -30,7 +30,7 @@ keywords = [
     "non-strict",
 ]
 dependencies = [
-    "pythonic-fp.circulararray>=5.0.0, <5.1",
+    "pythonic-fp.circulararray>=5.1.0, <5.2",
     "pythonic-fp.containers >=2.0.0, <2.1",
 ]
 

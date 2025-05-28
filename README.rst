@@ -3,7 +3,7 @@ Pythonic FP - Functional programming
 ====================================
 
 Functional programming tools which endeavor to be Pythonic, part of the
-`PyPI pythonic-fp Namespace Projects <https://github.com/grscheller/pythonic-fp/blob/main/README.md>`_.
+`PyPI pythonic-fp Namespace Projects <https://github.com/grscheller/pythonic-fp/blob/main/README.rst>`_.
 
 Detailed API documentation
 `documentation <https://grscheller.github.io/pythonic-fp/maintained/fptools>`_

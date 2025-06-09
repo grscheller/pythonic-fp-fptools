@@ -10,35 +10,35 @@ license = { file = "LICENSE" }
 readme = "README.rst"
 requires-python = ">=3.12"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Framework :: Pytest",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.13",
-    "Typing :: Typed",
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: Pytest",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
 ]
 dynamic = ["description"]
 keywords = [
-    "functional",
-    "functional programming",
-    "fp",
-    "monad",
-    "maybe",
-    "either",
-    "lazy",
-    "non-strict",
+  "functional",
+  "functional programming",
+  "fp",
+  "monad",
+  "maybe",
+  "either",
+  "lazy",
+  "non-strict",
 ]
 dependencies = [
-    "pythonic-fp.circulararray>=5.1.0, <5.2",
-    "pythonic-fp.containers >=2.0.0, <2.1",
+  "pythonic-fp.circulararray>=5.1.0, <5.2",
+  "pythonic-fp.containers >=2.0.0, <2.1",
 ]
 
 [project.optional-dependencies]
 test = [
-    "pytest >=8.3.5",
-    "pythonic-fp.iterables >=3.0.0, <3.1",
-    "pythonic-fp.queues >=3.0.0, <3.1",
+  "pytest >=8.3.5",
+  "pythonic-fp.iterables >=3.0.0, <3.1",
+  "pythonic-fp.queues >=3.0.0, <3.1",
 ]
 
 [project.urls]

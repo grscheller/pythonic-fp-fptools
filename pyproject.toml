@@ -1,14 +1,20 @@
-[build-system]
-requires = ["flit_core>=3.4,<4"]
-build-backend = "flit_core.buildapi"
-
 [project]
 name = "pythonic-fp.fptools"
 version = "3.0.0"
-authors = [{ name = "Geoffrey R. Scheller", email = "geoffrey@scheller.com" }]
-license = { file = "LICENSE" }
 readme = "README.rst"
 requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [{ name = "Geoffrey R. Scheller", email = "geoffrey@scheller.com" }]
+keywords = [
+  "either",
+  "fp",
+  "functional",
+  "functional programming",
+  "lazy",
+  "maybe",
+  "monad",
+  "non-strict",
+]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Framework :: Pytest",
@@ -18,21 +24,17 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Typing :: Typed",
 ]
-dynamic = ["description"]
-keywords = [
-  "functional",
-  "functional programming",
-  "fp",
-  "monad",
-  "maybe",
-  "either",
-  "lazy",
-  "non-strict",
-]
 dependencies = [
   "pythonic-fp.circulararray>=5.1.0, <5.2",
   "pythonic-fp.containers >=2.0.0, <2.1",
 ]
+dynamic = ["description"]
+
+[project.urls]
+Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
+Documentation = "https://grscheller.github.io/pythonic-fp/maintained/fptools"
+Homepage = "https://github.com/grscheller/pythonic-fp/blob/main/README.rst"
+Source = "https://github.com/grscheller/pythonic-fp-fptools"
 
 [project.optional-dependencies]
 test = [
@@ -41,32 +43,12 @@ test = [
   "pythonic-fp.queues >=3.0.0, <3.1",
 ]
 
-[project.urls]
-Homepage = "https://github.com/grscheller/pythonic-fp/blob/main/README.rst"
-Source = "https://github.com/grscheller/pythonic-fp-fptools"
-Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp/maintained/fptools"
+[build-system]
+requires = ["flit_core>=3.4,<4"]
+build-backend = "flit_core.buildapi"
 
 [tool.flit.sdist]
 exclude = ["dist", "tests", ".gitignore", ".mypy_cache", ".pytest_cache"]
-
-[tool.pytest.ini_options]
-consider_namespace_packages = true
-
-[tool.pylsp-mypy]
-enabled = true
-live-mode = true
-strict = true
-report_progress = true
-
-[pylsp]
-python_path = [
-  "/home/grs/devel/pypi/fptools/pythonic-fp-fptools/src",
-  "/home/grs/devel/pypi/fptools/pythonic-fp-circulararray/src",
-  "/home/grs/devel/pypi/fptools/pythonic-fp-containers/src",
-  "/home/grs/devel/pypi/fptools/pythonic-fp-iterables/src",
-  "/home/grs/devel/pypi/fptools/pythonic-fp-queues/src",
-]
 
 [tool.mypy]
 enable_incomplete_feature = ["NewGenericSyntax"]
@@ -75,6 +57,24 @@ local_partial_types = true
 warn_redundant_casts = true
 warn_return_any = true
 warn_unused_configs = true
+
+[tool.pylsp]
+python_path = [
+  "/home/grs/devel/pypi/fptools/pythonic-fp-fptools/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-circulararray/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-containers/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-iterables/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-queues/src",
+]
+
+[tool.pylsp-mypy]
+enabled = true
+live-mode = true
+strict = true
+report_progress = true
+
+[tool.pytest.ini_options]
+consider_namespace_packages = true
 
 [tool.ruff]
 target-version = "py313"

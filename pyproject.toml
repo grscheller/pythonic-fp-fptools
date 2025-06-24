@@ -59,6 +59,15 @@ live-mode = true
 strict = true
 report_progress = true
 
+[pylsp]
+python_path = [
+  "/home/grs/devel/pypi/fptools/pythonic-fp-fptools/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-circulararray/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-containers/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-iterables/src",
+  "/home/grs/devel/pypi/fptools/pythonic-fp-queues/src",
+]
+
 [tool.mypy]
 enable_incomplete_feature = ["NewGenericSyntax"]
 implicit_reexport = false

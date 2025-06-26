@@ -9,7 +9,7 @@ Detailed API
 [documentation](https://grscheller.github.io/pythonic-fp/maintained/fptools)
 on *GH-Pages*.
 
-## Features
+## Features:
 
 - Benefits of FP
   - improved composability
@@ -58,7 +58,6 @@ submodules sometime in the near future.
 - *module* `pythonic_fp.fptools.singletons`
 
   - 3 singleton classes representing
-
     - a missing value (actually missing, not potentially missing)
     - a sentinel value
     - a failed calculation
@@ -70,11 +69,11 @@ submodules sometime in the near future.
   - Classic FP implementation
     - the monad encapsulates a state transformation, not a "state"
 
-## Installation
+## Installation:
 
 | $ pip install pythonic-fp.fptools
 
-## Contribute
+## Contribute:
 
 - Project on PyPI: https://pypi.org/project/pythonic-fp.fptools
 - Source Code: https://github.com/grscheller/pythonic-fp-fptools
@@ -84,7 +83,7 @@ submodules sometime in the near future.
 
 | Contributors | Name | Role |
 |:------------ |:---- |:---- |
-| [@grscheller](https://github.com/grscheller) | Geoffrey R. Scheller | author, maintainer |
+| [grscheller](https://github.com/grscheller) | Geoffrey R. Scheller | author, maintainer |
 
 ### License Information
 

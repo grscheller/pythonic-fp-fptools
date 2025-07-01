@@ -59,7 +59,7 @@ submodules sometime in the near future.
 
   - 3 singleton classes representing
     - a missing value (actually missing, not potentially missing)
-    - a sentinel value
+    - a sentinel values
     - a failed calculation
 
 ### State monad implementation
@@ -69,26 +69,15 @@ submodules sometime in the near future.
   - Classic FP implementation
     - the monad encapsulates a state transformation, not a "state"
 
-## Installation:
+This PyPI project is part of of the grscheller
+[pythonic-fp namespace projects](https://grscheller.github.io/pythonic-fp/).
 
-| $ pip install pythonic-fp.fptools
+## Documentation
 
-## Contribute:
+Documentation hosted on
+[GitHub Pages](https://grscheller.github.io/pythonic-fp-fptools/).
 
-- Project on PyPI: https://pypi.org/project/pythonic-fp.fptools
-- Source Code: https://github.com/grscheller/pythonic-fp-fptools
-- Issue Tracker: https://github.com/grscheller/pythonic-fp-fptools/issues
-- Pull Requests: https://github.com/grscheller/pythonic-fp-fptools/pulls
-- CHANGELOG: https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst
+## Copyright and License
 
-| Contributors | Name | Role |
-|:------------ |:---- |:---- |
-| [grscheller](https://github.com/grscheller) | Geoffrey R. Scheller | author, maintainer |
-
-### License Information
-
-This project is licensed under the Apache License Version 2.0, January 2004.
-
-See the
-[LICENCE file](https://github.com/grscheller/pythonic-fp-fptools/blob/main/LICENSE)
-for details.
+Copyright (c) 2023-2025 Geoffrey R. Scheller. Licensed under the Apache
+License, Version 2.0. See the LICENSE file for details.

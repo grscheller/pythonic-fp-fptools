@@ -25,7 +25,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "pythonic-fp.circulararray>=5.1.0",
+  "pythonic-fp.circulararray>=5.0.0",
   "pythonic-fp.containers >=2.0.0",
 ]
 dynamic = ["description"]

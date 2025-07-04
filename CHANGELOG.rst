@@ -26,10 +26,6 @@ First PyPI release as ``pythonic-fp.fptools``
 2.0.0 - 2025-05-22
 ------------------
 
-- Moved dtools.fp.iterables to its own PyPI project
-
-  - dtools.iterables
-
 - Moved dtools.fp.err_handling to the dtools.containers PyPI project
 
   - Moved class MayBe -> module dtools.containers.maybe
@@ -71,11 +67,6 @@ Last PyPI release as dtools.fp
 1.4.0 - 2025-03-16
 ------------------
 
-- much work dtools.iterables
-
-  - finally implemented scReduceL and scReduceR functions
-  - tweaked API across iterables module
-
 - added two state changing methods to dtools.err_handling.MB
 
   - added put method to MB class
@@ -111,7 +102,6 @@ Repo name changes.
 ------------------
 
 - added modules lazy and state
-- simplifications done to fp.iterables module
 - renamed flatmap methods to bind
 - minor MB and XOR updates/corrections
 
@@ -186,62 +176,6 @@ Development environment only.
 
     - prefer class ``MB`` to represent a missing value in client code
 
-0.3.4.0 - 2024-09-30
---------------------
-
-Development environment only.
-
-- API change for fp.iterables
-
-  - function name changes
-
-    - ``foldL``, ``foldR``, ``foldLsc``, ``foldRsc``
-    - ``sc`` stands for "short circuit"
-
-  - all now return class woException.MB
-
-0.3.3.7 - 2024-09-22
---------------------
-
-Development environment only.
-
-- added more functions to fp.iterables module
-
-  - take(it: Iterable[D], n: int) -> Iterator[D]
-  - takeWhile(it: Iterable[D], pred: Callable\[[D], bool\]) -> Iterator[D]
-  - drop(it: Iterable[D], n: int) -> Iterator[D]
-  - dropWhile(it: Iterable[D], pred: Callable\[[D], bool\]) -> Iterator[D]
-
-0.3.3.4 - 2024-09-16
---------------------
-
-Development environment only.
-
-- fp.iterables ``foldL_sc`` & ``foldR_sc`` now have
-
-  - common paradigm
-  - similar signatures
-
-0.3.3.3 - 2024-09-15
---------------------
-
-Development environment only.
-
-- added fp.iterables function ``foldR_sc``
-
-  - shortcut version of ``foldR``
-  - not fully tested
-  - docstring not updated
-
-0.3.3.2 - 2024-09-14
---------------------
-
-Development environment only.
-
-- added fp.iterables function ``foldL_sc``
-
-  - shortcut version of foldL
-
 0.3.3 - 2024-08-25
 ------------------
 
@@ -253,16 +187,6 @@ Development environment only.
 
   - makeRight(self, right: R|Nada=nada) -> XOR\[L, R\]:
   - swapRight(self, right: R) -> XOR\[L, R\]:
-
-0.3.1 - 2024-08-20
-------------------
-
-Now fp.iterables no longer exports ``CONCAT``, ``MERGE``, ``EXHAUST``.
-
-- for grscheller.datastructures
-
-  - grscheller.datastructures.ftuple
-  - grscheller.datastructures.split_ends
 
 0.3.0 - 2024-08-17
 ------------------
@@ -284,15 +208,12 @@ PyPI grscheller.fp package release v0.2.1
 
 - from last PyPI release
 
-  - added accumulate function to fp.iterators
   - new fp.nothing module implementing nothing: Nothing singleton
 
     - represents a missing value
     - better "bottom" type than either None or ()
 
-  - renamed fp.wo_exception to fp.woException
-
-- overall much better docstrings
+  - renamed ``fp.wo_exception`` to ``fp.woException``
 
 0.1.0 - 2024-07-11
 ------------------
@@ -301,6 +222,5 @@ Initial PyPI release as grscheller.fp
 
 Replicated functionality from grscheller.datastructures.
 
-- grscheller.datastructures.fp.MB -> grscheller.fp.wo_exception.MB
-- grscheller.datastructures.fp.XOR -> grscheller.fp.wo_exception.XOR
-- grscheller.core.iterlib -> grscheller.fp.iterators
+- ``grscheller.datastructures.fp.MB -> grscheller.fp.wo_exception.MB``
+- ``grscheller.datastructures.fp.XOR -> grscheller.fp.wo_exception.XOR``

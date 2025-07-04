@@ -19,7 +19,7 @@ Functional programming tools which endeavor to be Pythonic,
     - the monad encapsulates a state transformation, not a "state"
 
 This PyPI project is part of of the grscheller
-[pythonic-fp namespace projects](https://grscheller.github.io/pythonic-fp/).
+[pythonic-fp namespace projects](https://github.com/grscheller/pythonic-fp/blob/main/README.md).
 
 **Warning:** The maintainer intends to break out the first, forth and
 fifth modules to their own repos sometime in the near future.

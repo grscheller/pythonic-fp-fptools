@@ -1,7 +1,7 @@
 [project]
 name = "pythonic-fp.fptools"
 version = "3.0.0"
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 authors = [{ name = "Geoffrey R. Scheller", email = "geoffrey@scheller.com" }]
@@ -31,9 +31,9 @@ dependencies = [
 dynamic = ["description"]
 
 [project.urls]
-Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp/maintained/fptools"
-Homepage = "https://github.com/grscheller/pythonic-fp/blob/main/README.rst"
+Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.md"
+Documentation = "https://grscheller.github.io/pythonic-fp-fptools/html/"
+Homepage = "https://github.com/grscheller/pythonic-fp/blob/main/README.md"
 Source = "https://github.com/grscheller/pythonic-fp-fptools"
 
 [build-system]

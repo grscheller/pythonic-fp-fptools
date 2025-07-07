@@ -51,13 +51,6 @@ warn_redundant_casts = true
 warn_return_any = true
 warn_unused_configs = true
 
-[tool.pylsp]
-python_path = [
-  "/home/grs/devel/pypi/fptools/pythonic-fp-fptools/src",
-  "/home/grs/devel/pypi/fptools/pythonic-fp-circulararray/src",
-  "/home/grs/devel/pypi/fptools/pythonic-fp-containers/src",
-]
-
 [tool.pylsp-mypy]
 enabled = true
 live-mode = true

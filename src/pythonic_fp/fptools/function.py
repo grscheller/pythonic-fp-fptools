@@ -18,13 +18,13 @@ Not a replacement for the std library's `functools` which is more about
 modifying function behavior through decorators than functional composition
 and application.
 
-- FP utilities to manipulate and partially apply functions
-  - *function* swap: Swap the arguments of a 2 argument function
-  - *function* it: Function returning an iterator of its arguments
-  - *function* sequenced: Convert function to take a sequence of its arguments
-  - *function* negate: Transforms a predicate to its negation
-  - *function* partial: Returns a partially applied function
+FP utilities to manipulate and partially apply functions
 
+- *function* swap: Swap the arguments of a 2 argument function
+- *function* it: Function returning an iterator of its arguments
+- *function* sequenced: Convert function to take a sequence of its arguments
+- *function* negate: Transforms a predicate to its negation
+- *function* partial: Returns a partially applied function
 """
 
 from __future__ import annotations
@@ -64,11 +64,12 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
     a tuple of the original arguments.
 
     - was awaiting typing and mypy "improvements" to ParamSpec
+
       - return type: Callable[tuple[P.args], R]   ???
       - return type: Callable[[tuple[P.args]], R] ???
+
     - not going to happen - https://github.com/python/mypy/pull/18278
     - TODO: Look into replacing this function with a Callable class?
-
     """
     def ff(tupled_args: tuple[Any]) -> R:
         return f(*tupled_args)
@@ -81,9 +82,7 @@ def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
 
     - type-wise the only thing guaranteed is the return type
     - best practice is to cast the result immediately
-
     """
-
     def finish(*rest: Any) -> R:
         return sequenced(f)(args + rest)
 

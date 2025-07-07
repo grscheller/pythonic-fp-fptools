@@ -3,7 +3,7 @@
 
 PyPI project
 [pythonic-fp.fptools](https://pypi.org/project/pythonic-fp.fptools/)
-Functional programming tools which endeavor to be Pythonic,
+Functional programming tools which endeavor to be Pythonic.
 
 - Subclassable Boolean datatype (*module* `pythonic_fp.fptools.bool`)
 - Functions as first class objects (*module* `pythonic_fp.fptools.function`)

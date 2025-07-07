@@ -17,11 +17,11 @@
 Delayed function evaluations. FP tools for "non-strict" function evaluations.
 Useful to delay a function's evaluation until some inner scope.
 
-- Non-strict delayed function evaluation:
+Non-strict delayed function evaluation:
+
   - *class* Lazy: Delay evaluation of functions taking & returning single values
   - *function* lazy: Delay evaluation of functions taking any number of values
-  - *function* real_lazy: Version of `lazy` which caches its result
-
+  - *function* real_lazy: Version of ``lazy`` which caches its result
 """
 
 from __future__ import annotations
@@ -42,16 +42,18 @@ P = ParamSpec('P')
 class Lazy[D, R]:
     """Delayed evaluation of a singled valued function.
 
-    Class instance delays the executable of a function where `Lazy(f, arg)`
-    constructs an object that can evaluate the Callable `f` with its argument
+    Class instance delays the executable of a function where ``Lazy(f, arg)``
+    constructs an object that can evaluate the Callable ``f`` with its argument
     at a later time.
 
-    * first argument `f` taking values of type `~D` to values of type `~R`
-    * second argument `arg: ~D` is the argument to be passed to `f`
-      * where the type `~D` is the `tuple` type of the argument types to `f`
-    * function is evaluated when the `eval` method is called
-    * result is cached unless `pure` is set to `False`
-    * returns True in Boolean context if evaluated
+    - first argument ``f`` taking values of type ``~D`` to values of type ``~R``
+    - second argument ``arg: ~D`` is the argument to be passed to ``f``
+
+      - where the type ``~D`` is the ``tuple`` type of the argument types to ``f``
+
+    - function is evaluated when the ``eval`` method is called
+    - result is cached unless ``pure`` is set to ``False``
+    - returns True in Boolean context if evaluated
 
     Usually use case is to make a function "non-strict" by passing some of its
     arguments wrapped in Lazy instances.
@@ -74,9 +76,8 @@ class Lazy[D, R]:
         """Evaluate function with its argument.
 
         - evaluate function
-        - cache result or exception if `pure == True`
-        - reevaluate if `pure == False`
-
+        - cache result or exception if ``pure == True``
+        - reevaluate if ``pure == False``
         """
         if not (self._pure and self._evaluated):
             try:
@@ -137,12 +138,14 @@ def lazy[**P, R](
     Function returning a delayed evaluation of a function of an arbitrary number
     of positional arguments.
 
-    - first positional argument `f` takes a function
-    - next positional arguments are the arguments to be applied later to `f`
-      - `f` is reevaluated whenever `eval` method of the returned `Lazy` is called
-    - any kwargs passed are ignored
-      - if `f` needs them, then wrap `f` in another function
+    - first positional argument ``f`` takes a function
+    - next positional arguments are the arguments to be applied later to ``f``
 
+      - ``f`` is reevaluated whenever ``eval`` method of the returned ``Lazy`` is called
+
+    - any kwargs passed are ignored
+
+      - if ``f`` needs them, then wrap ``f`` in another function
     """
     return Lazy(sequenced(f), args, pure=False)
 
@@ -155,12 +158,14 @@ def real_lazy[**P, R](
     Function returning a delayed evaluation of a function of an arbitrary number
     of positional arguments.
 
-    - first positional argument `f` takes a function
-    - next positional arguments are the arguments to be applied later to `f`
-      - `f` is evaluated when `eval` method of the returned `Lazy` is called
-      - `f` is evaluated only once with results cached
-    - any kwargs passed are ignored
-      - if `f` needs them then wrap `f` in another function
+    - first positional argument ``f`` takes a function
+    - next positional arguments are the arguments to be applied later to ``f``
 
+      - ``f`` is evaluated when ``eval`` method of the returned ``Lazy`` is called
+      - ``f`` is evaluated only once with results cached
+
+    - any kwargs passed are ignored
+
+      - if ``f`` needs them then wrap ``f`` in another function
     """
     return Lazy(sequenced(f), args)

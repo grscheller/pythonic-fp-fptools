@@ -12,17 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""### Developer Tools - Pythonic functional programming
+"""Pythonic FP - Functional Programming Tools
 
 Tools to aid with functional programming in Python yet still endeavoring to
 remain Pythonic.
-
-- *module* pythonic-fp.fptools.bool: boolean with sub-types
-- *module* pythonic-fp.fptools.function: tools to combine and partially apply functions
-- *module* pythonic-fp.fptools.lazy: Lazy (non-strict) function evaluation
-- *module* pythonic-fp.fptools.singletons: useful types with but one instance
-- *module* pythonic-fp.fptools.state: classic implementation of the state monad
-
 """
 
 __author__ = 'Geoffrey R. Scheller'

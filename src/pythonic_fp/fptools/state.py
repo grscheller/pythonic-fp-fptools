@@ -21,15 +21,21 @@ Handling state functionally.
 A pure FP immutable implementation for the State Monad.
 
 - translated to Python from the book "Functional Programming in Scala"
+
   - authors Chiusana & Bjarnason
-  - run "action" returns a tuple `(a, s)` reversed to the type `State[S, A]`
+  - run "action" returns a tuple ``(a, s)`` reversed to the type ``State[S, A]``
+
     - the standard convention seen in the FP community
     - another "factoid" to remember
-- choose the name `bind` instead of `flatmap`
-  - the `flatmap` name is misleading for non-container-like monads
-  - `flatmap` name too long, `bind` shorter to type
+
+- choose the name ``bind`` instead of ``flatmap``
+
+  - the ``flatmap`` name is misleading for non-container-like monads
+  - ``flatmap`` name too long, ``bind`` shorter to type
+
     - without "do-notation", code tends to march to the right
-- typing for the `modify` class method may be a bit suspect
+
+- typing for the ``modify`` class method may be a bit suspect
 
 """
 
@@ -41,21 +47,22 @@ from collections.abc import Callable
 from typing import TypeVar
 from pythonic_fp.circulararray import CA
 
-S = TypeVar('S')    # Needed only for pdoc documentation generation.
-A = TypeVar('A')    # Otherwise, ignored by both MyPy and Python. Makes
-B = TypeVar('B')    # linters unhappy when these are used on function
-C = TypeVar('C')    # and method signatures due to "redefined-outer-name"
-ST = TypeVar('ST')  # warnings. Function and method signatures do not
-AA = TypeVar('AA')  # support variance and bounds constraints.
+S = TypeVar('S')
+A = TypeVar('A')
+B = TypeVar('B')
+C = TypeVar('C')
+ST = TypeVar('ST')
+AA = TypeVar('AA')
 
 
 class State[S, A]:
     """Data structure generating values while propagating changes of state.
 
-    - class `State` represents neither a state nor (value, state) pair
+    - class ``State`` represents neither a state nor (value, state) pair
+
       - it wraps a transformation old_state -> (value, new_state)
-      - the `run` method is this wrapped transformation
-      - `bind` is just state propagating function composition
+      - the ``run`` method is this wrapped transformation
+      - ``bind`` is just state propagating function composition
 
     """
 
@@ -110,10 +117,10 @@ class State[S, A]:
     def put[ST](s: ST) -> State[ST, tuple[()]]:
         """Manually insert a state.
 
-        - the run action
-          - ignores previous state and swaps in a new state
-          - assigns a canonically meaningless value to current value
+        THe run action.
 
+        - ignores previous state and swaps in a new state
+        - assigns a canonically meaningless value to current value
         """
         return State(lambda _: ((), s))
 
@@ -121,10 +128,10 @@ class State[S, A]:
     def modify[ST](f: Callable[[ST], ST]) -> State[ST, tuple[()]]:
         """Modify previous state.
 
-        - like put, but modify previous state via `f`
+        - like put, but modify previous state via ``f``
         - will need type annotation
-          - mypy has no "a priori" way to know what ST is
 
+          - mypy has no "a priori" way to know what ST is
         """
         return State.get().bind(lambda a: State.put(f(a)))  # type: ignore
 
@@ -134,7 +141,6 @@ class State[S, A]:
 
         - all state actions must be of the same type
         - run method evaluates list front to back
-
         """
 
         def append_ret(ls: list[AA], a: AA) -> list[AA]:

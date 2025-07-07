@@ -15,26 +15,29 @@
 
 """Class `Bool` - Subclassable Boolean
 
-Python does not permit bool to be subclassed, but `int` can be subclassed.
-Under-the-hood a `bool` is just an `int`. The Bool class inherits from int and
-relies on the underlying truthiness and falsiness of `1` and `0` respectfully.
+Python does not permit bool to be subclassed, but ``int`` can be subclassed.
+Under-the-hood a ``bool`` is just an ``int``. The Bool class inherits from
+``int`` and relies on the underlying truthiness and falsiness
+of ``1`` and ``0``.
 
-The `Truth(truth: str)` and `Lie(lie: str)` subclass constructors produce
-singletons based on their input parameters. When using type hints, declare
-variables of these types as type Bool. Best practices when used with these
-subclasses are:
+The ``Truth(truth: str)`` and ``Lie(lie: str)`` subclass constructors
+produce singletons based on their input parameters. When using type hints,
+declare variables of these types as type ``Bool``. Best practices when
+used with these subclasses are:
 
 - use `==` or `!=` for pure Boolean comparisons
 - use `is` or `not is` if the type of truth matters
 - only use Bool() as a type, never as a constructor
 - when using Python shortcut logic remember
-  - an instance of `Truth` is truthy
-  - an instance of `Lie` is falsy
-  - shortcut logic is lazy
-    - the last truthy thing evaluated is returned
-    - and is not converted to a bool
-  - the `not` statement converts a Bool to an actual bool
 
+  - an instance of ``Truth`` is truthy
+  - an instance of ``Lie`` is falsy
+  - shortcut logic is lazy
+
+    - the last truthy thing evaluated is returned
+    - and is not converted to a ``bool``
+
+  - the `not` statement converts a ``Bool`` to an actual ``bool``
 """
 
 from __future__ import annotations
@@ -61,7 +64,8 @@ class Bool(int):
 class Truth(Bool):
     """Truthy singleton Bool subclass.
 
-    When using type hints, declare variables Bool, not Truth.
+    :: note:
+        When using type hints, declare variables Bool, not Truth.
     """
 
     _instances: dict[str, Truth] = dict()
@@ -81,7 +85,8 @@ class Truth(Bool):
 class Lie(Bool):
     """Falsy singleton Bool subclass.
 
-    When using type hints, declare variables Bool, not Lie.
+    :: note:
+        When using type hints, declare variables Bool, not Lie.
     """
 
     _instances: dict[str, Lie] = dict()

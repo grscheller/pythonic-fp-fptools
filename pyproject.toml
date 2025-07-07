@@ -41,7 +41,7 @@ requires = ["flit_core>=3.12,<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.sdist]
-exclude = ["dist", "tests", ".gitignore", ".mypy_cache", ".pytest_cache"]
+exclude = ["dist", "docs", "tests", ".gitignore", ".mypy_cache", ".pytest_cache"]
 
 [tool.mypy]
 enable_incomplete_feature = ["NewGenericSyntax"]

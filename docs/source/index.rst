@@ -6,7 +6,7 @@
 Pythonic FP - FPTools project
 =============================
 
-Part of of the `pythonic-fp namespace projects <https://github.com/grscheller/pythonic-fp/README.md>`_.
+Part of of the `pythonic-fp namespace projects <https://github.com/grscheller/pythonic-fp/blob/main/README.md>`_.
 
 Overview
 --------

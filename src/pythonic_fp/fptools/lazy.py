@@ -17,11 +17,12 @@
 Delayed function evaluations. FP tools for "non-strict" function evaluations.
 Useful to delay a function's evaluation until some inner scope.
 
-Non-strict delayed function evaluation:
+Non-strict delayed function evaluation.
 
-  - *class* Lazy: Delay evaluation of functions taking & returning single values
-  - *function* lazy: Delay evaluation of functions taking any number of values
-  - *function* real_lazy: Version of ``lazy`` which caches its result
+- *class* **Lazy** - Delay evaluation of functions taking & returning single values
+- *function* **lazy** - Delay evaluation of functions taking any number of values
+- *function* **real_lazy** - Version of ``lazy`` which caches its result
+
 """
 
 from __future__ import annotations
@@ -46,10 +47,10 @@ class Lazy[D, R]:
     constructs an object that can evaluate the Callable ``f`` with its argument
     at a later time.
 
-    - first argument ``f`` taking values of type ``~D`` to values of type ``~R``
-    - second argument ``arg: ~D`` is the argument to be passed to ``f``
+    - first argument ``f`` taking values of type ``D`` to values of type ``R``
+    - second argument ``arg: D`` is the argument to be passed to ``f``
 
-      - where the type ``~D`` is the ``tuple`` type of the argument types to ``f``
+      - where the type ``D`` is the ``tuple`` type of the argument types to ``f``
 
     - function is evaluated when the ``eval`` method is called
     - result is cached unless ``pure`` is set to ``False``
@@ -57,6 +58,7 @@ class Lazy[D, R]:
 
     Usually use case is to make a function "non-strict" by passing some of its
     arguments wrapped in Lazy instances.
+
     """
 
     __slots__ = ('_f', '_d', '_result', '_pure', '_evaluated', '_exceptional')
@@ -78,6 +80,7 @@ class Lazy[D, R]:
         - evaluate function
         - cache result or exception if ``pure == True``
         - reevaluate if ``pure == False``
+
         """
         if not (self._pure and self._evaluated):
             try:
@@ -109,6 +112,7 @@ class Lazy[D, R]:
 
         A possible use case would be if the calculation is expensive, but if it
         has already been done, its result is better than the alternate value.
+
         """
         if self._evaluated and self._result:
             return self._result.get()
@@ -146,6 +150,7 @@ def lazy[**P, R](
     - any kwargs passed are ignored
 
       - if ``f`` needs them, then wrap ``f`` in another function
+
     """
     return Lazy(sequenced(f), args, pure=False)
 
@@ -167,5 +172,6 @@ def real_lazy[**P, R](
     - any kwargs passed are ignored
 
       - if ``f`` needs them then wrap ``f`` in another function
+
     """
     return Lazy(sequenced(f), args)

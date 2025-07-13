@@ -38,6 +38,7 @@ used with these subclasses are:
     - and is not converted to a ``bool``
 
   - the `not` statement converts a ``Bool`` to an actual ``bool``
+
 """
 
 from __future__ import annotations
@@ -64,8 +65,9 @@ class Bool(int):
 class Truth(Bool):
     """Truthy singleton Bool subclass.
 
-    :: note:
+    .. note::
         When using type hints, declare variables Bool, not Truth.
+
     """
 
     _instances: dict[str, Truth] = dict()
@@ -85,8 +87,9 @@ class Truth(Bool):
 class Lie(Bool):
     """Falsy singleton Bool subclass.
 
-    :: note:
+    .. note::
         When using type hints, declare variables Bool, not Lie.
+
     """
 
     _instances: dict[str, Lie] = dict()

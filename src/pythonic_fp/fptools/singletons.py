@@ -30,7 +30,7 @@ class NoValue:
       - while ``None`` represents "returned no values"
       - ``NoValue()`` represents the absence of a value
 
-    - usage
+    - Usage
 
       - ``import NoValue`` from ``pythonic-fp.fptools.singletons`` and then
 
@@ -42,6 +42,7 @@ class NoValue:
         - not ``==`` or ``!=``
         - ``None`` means returned no values, so ``None == None`` makes sense
         - if one or both values are missing, then what is there to compare?
+
     """
 
     __slots__ = ()
@@ -88,6 +89,7 @@ class Sentinel:
         - ``is`` and ``is not`` or ``==`` and ``!=``
         - the ``Sentinel()`` value always equals itself
         - and never equals anything else, especially other sentinel values
+
     """
 
     __slots__ = ('_sentinel_name',)
@@ -142,6 +144,7 @@ class Nada:
         - ``==`` and ``!=``
         - the ``Nada()`` value never equals itself
         - and never equals anything else
+
     """
 
     __slots__ = ()

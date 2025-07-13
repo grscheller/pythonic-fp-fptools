@@ -121,6 +121,7 @@ class State[S, A]:
 
         - ignores previous state and swaps in a new state
         - assigns a canonically meaningless value to current value
+
         """
         return State(lambda _: ((), s))
 
@@ -132,6 +133,7 @@ class State[S, A]:
         - will need type annotation
 
           - mypy has no "a priori" way to know what ST is
+
         """
         return State.get().bind(lambda a: State.put(f(a)))  # type: ignore
 
@@ -141,6 +143,7 @@ class State[S, A]:
 
         - all state actions must be of the same type
         - run method evaluates list front to back
+
         """
 
         def append_ret(ls: list[AA], a: AA) -> list[AA]:

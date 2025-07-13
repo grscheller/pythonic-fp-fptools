@@ -16,6 +16,25 @@
 
 Tools to aid with functional programming in Python yet still endeavoring to
 remain Pythonic.
+
+- Subclassable Boolean datatype (*module* `pythonic_fp.fptools.bool`)
+- Functions as first class objects (*module* `pythonic_fp.fptools.function`)
+- Lazy (non-strict) function evaluation (*module* `pythonic_fp.fptools.lazy`)
+- Singletons (*module* `pythonic_fp.fptools.singletons`)
+
+  - 3 singleton classes representing
+
+    - a missing value (actually missing, not potentially missing)
+    - a sentinel values
+    - a failed calculation
+
+- State monad implementation (*module* `pythonic_fp.fptools.state`)
+
+  - pure FP handling of state (the state monad)
+  - Classic FP implementation
+
+    - the monad encapsulates a state transformation, not a "state"
+
 """
 
 __author__ = 'Geoffrey R. Scheller'

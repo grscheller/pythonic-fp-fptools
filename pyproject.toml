@@ -31,8 +31,8 @@ dependencies = [
 dynamic = ["description"]
 
 [project.urls]
-Changelog = "https://grscheller.github.io/pythonic-fp-fptools/html/changelog.html"
-Documentation = "https://grscheller.github.io/pythonic-fp-fptools/html/"
+Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
+Documentation = "https://grscheller.github.io/pythonic-fp/fptools/API/v3.0.0/build/html/"
 Homepage = "https://github.com/grscheller/pythonic-fp/blob/main/README.md"
 Source = "https://github.com/grscheller/pythonic-fp-fptools"
 

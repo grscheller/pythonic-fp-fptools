@@ -17,8 +17,19 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-3.0.0 - TBD
-~~~~~~~~~~~
+4.0.0 - 2505-07-13
+~~~~~~~~~~~~~~~~~~
+
+- Dropped developer status to Beta
+
+  - Development Status :: 4 - Beta
+  - planning to shuffle packages around a bit
+
+TODO: After next Boring Math (bm) deployment, I should be able to archive
+my dtools namespace repos
+
+3.0.0 - 2505-07-06
+~~~~~~~~~~~~~~~~~~
 
 First PyPI release as ``pythonic-fp.fptools``
 

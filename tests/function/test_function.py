@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from pythonic_fp.circulararray import ca, CA
+from pythonic_fp.circulararray.resizing import ca, CA
 from pythonic_fp.fptools.function import partial, sequenced, swap, it
-from pythonic_fp.iterables import mb_fold_left, take
+from pythonic_fp.iterables.drop_take import take
+from pythonic_fp.iterables.folding import maybe_fold_left
 
 class Test_function:
     def test_same_type(self) -> None:
@@ -35,7 +36,7 @@ class Test_function:
 
     def test_different_types(self) -> None:
         def names(num: int, sep: str, names: list[str]) -> str:
-            return mb_fold_left(take(names, num),
+            return maybe_fold_left(take(names, num),
                          lambda names, name: names + sep + name,
                          "").get()[len(sep):]
 

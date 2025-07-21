@@ -25,23 +25,23 @@ from typing import Any, Final, final
 class NoValue:
     """Singleton class representing a missing value.
 
-    - similar to ``None`` but
+    Similar to ``None`` but
 
-      - while ``None`` represents "returned no values"
-      - ``NoValue()`` represents the absence of a value
+    - while ``None`` represents "returned no values"
+    - ``NoValue()`` represents the absence of a value
 
-    - Usage
+    **Usage:**
 
-      - ``import NoValue`` from ``pythonic-fp.fptools.singletons`` and then
+    - ``import NoValue`` from ``pythonic-fp.fptools.singletons`` and then
 
-        - either use ``NoValue()`` directly
-        - or define ``_noValue: Final[NoValue] = NoValue()`` don't export it
+      - either use ``NoValue()`` directly
+      - or define ``_noValue: Final[NoValue] = NoValue()`` don't export it
 
-      - compare using ``is`` and ``is not``
+    - compare using ``is`` and ``is not``
 
-        - not ``==`` or ``!=``
-        - ``None`` means returned no values, so ``None == None`` makes sense
-        - if one or both values are missing, then what is there to compare?
+      - not ``==`` or ``!=``
+      - ``None`` means returned no values, so ``None == None`` makes sense
+      - if one or both values are missing, then what is there to compare?
 
     """
 
@@ -77,18 +77,18 @@ class Sentinel:
       - allows end users to choose to use ``None`` or ``()`` as sentinel values
       - always equals itself (unlike ``NoValue``)
 
-    - usage
+    **Usage:**
 
-      - import Sentinel and then either
+    - import Sentinel and then either
 
-        - define ``_my_sentinel: Final[Sentinel] = Sentinel('my_sentinel')``
-        - or use ``Sentinel('my_sentinel')`` directly
+      - define ``_my_sentinel: Final[Sentinel] = Sentinel('my_sentinel')``
+      - or use ``Sentinel('my_sentinel')`` directly
 
-      - compare using either
+    - compare using either
 
-        - ``is`` and ``is not`` or ``==`` and ``!=``
-        - the ``Sentinel()`` value always equals itself
-        - and never equals anything else, especially other sentinel values
+      - ``is`` and ``is not`` or ``==`` and ``!=``
+      - the ``Sentinel()`` value always equals itself
+      - and never equals anything else, especially other sentinel values
 
     """
 
@@ -120,30 +120,30 @@ class Nada:
       - comparison compares true only when 2 non-missing values compare true
       - thus ``a == b`` means two non-missing values compare as equal
 
-    - usage
+    **Usage:**
 
-      - import ``Nada`` and then
+    - import ``Nada`` and then
 
-        - either use ``Nada()`` directly
-        - or define ``_nada: Final[Nada] = Nada()`` don't export it
+      - either use ``Nada()`` directly
+      - or define ``_nada: Final[Nada] = Nada()`` don't export it
 
-      - start propagating failure by setting a propagating value to Nada()
+    - start propagating failure by setting a propagating value to Nada()
 
-        - works best when working with expression
-        - failure may fail to propagate
+      - works best when working with expression
+      - failure may fail to propagate
 
-          - for a function/method with just side effects
-          - engineer Nada() to fail to trigger side effects
+        - for a function/method with just side effects
+        - engineer Nada() to fail to trigger side effects
 
-      - test for failure by comparing a result to ``Nada()`` itself using
+    - test for failure by comparing a result to ``Nada()`` itself using
 
-        - ``is`` and ``is not``
+      - ``is`` and ``is not``
 
-      - propagate failure through a calculation using
+    - propagate failure through a calculation using
 
-        - ``==`` and ``!=``
-        - the ``Nada()`` value never equals itself
-        - and never equals anything else
+      - ``==`` and ``!=``
+      - the ``Nada()`` value never equals itself
+      - and never equals anything else
 
     """
 

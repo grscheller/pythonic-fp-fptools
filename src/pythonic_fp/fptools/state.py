@@ -45,7 +45,7 @@ __all__ = ['State']
 
 from collections.abc import Callable
 from typing import TypeVar
-from pythonic_fp.circulararray import CA
+from pythonic_fp.circulararray.resizing import CA
 
 S = TypeVar('S')
 A = TypeVar('A')

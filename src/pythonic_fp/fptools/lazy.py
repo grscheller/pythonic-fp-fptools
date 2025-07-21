@@ -29,7 +29,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from typing import Any, Final, Never, TypeVar, ParamSpec
-from pythonic_fp.containers.maybe import MayBe as MB
+from pythonic_fp.containers.maybe import MayBe
 from pythonic_fp.containers.xor import Xor, LEFT, RIGHT
 from .function import sequenced
 
@@ -68,7 +68,7 @@ class Lazy[D, R]:
         self._d: Final[D] = d
         self._pure: bool = pure
         self._evaluated: bool = False
-        self._exceptional: MB[bool] = MB()
+        self._exceptional: MayBe[bool] = MayBe()
         self._result: Xor[R, Exception]
 
     def __bool__(self) -> bool:
@@ -89,20 +89,20 @@ class Lazy[D, R]:
                 self._result, self._evaluated, self._exceptional = (
                     Xor(exc, RIGHT),
                     True,
-                    MB(True),
+                    MayBe(True),
                 )
             else:
                 self._result, self._evaluated, self._exceptional = (
                     Xor(result, LEFT),
                     True,
-                    MB(False),
+                    MayBe(False),
                 )
 
-    def got_result(self) -> MB[bool]:
+    def got_result(self) -> MayBe[bool]:
         """Return true if an evaluated Lazy did not raise an exception."""
-        return self._exceptional.bind(lambda x: MB(not x))
+        return self._exceptional.bind(lambda x: MayBe(not x))
 
-    def got_exception(self) -> MB[bool]:
+    def got_exception(self) -> MayBe[bool]:
         """Return true if Lazy raised exception."""
         return self._exceptional
 
@@ -121,17 +121,17 @@ class Lazy[D, R]:
         msg = 'Lazy: method get needed an alternate value but none given.'
         raise ValueError(msg)
 
-    def get_result(self) -> MB[R]:
+    def get_result(self) -> MayBe[R]:
         """Get result only if evaluated and not exceptional."""
         if self._evaluated and self._result:
             return self._result.get_left()
-        return MB()
+        return MayBe()
 
-    def get_exception(self) -> MB[Exception]:
+    def get_exception(self) -> MayBe[Exception]:
         """Get result only if evaluate and exceptional."""
         if self._evaluated and not self._result:
             return self._result.get_right()
-        return MB()
+        return MayBe()
 
 
 def lazy[**P, R](

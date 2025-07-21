@@ -1,6 +1,6 @@
 [project]
 name = "pythonic-fp.fptools"
-version = "4.0.1"
+version = "5.0.0"
 readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
@@ -25,8 +25,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "pythonic-fp.circulararray>=5.0.0",
-  "pythonic-fp.containers >=2.0.0",
+  "pythonic-fp.circulararray>=5.3.0",
 ]
 dynamic = ["description"]
 

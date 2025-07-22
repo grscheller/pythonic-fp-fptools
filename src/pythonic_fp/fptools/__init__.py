@@ -14,12 +14,28 @@
 
 """Pythonic FP - Functional Programming Tools
 
-Tools to aid with functional programming in Python yet still endeavoring to
-remain Pythonic.
+Functions as first class objects, Lazy (non-strict) function evaluation,
+and classical Functional Programming data structures.
+
++--------------------------+----------------------------------+
+|       Description        |              Module              |
++==========================+==================================+
+| Function manipulation    | ``pythonic_fp.fptools.function`` |
++--------------------------+----------------------------------+
+| Lazy function evaluation | ``pythonic_fp.fptools.lazy``     |
++--------------------------+----------------------------------+
+| Maybe monad              | ``pythonic_fp.fptools.maybe``    |
++--------------------------+----------------------------------+
+| Either monad             | ``pythonic_fp.fptools.either``   |
++--------------------------+----------------------------------+
+| State monad              | ``pythonic_fp.fptools.either``   |
++--------------------------+----------------------------------+
+
+Functional programming tools which endeavor to remain Pythonic.
+
 
 - Subclassable Boolean datatype (*module* `pythonic_fp.fptools.bool`)
-- Functions as first class objects (*module* `pythonic_fp.fptools.function`)
-- Lazy (non-strict) function evaluation (*module* `pythonic_fp.fptools.lazy`)
+
 - Singletons (*module* `pythonic_fp.fptools.singletons`)
 
   - 3 singleton classes representing

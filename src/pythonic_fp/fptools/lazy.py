@@ -29,8 +29,8 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from typing import Any, Final, Never, TypeVar, ParamSpec
-from pythonic_fp.containers.maybe import MayBe
-from pythonic_fp.containers.xor import Xor, LEFT, RIGHT
+from pythonic_fp.fptools.maybe import MayBe
+from pythonic_fp.fptools.either import Either, LEFT, RIGHT
 from .function import sequenced
 
 __all__ = ['Lazy', 'lazy', 'real_lazy']
@@ -69,7 +69,7 @@ class Lazy[D, R]:
         self._pure: bool = pure
         self._evaluated: bool = False
         self._exceptional: MayBe[bool] = MayBe()
-        self._result: Xor[R, Exception]
+        self._result: Either[R, Exception]
 
     def __bool__(self) -> bool:
         return self._evaluated
@@ -87,13 +87,13 @@ class Lazy[D, R]:
                 result = self._f(self._d)
             except Exception as exc:
                 self._result, self._evaluated, self._exceptional = (
-                    Xor(exc, RIGHT),
+                    Either(exc, RIGHT),
                     True,
                     MayBe(True),
                 )
             else:
                 self._result, self._evaluated, self._exceptional = (
-                    Xor(result, LEFT),
+                    Either(result, LEFT),
                     True,
                     MayBe(False),
                 )

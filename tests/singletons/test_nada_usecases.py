@@ -35,7 +35,7 @@ def not_nada(x: object) -> bool:
     else:
         return True
 
-class Test_Builtin_Containers:
+class TestBuiltinContainers:
     def test_mixed_list(self) -> None:
         foo: list[int|Nada] = [23, -5, nada, nada, -1, 40]
 

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from pythonic_fp.fptools.bool import Bool, Truth, Lie, TRUTH, LIE
+from pythonic_fp.singletons.sbool import SBool as SBool, Truth, Lie, TRUTH, LIE
 
 class Testbool:
     """Test class pythonic_fp.fptools.bool"""
@@ -24,10 +24,10 @@ class Testbool:
         assert LIE is LIE
         assert TRUTH is not LIE  # type: ignore # Non-overlapping identity check
 
-        sky_is_blue: Bool = TRUTH
-        koalas_eat_meat: Bool = LIE
-        water_is_wet: Bool = Truth()
-        ice_is_hot: Bool = Lie()
+        sky_is_blue: SBool = TRUTH
+        koalas_eat_meat: SBool = LIE
+        water_is_wet: SBool = Truth()
+        ice_is_hot: SBool = Lie()
 
         assert sky_is_blue == water_is_wet
         assert koalas_eat_meat == ice_is_hot
@@ -54,21 +54,21 @@ class Testbool:
         assert koalas_eat_meat != 1
         assert koalas_eat_meat != 5
 
-        foo: Bool = TRUTH
+        foo: SBool = TRUTH
         assert foo == TRUTH
         foo = LIE
         assert foo == LIE
 
 
 class Test_issubclass:
-    assert issubclass(Truth, Bool)
-    assert issubclass(Lie, Bool)
+    assert issubclass(Truth, SBool)
+    assert issubclass(Lie, SBool)
     assert issubclass(Truth, int)
     assert issubclass(Lie, int)
-    assert issubclass(Bool, int)
+    assert issubclass(SBool, int)
     assert issubclass(bool, int)
-    assert not issubclass(bool, Bool)
-    assert not issubclass(Bool, bool)
+    assert not issubclass(bool, SBool)
+    assert not issubclass(SBool, bool)
 
 
 class Test_isinstance:
@@ -80,7 +80,7 @@ class Test_isinstance:
     assert isinstance(a_bool, bool)
     assert isinstance(my_int, int)
     assert isinstance(myLie, int)
-    assert isinstance(myLie, Bool)
+    assert isinstance(myLie, SBool)
     assert isinstance(myLie, Lie)
     assert not isinstance(myLie, Truth)
     assert not isinstance(myLie, bool)
@@ -94,7 +94,7 @@ class Test_isinstance:
     assert isinstance(a_bool, bool)
     assert isinstance(my_int, int)
     assert isinstance(myTruth, int)
-    assert isinstance(myTruth, Bool)
+    assert isinstance(myTruth, SBool)
     assert isinstance(myTruth, Truth)
     assert not isinstance(myTruth, Lie)
     assert not isinstance(myTruth, bool)
@@ -106,53 +106,53 @@ class Test_not:
     assert not isinstance(foo, bool)
     assert isinstance(not foo, int)
     assert isinstance(not foo, bool)
-    assert not isinstance(not foo, Bool)
+    assert not isinstance(not foo, SBool)
 
     bar: bool = True
     assert isinstance(bar, int)
     assert isinstance(bar, bool)
     assert isinstance(not bar, int)
     assert isinstance(not bar, bool)
-    assert not isinstance(not bar, Bool)
+    assert not isinstance(not bar, SBool)
 
-    baz: Bool = TRUTH
+    baz: SBool = TRUTH
     assert isinstance(baz, int)
     assert not isinstance(baz, bool)
     assert isinstance(not baz, int)
     assert isinstance(not baz, bool)
-    assert not isinstance(not baz, Bool)
+    assert not isinstance(not baz, SBool)
 
-    quuz: Bool = LIE
+    quuz: SBool = LIE
     assert isinstance(quuz, int)
     assert not isinstance(quuz, bool)
     assert isinstance(not quuz, int)
     assert isinstance(not quuz, bool)
-    assert not isinstance(not quuz, Bool)
+    assert not isinstance(not quuz, SBool)
 
-    putz: Bool = Truth()
+    putz: SBool = Truth()
     assert isinstance(putz, int)
     assert not isinstance(putz, bool)
     assert isinstance(not putz, int)
     assert isinstance(not putz, bool)
-    assert not isinstance(not putz, Bool)
+    assert not isinstance(not putz, SBool)
 
-    lutz: Bool = Lie()
+    lutz: SBool = Lie()
     assert isinstance(lutz, int)
     assert not isinstance(lutz, bool)
     assert isinstance(not lutz, int)
     assert isinstance(not lutz, bool)
-    assert not isinstance(not lutz, Bool)
+    assert not isinstance(not lutz, SBool)
 
 class TestTruthsAndLies:
-    fooT: Bool = Truth('foo')
-    fudT: Bool = Truth('foo')
-    fooL: Bool = Lie('foo')
-    fudL: Bool = Lie('foo')
+    fooT: SBool = Truth('foo')
+    fudT: SBool = Truth('foo')
+    fooL: SBool = Lie('foo')
+    fudL: SBool = Lie('foo')
 
-    booT: Bool = Truth('boo')
-    budT: Bool = Truth('boo')
-    booL: Bool = Lie('boo')
-    boobooL: Bool = Lie('boo')
+    booT: SBool = Truth('boo')
+    budT: SBool = Truth('boo')
+    booL: SBool = Lie('boo')
+    boobooL: SBool = Lie('boo')
 
     assert fooT == fooT
     assert fudT == fudT
@@ -181,10 +181,10 @@ class TestTruthsAndLies:
     assert booT is not fudL
 
 class TestSuperClassType:
-    mooT: Bool = Truth('my_truth')
-    yooT: Bool = Truth('your_truth')
-    mooL: Bool = Lie('my_lie')
-    yooL: Bool = Lie('your_lie')
+    mooT: SBool = Truth('my_truth')
+    yooT: SBool = Truth('your_truth')
+    mooL: SBool = Lie('my_lie')
+    yooL: SBool = Lie('your_lie')
 
     mooT == yooT
     mooL == yooL

@@ -18,8 +18,8 @@ __all__ = ['Either', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Never, overload, TypeVar
-from pythonic_fp.fptools.bool import Bool as Both, Truth as Left, Lie as Right
-from pythonic_fp.fptools.singletons import Sentinel as _Sentinel
+from pythonic_fp.singletons.sbool import SBool, Truth as Left, Lie as Right
+from pythonic_fp.singletons.sentinel import Sentinel as _Sentinel
 from .maybe import MayBe
 
 L = TypeVar('L', covariant=True)
@@ -76,7 +76,7 @@ class Either[L, R]:
     @overload
     def __init__(self, value: R, side: Right) -> None: ...
 
-    def __init__(self, value: L | R, side: Both = LEFT) -> None:
+    def __init__(self, value: L | R, side: SBool = LEFT) -> None:
         self._value = value
         self._side = side
 

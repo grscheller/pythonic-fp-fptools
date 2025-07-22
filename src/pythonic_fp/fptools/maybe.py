@@ -20,7 +20,7 @@ __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Final, Never, overload, TypeVar
-from pythonic_fp.fptools.singletons import Sentinel
+from pythonic_fp.singletons.sentinel import Sentinel
 
 D = TypeVar('D', covariant=True)
 

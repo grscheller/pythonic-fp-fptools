@@ -34,16 +34,6 @@ and classical Functional Programming data structures.
 Functional programming tools which endeavor to remain Pythonic.
 
 
-- Subclassable Boolean datatype (*module* `pythonic_fp.fptools.bool`)
-
-- Singletons (*module* `pythonic_fp.fptools.singletons`)
-
-  - 3 singleton classes representing
-
-    - a missing value (actually missing, not potentially missing)
-    - a sentinel values
-    - a failed calculation
-
 - State monad implementation (*module* `pythonic_fp.fptools.state`)
 
   - pure FP handling of state (the state monad)

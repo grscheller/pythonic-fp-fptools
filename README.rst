@@ -34,10 +34,9 @@ fifth modules to their own repos sometime in the near future.
 Documentation
 -------------
 
-Documentation for package
+Documentation for this project is hosted on
 `GitHub Pages
-<https://grscheller.github.io/pythonic-fp/fptools/API/development/build/html/releases.html>`_
-hosted on GitHub pages.
+<https://grscheller.github.io/pythonic-fp/fptools/API/development/build/html/releases.html>`_.
 
 Copyright and License
 ---------------------

@@ -17,29 +17,19 @@
 Functions as first class objects, Lazy (non-strict) function evaluation,
 and classical Functional Programming data structures.
 
-+--------------------------+----------------------------------+
-|       Description        |              Module              |
-+==========================+==================================+
-| Function manipulation    | ``pythonic_fp.fptools.function`` |
-+--------------------------+----------------------------------+
-| Lazy function evaluation | ``pythonic_fp.fptools.lazy``     |
-+--------------------------+----------------------------------+
-| Maybe monad              | ``pythonic_fp.fptools.maybe``    |
-+--------------------------+----------------------------------+
-| Either monad             | ``pythonic_fp.fptools.either``   |
-+--------------------------+----------------------------------+
-| State monad              | ``pythonic_fp.fptools.either``   |
-+--------------------------+----------------------------------+
-
-Functional programming tools which endeavor to remain Pythonic.
-
-
-- State monad implementation (*module* `pythonic_fp.fptools.state`)
-
-  - pure FP handling of state (the state monad)
-  - Classic FP implementation
-
-    - the monad encapsulates a state transformation, not a "state"
++--------------------------+------------------------------+
+| Description              | Module                       |
++==========================+==============================+
+| Function manipulation    | pythonic_fp.fptools.function |
++--------------------------+------------------------------+
+| Lazy function evaluation | pythonic_fp.fptools.lazy     |
++--------------------------+------------------------------+
+| Maybe monad              | pythonic_fp.fptools.maybe    |
++--------------------------+------------------------------+
+| Either monad             | pythonic_fp.fptools.either   |
++--------------------------+------------------------------+
+| State monad              | pythonic_fp.fptools.either   |
++--------------------------+------------------------------+
 
 """
 

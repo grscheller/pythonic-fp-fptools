@@ -10,7 +10,6 @@ remain Pythonic.
 - Subclassable Boolean datatype (*module* `pythonic_fp.fptools.bool`)
 - Functions as first class objects (*module* `pythonic_fp.fptools.function`)
 - Lazy (non-strict) function evaluation (*module* `pythonic_fp.fptools.lazy`)
-- Singletons (*module* `pythonic_fp.fptools.singletons`)
 
   - 3 singleton classes representing
 

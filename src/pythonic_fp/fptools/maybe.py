@@ -24,6 +24,7 @@ from pythonic_fp.singletons.sentinel import Sentinel
 
 D = TypeVar('D', covariant=True)
 
+
 class MayBe[D]:
     """Maybe monad, data structure wrapping a potentially missing value.
 
@@ -34,7 +35,8 @@ class MayBe[D]:
     - immutable semantics, therefore made covariant
 
     .. warning::
-        hashability invalidated if contained value is not hashable
+
+        Hashability invalidated if contained value is not hashable.
 
     """
 
@@ -88,12 +90,14 @@ class MayBe[D]:
     def get(self, alt: D | Sentinel = Sentinel('MayBe')) -> D | Never:
         """Return the contained value if it exists, otherwise an alternate value.
 
-        .. warning:
+        .. warning::
+
             Unsafe method ``get``. Will raise ``ValueError`` if MayBe empty
             and an alt return value not given. Best practice is to first check
             the MayBe in a boolean context.
 
         :raises ValueError: when an alternate value is not provided but needed
+
         """
         _sentinel: Final[Sentinel] = Sentinel('MayBe')
         if self._value is not _sentinel:

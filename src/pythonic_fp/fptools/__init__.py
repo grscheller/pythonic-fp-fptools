@@ -28,7 +28,7 @@ and classical Functional Programming data structures.
 +--------------------------+------------------------------+
 | Either monad             | pythonic_fp.fptools.either   |
 +--------------------------+------------------------------+
-| State monad              | pythonic_fp.fptools.either   |
+| State monad              | pythonic_fp.fptools.state    |
 +--------------------------+------------------------------+
 
 """

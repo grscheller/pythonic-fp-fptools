@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from pythonic_fp.containers.functional_tuple import FTuple
 from pythonic_fp.fptools.maybe import MayBe
-from pythonic_fp.queues.de import DEQueue as DQ, de_queue as dq
+from pythonic_fp.containers.queues.de import DEQueue as DQ, de_queue as dq
 
 
 class Test_MB_sequence:

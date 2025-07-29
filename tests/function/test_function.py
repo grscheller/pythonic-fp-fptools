@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from pythonic_fp.circulararray.resizing import ca, CA
+from pythonic_fp.circulararray.auto import ca, CA
 from pythonic_fp.fptools.function import partial, sequenced, swap, it
 from pythonic_fp.iterables.drop_take import take
 from pythonic_fp.iterables.folding import maybe_fold_left

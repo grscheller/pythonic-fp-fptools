@@ -35,7 +35,7 @@ Documentation
 
 Documentation for this project is hosted on
 `GitHub Pages
-<https://grscheller.github.io/pythonic-fp/fptools/API/development/build/html/releases.html>`_.
+<https://grscheller.github.io/pythonic-fp/fptools/development/build/html>`_.
 
 Copyright and License
 ---------------------

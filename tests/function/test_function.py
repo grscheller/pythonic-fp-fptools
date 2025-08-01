@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from pythonic_fp.circulararray.auto import ca, CA
-from pythonic_fp.fptools.function import partial, sequenced, swap, it
+from pythonic_fp.fptools.function import partial, sequenced, swap
 from pythonic_fp.iterables.drop_take import take
 from pythonic_fp.iterables.folding import maybe_fold_left
 
@@ -59,30 +58,3 @@ class Test_function:
         compute_seq = sequenced(compute)
 
         assert compute(*data) == compute_seq(data)
-
-    def test_it(self) -> None:
-        ref0: list[int] = []
-        trg0: list[int] = list(it())
-        assert ref0 == trg0
-
-        ref1 = [1, 2, 4, 8, 42]
-        trg1 = list(it(1, 2, 4, 8, 42))
-        assert ref1 == trg1
-
-        ref2 = [1, 2, 3]
-        trg2 = [*it(1,2,3)]
-        assert ref2 == trg2
-
-        ca_iter = CA((1, 2))
-        ca_args = ca(1, 2)
-        assert ca_iter == ca_args
-
-        ca0_ref: CA[int] = ca()
-        ca0_trg: CA[int] = CA[int](it())
-        assert ca0_ref == ca0_trg
-
-        ca1_ref: CA[int] = CA((42, 7, 11, 100))
-        ca1_trg = CA(it(42, 7, 11, 100))
-        ca1_splat1 = ca(*it(42, 7, 11, 100))
-        ca1_splat2 = ca(*it(42, 7), *it(11, 100))
-        assert ca1_ref == ca1_trg == ca1_splat1 == ca1_splat2

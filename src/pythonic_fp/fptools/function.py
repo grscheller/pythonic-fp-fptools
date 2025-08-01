@@ -21,7 +21,6 @@ and application.
 FP utilities to manipulate and partially apply functions
 
 - *function* **swap** - Swap the arguments of a 2 argument function
-- *function* **it** - Function returning an iterator of its arguments
 - *function* **sequenced** - Convert function to take a sequence of its arguments
 - *function* **negate** - Transforms a predicate to its negation
 - *function* **partial** - Returns a partially applied function
@@ -29,10 +28,10 @@ FP utilities to manipulate and partially apply functions
 """
 
 from __future__ import annotations
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from typing import Any, ParamSpec
 
-__all__ = ['swap', 'sequenced', 'partial', 'it', 'negate']
+__all__ = ['swap', 'sequenced', 'partial', 'negate']
 
 P = ParamSpec('P')
 
@@ -40,11 +39,6 @@ P = ParamSpec('P')
 def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
     """Swap arguments of a two argument function."""
     return lambda v, u: f(u, v)
-
-
-def it[A](*args: A) -> Iterator[A]:
-    """Function returning an iterator of its arguments."""
-    yield from args
 
 
 def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:

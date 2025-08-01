@@ -30,15 +30,11 @@ FP utilities to manipulate and partially apply functions
 
 from __future__ import annotations
 from collections.abc import Callable, Iterator
-from typing import Any, ParamSpec, TypeVar
+from typing import Any, ParamSpec
 
 __all__ = ['swap', 'sequenced', 'partial', 'it', 'negate']
 
-A = TypeVar('A')    # Needed only for pdoc documentation generation. Otherwise,
-R = TypeVar('R')    # ignored by both MyPy and Python. Makes linters unhappy
-U = TypeVar('U')    # when these are used on function and method signatures due
-V = TypeVar('V')    # to "redefined-outer-name" warnings. Function and method
-P = ParamSpec('P')  # signatures do not support variance and bounds constraints.
+P = ParamSpec('P')
 
 
 def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:

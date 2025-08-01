@@ -29,9 +29,9 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from typing import Any, Final, Never, TypeVar, ParamSpec
-from pythonic_fp.fptools.maybe import MayBe
-from pythonic_fp.fptools.either import Either, LEFT, RIGHT
 from .function import sequenced
+from .either import Either, LEFT, RIGHT
+from .maybe import MayBe
 
 __all__ = ['Lazy', 'lazy', 'real_lazy']
 

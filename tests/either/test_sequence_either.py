@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 from typing import Final
 from pythonic_fp.containers.functional_tuple import FTuple
 from pythonic_fp.fptools.either import Either, LEFT, RIGHT

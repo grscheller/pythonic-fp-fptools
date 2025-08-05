@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 from pythonic_fp.fptools.maybe import MayBe
 from pythonic_fp.fptools.either import Either as Either, LEFT, RIGHT
 
@@ -28,7 +26,7 @@ def add_lt_42(x: int, y: int) -> MayBe[int]:
 def add_gt_42(x: int, y: int) -> Either[int, str]:
     sum_xy = x + y
     if sum_xy > 42:
-        return Either(sum_xy)
+        return Either(sum_xy, LEFT)
     else:
         return Either('too small', RIGHT)
 
@@ -180,7 +178,7 @@ class Test_repr:
         e7 = lt5_or_str(2)
         e8 = lt5_or_str(3)
         e9 = lt5_or_nothing(7)
-        e10 = Either[int, str](10).bind(lt5_or_str)
+        e10 = Either[int, str](10, LEFT).bind(lt5_or_str)
 
         assert e6 != e7
         assert e7 != e8

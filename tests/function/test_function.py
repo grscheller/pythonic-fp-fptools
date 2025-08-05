@@ -16,12 +16,13 @@ from pythonic_fp.fptools.function import partial, sequenced, swap
 from pythonic_fp.iterables.drop_take import take
 from pythonic_fp.iterables.folding import maybe_fold_left
 
+
 class Test_function:
     def test_same_type(self) -> None:
         def multAdd(m1: int, m2: int, a: int) -> int:
-            return m1*m2 + a
+            return m1 * m2 + a
 
-        ans = 8*5 + 2
+        ans = 8 * 5 + 2
         assert ans == multAdd(8, 5, 2)
 
         p2 = partial(multAdd, 8)
@@ -35,9 +36,9 @@ class Test_function:
 
     def test_different_types(self) -> None:
         def names(num: int, sep: str, names: list[str]) -> str:
-            return maybe_fold_left(take(names, num),
-                         lambda names, name: names + sep + name,
-                         "").get()[len(sep):]
+            return maybe_fold_left(
+                take(names, num), lambda names, name: names + sep + name, ''
+            ).get()[len(sep) :]
 
         charactors = ['Moe', 'Larry', 'Curlie', 'Shemp', 'Curlie Joe']
         stooges = names(3, ', ', charactors)
@@ -52,9 +53,9 @@ class Test_function:
 
     def test_sequenced(self) -> None:
         def compute(a: float, b: float, c: float, d: int) -> float:
-            return ( (a + b)*c ) ** d
+            return ((a + b) * c) ** d
 
-        data: tuple[float, float, float, int] = (3.1, 4.2, 2.7, 5)
+        data: tuple[float | int, ...] = (3.1, 4.2, 2.7, 5)
         compute_seq = sequenced(compute)
 
         assert compute(*data) == compute_seq(data)

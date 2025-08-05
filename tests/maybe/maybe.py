@@ -12,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 from pythonic_fp.fptools.maybe import MayBe
 
 
 def add2(x: int) -> int:
     return x + 2
+
 
 class TestMayBe:
     def test_identity(self) -> None:

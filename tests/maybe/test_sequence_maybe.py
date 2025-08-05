@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 from pythonic_fp.containers.functional_tuple import FTuple
 from pythonic_fp.fptools.maybe import MayBe
 from pythonic_fp.containers.queues.de import DEQueue as DQ, de_queue as dq

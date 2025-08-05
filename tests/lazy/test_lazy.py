@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 from typing import Any
 from pythonic_fp.fptools.lazy import Lazy, lazy, real_lazy
 from pythonic_fp.fptools.maybe import MayBe as MB

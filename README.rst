@@ -19,12 +19,9 @@ remain Pythonic.
 
     - the monad encapsulates a state transformation, not a "state"
 
-This PyPI project is part of of the grscheller
+This PyPI project is part of the
 `pythonic-fp namespace projects
 <https://github.com/grscheller/pythonic-fp/blob/main/README.md>`_
-
-**Warning:** The maintainer intends to break out the first, forth and
-fifth modules to their own repos sometime in the near future.
 
 Documentation
 -------------

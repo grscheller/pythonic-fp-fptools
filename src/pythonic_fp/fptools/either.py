@@ -12,26 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 __all__ = ['Either', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Never, overload, TypeVar
-from pythonic_fp.booleans.sbool import SBool
+from pythonic_fp.booleans.subtypable_boolean import SBool
 from .maybe import MayBe
 
 L = TypeVar('L', covariant=True)
 R = TypeVar('R', covariant=True)
 
-class _EitherBool(SBool):
+
+class EitherBool(SBool):
     def __repr__(self) -> str:
         if self:
             return 'LEFT'
         return 'RIGHT'
 
-LEFT = _EitherBool(True)
-RIGHT = _EitherBool(False)
+
+LEFT = EitherBool(True)
+RIGHT = EitherBool(False)
 
 
 class Either[L, R]:
@@ -69,6 +69,7 @@ class Either[L, R]:
         ``Either(value: +R, side: Right): Either[+L, +R] -> right: Either[+L, +R]``
 
     """
+
     __slots__ = '_value', '_side'
     __match_args__ = ('_value', '_side')
 
@@ -172,25 +173,25 @@ class Either[L, R]:
             return MayBe(cast(R, self._value))
         return MayBe()
 
-    def map_right[V](self, f: Callable[[R], V]) -> Either[L, V]:
+    def map_right[V](self, f: Callable[[R], V]) -> 'Either[L, V]':
         """Construct new Either with a different right."""
         if self._side == LEFT:
             return cast(Either[L, V], self)
         return Either[L, V](f(cast(R, self._value)), RIGHT)
 
-    def map[U](self, f: Callable[[L], U]) -> Either[U, R]:
+    def map[U](self, f: Callable[[L], U]) -> 'Either[U, R]':
         """Map over if a left value. Return new instance."""
         if self._side == RIGHT:
             return cast(Either[U, R], self)
         return Either(f(cast(L, self._value)), LEFT)
 
-    def bind[U](self, f: Callable[[L], Either[U, R]]) -> Either[U, R]:
+    def bind[U](self, f: 'Callable[[L], Either[U, R]]') -> 'Either[U, R]':
         """Flatmap over the left value, propagate right values."""
         if self:
             return f(cast(L, self._value))
         return cast(Either[U, R], self)
 
-    def map_except[U](self, f: Callable[[L], U], fallback_right: R) -> Either[U, R]:
+    def map_except[U](self, f: Callable[[L], U], fallback_right: R) -> 'Either[U, R]':
         """Map over if a left value - with fallback upon exception.
 
         - if `Either` is a left then map `f` over its value
@@ -229,8 +230,8 @@ class Either[L, R]:
         return applied.get()
 
     def bind_except[U](
-        self, f: Callable[[L], Either[U, R]], fallback_right: R
-    ) -> Either[U, R]:
+        self, f: 'Callable[[L], Either[U, R]]', fallback_right: R
+    ) -> 'Either[U, R]':
         """Flatmap `Either` with function `f` with fallback right
 
         .. warning::
@@ -265,8 +266,8 @@ class Either[L, R]:
 
     @staticmethod
     def sequence[U, V](
-        sequence_xor_uv: Sequence[Either[U, V]],
-    ) -> Either[Sequence[U], V]:
+        sequence_xor_uv: 'Sequence[Either[U, V]]',
+    ) -> 'Either[Sequence[U], V]':
         """Sequence an indexable of type `Either[~U, ~V]`
 
         If the iterated `Either` values are all lefts, then return an `Either` of

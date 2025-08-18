@@ -27,7 +27,6 @@ FP utilities to manipulate and partially apply functions
 
 """
 
-from __future__ import annotations
 from collections.abc import Callable
 from typing import Any, ParamSpec
 
@@ -64,6 +63,7 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
     TODO: Look into replacing this function with a Callable class?
 
     """
+
     def ff(tupled_args: tuple[Any]) -> R:
         return f(*tupled_args)
 
@@ -77,6 +77,7 @@ def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
     - best practice is to cast the result immediately
 
     """
+
     def finish(*rest: Any) -> R:
         return sequenced(f)(args + rest)
 

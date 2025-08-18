@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
+from typing import Any
 from pythonic_fp.fptools.function import partial, sequenced, swap
 from pythonic_fp.iterables.drop_take import take
 from pythonic_fp.iterables.folding import maybe_fold_left
@@ -55,7 +56,7 @@ class Test_function:
         def compute(a: float, b: float, c: float, d: int) -> float:
             return ((a + b) * c) ** d
 
-        data: tuple[float | int, ...] = (3.1, 4.2, 2.7, 5)
+        data: tuple[Any, ...] = (3.1, 4.2, 2.7, 5)
         compute_seq = sequenced(compute)
 
         assert compute(*data) == compute_seq(data)

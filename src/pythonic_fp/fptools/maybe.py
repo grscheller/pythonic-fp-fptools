@@ -14,8 +14,6 @@
 
 """Pythonic FP - Maybe Monad"""
 
-from __future__ import annotations
-
 __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
@@ -107,19 +105,19 @@ class MayBe[D]:
             raise ValueError(msg)
         return cast(D, alt)
 
-    def map[U](self, f: Callable[[D], U]) -> MayBe[U]:
+    def map[U](self, f: Callable[[D], U]) -> 'MayBe[U]':
         """Map function `f` over contents."""
 
         if self:
             return MayBe(f(cast(D, self._value)))
         return cast(MayBe[U], self)
 
-    def bind[U](self, f: Callable[[D], MayBe[U]]) -> MayBe[U]:
+    def bind[U](self, f: 'Callable[[D], MayBe[U]]') -> 'MayBe[U]':
         """Flatmap ``MayBe`` with function ``f``."""
         return f(cast(D, self._value)) if self else cast(MayBe[U], self)
 
     @staticmethod
-    def sequence[U](sequence_mb_u: Sequence[MayBe[U]]) -> MayBe[Sequence[U]]:
+    def sequence[U](sequence_mb_u: 'Sequence[MayBe[U]]') -> 'MayBe[Sequence[U]]':
         """Sequence a mutable indexable of type ``MayBe[~U]``
 
         If the iterated `MayBe` values are not all empty,

@@ -39,8 +39,6 @@ A pure FP immutable implementation for the State Monad.
 
 """
 
-from __future__ import annotations
-
 __all__ = ['State']
 
 from collections.abc import Callable
@@ -71,7 +69,7 @@ class State[S, A]:
     def __init__(self, run: Callable[[S], tuple[A, S]]) -> None:
         self.run = run
 
-    def bind[B](self, g: Callable[[A], State[S, B]]) -> State[S, B]:
+    def bind[B](self, g: 'Callable[[A], State[S, B]]') -> 'State[S, B]':
         """Perform function composition while propagating state."""
 
         def compose(s: S) -> tuple[B, S]:
@@ -85,25 +83,25 @@ class State[S, A]:
         a, _ = self.run(init)
         return a
 
-    def map[B](self, f: Callable[[A], B]) -> State[S, B]:
+    def map[B](self, f: Callable[[A], B]) -> 'State[S, B]':
         """Map a function over a run action."""
         return self.bind(lambda a: State.unit(f(a)))
 
-    def map2[B, C](self, sb: State[S, B], f: Callable[[A, B], C]) -> State[S, C]:
+    def map2[B, C](self, sb: 'State[S, B]', f: Callable[[A, B], C]) -> 'State[S, C]':
         """Map a function of two variables over two state actions."""
         return self.bind(lambda a: sb.map(lambda b: f(a, b)))
 
-    def both[B](self, rb: State[S, B]) -> State[S, tuple[A, B]]:
+    def both[B](self, rb: 'State[S, B]') -> 'State[S, tuple[A, B]]':
         """Return a tuple of two state actions."""
         return self.map2(rb, lambda a, b: (a, b))
 
     @staticmethod
-    def unit[ST, B](b: B) -> State[ST, B]:
+    def unit[ST, B](b: B) -> 'State[ST, B]':
         """Create a State action returning the given value."""
         return State(lambda s: (b, s))
 
     @staticmethod
-    def get[ST]() -> State[ST, ST]:
+    def get[ST]() -> 'State[ST, ST]':
         """Set run action to return the current state
 
         - the current state is propagated unchanged
@@ -114,7 +112,7 @@ class State[S, A]:
         return State[ST, ST](lambda s: (s, s))
 
     @staticmethod
-    def put[ST](s: ST) -> State[ST, tuple[()]]:
+    def put[ST](s: ST) -> 'State[ST, tuple[()]]':
         """Manually insert a state.
 
         THe run action.
@@ -126,7 +124,7 @@ class State[S, A]:
         return State(lambda _: ((), s))
 
     @staticmethod
-    def modify[ST](f: Callable[[ST], ST]) -> State[ST, tuple[()]]:
+    def modify[ST](f: Callable[[ST], ST]) -> 'State[ST, tuple[()]]':
         """Modify previous state.
 
         - like put, but modify previous state via ``f``
@@ -138,7 +136,7 @@ class State[S, A]:
         return State.get().bind(lambda a: State.put(f(a)))  # type: ignore
 
     @staticmethod
-    def sequence[ST, AA](sas: list[State[ST, AA]]) -> State[ST, list[AA]]:
+    def sequence[ST, AA](sas: 'list[State[ST, AA]]') -> 'State[ST, list[AA]]':
         """Combine a list of state actions into a state action of a list.
 
         - all state actions must be of the same type
@@ -151,6 +149,5 @@ class State[S, A]:
             return ls
 
         return CA(sas).foldl(
-            lambda s1, sa: s1.map2(sa, append_ret),
-            State.unit(list[AA]([]))
+            lambda s1, sa: s1.map2(sa, append_ret), State.unit(list[AA]([]))
         )

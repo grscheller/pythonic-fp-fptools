@@ -18,15 +18,20 @@ __all__ = ['Either', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Never, overload, TypeVar
-from pythonic_fp.singletons.sbool import SBool, Truth as Left, Lie as Right
-from pythonic_fp.singletons.sentinel import Sentinel as _Sentinel
+from pythonic_fp.booleans.sbool import SBool
 from .maybe import MayBe
 
 L = TypeVar('L', covariant=True)
 R = TypeVar('R', covariant=True)
 
-LEFT = Left('LEFT')
-RIGHT = Right('RIGHT')
+class _EitherBool(SBool):
+    def __repr__(self) -> str:
+        if self:
+            return 'LEFT'
+        return 'RIGHT'
+
+LEFT = _EitherBool(True)
+RIGHT = _EitherBool(False)
 
 
 class Either[L, R]:
@@ -72,16 +77,24 @@ class Either[L, R]:
     T = TypeVar('T')
 
     @overload
-    def __init__(self, value: L, side: Left) -> None: ...
+    def __init__(self, value: L) -> None: ...
     @overload
-    def __init__(self, value: R, side: Right) -> None: ...
+    def __init__(self, value: L, side: object) -> None: ...
+    @overload
+    def __init__(self, value: R, side: object) -> None: ...
 
-    def __init__(self, value: L | R, side: SBool = LEFT) -> None:
-        self._value = value
-        self._side = side
+    def __init__(self, value: L | R, side: object = LEFT) -> None:
+        self._value: L | R
+        self._side: _EitherBool
+        if side:
+            self._value = value
+            self._side = LEFT
+        else:
+            self._value = value
+            self._side = RIGHT
 
     def __hash__(self) -> int:
-        return hash((_Sentinel('XOR'), self._value, self._side))
+        return hash((self, self._value, self._side))
 
     def __bool__(self) -> bool:
         return self._side == LEFT

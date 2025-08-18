@@ -20,7 +20,7 @@ __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Final, Never, overload, TypeVar
-from pythonic_fp.singletons.sentinel import Sentinel
+from pythonic_fp.sentinels.sentinel import Sentinel
 
 D = TypeVar('D', covariant=True)
 
@@ -52,8 +52,8 @@ class MayBe[D]:
     @overload
     def __init__(self, value: D) -> None: ...
 
-    def __init__(self, value: D | Sentinel = Sentinel('MayBe')) -> None:
-        self._value: D | Sentinel = value
+    def __init__(self, value: D | Sentinel[str] = Sentinel('MayBe')) -> None:
+        self._value: D | Sentinel[str] = value
 
     def __hash__(self) -> int:
         return hash((Sentinel('MayBe'), self._value))
@@ -87,7 +87,7 @@ class MayBe[D]:
     @overload
     def get(self, alt: D) -> D: ...
 
-    def get(self, alt: D | Sentinel = Sentinel('MayBe')) -> D | Never:
+    def get(self, alt: D | Sentinel[str] = Sentinel('MayBe')) -> D | Never:
         """Return the contained value if it exists, otherwise an alternate value.
 
         .. warning::
@@ -99,7 +99,7 @@ class MayBe[D]:
         :raises ValueError: when an alternate value is not provided but needed
 
         """
-        _sentinel: Final[Sentinel] = Sentinel('MayBe')
+        _sentinel: Final[Sentinel[str]] = Sentinel('MayBe')
         if self._value is not _sentinel:
             return cast(D, self._value)
         if alt is _sentinel:

@@ -16,7 +16,7 @@ __all__ = ['Either', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Never, overload, TypeVar
-from pythonic_fp.booleans.subtypable_boolean import SBool
+from pythonic_fp.booleans.subtypable import SBool
 from .maybe import MayBe
 
 L = TypeVar('L', covariant=True)
@@ -80,13 +80,13 @@ class Either[L, R]:
     @overload
     def __init__(self, value: L) -> None: ...
     @overload
-    def __init__(self, value: L, side: object) -> None: ...
+    def __init__(self, value: L, side: EitherBool) -> None: ...
     @overload
-    def __init__(self, value: R, side: object) -> None: ...
+    def __init__(self, value: R, side: EitherBool) -> None: ...
 
-    def __init__(self, value: L | R, side: object = LEFT) -> None:
+    def __init__(self, value: L | R, side: EitherBool = LEFT) -> None:
         self._value: L | R
-        self._side: _EitherBool
+        self._side: EitherBool
         if side:
             self._value = value
             self._side = LEFT
@@ -98,7 +98,7 @@ class Either[L, R]:
         return hash((self, self._value, self._side))
 
     def __bool__(self) -> bool:
-        return self._side == LEFT
+        return self._side is LEFT
 
     def __iter__(self) -> Iterator[L]:
         if self:

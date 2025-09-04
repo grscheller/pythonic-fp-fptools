@@ -18,7 +18,7 @@ __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Final, Never, overload, TypeVar
-from pythonic_fp.sentinels.sentinel import Sentinel
+from pythonic_fp.sentinels.flavored import Sentinel
 
 D = TypeVar('D', covariant=True)
 

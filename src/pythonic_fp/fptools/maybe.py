@@ -17,10 +17,8 @@
 __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
-from typing import cast, Final, Never, overload, TypeVar
+from typing import cast, Final, overload, TypeVar
 from pythonic_fp.sentinels.flavored import Sentinel
-
-D = TypeVar('D', covariant=True)
 
 
 class MayBe[D]:
@@ -29,18 +27,16 @@ class MayBe[D]:
     Immutable semantics
 
     - can store any item of any type, including ``None``
-    - can store any value of any type with one exception
-    - immutable semantics, therefore made covariant
+
+      - with one hidden implementation dependent exception
+
+    - immutable semantics, therefore covariant
 
     .. warning::
 
         Hashability invalidated if contained value is not hashable.
 
     """
-
-    U = TypeVar('U', covariant=True)
-    V = TypeVar('V', covariant=True)
-    T = TypeVar('T')
 
     __slots__ = ('_value',)
     __match_args__ = ('_value',)
@@ -50,14 +46,14 @@ class MayBe[D]:
     @overload
     def __init__(self, value: D) -> None: ...
 
-    def __init__(self, value: D | Sentinel[str] = Sentinel('MayBe')) -> None:
+    def __init__(self, value: D | Sentinel[str] = Sentinel('_MayBe_str')) -> None:
         self._value: D | Sentinel[str] = value
 
     def __hash__(self) -> int:
-        return hash((Sentinel('MayBe'), self._value))
+        return hash((Sentinel('_MayBe_str'), self._value))
 
     def __bool__(self) -> bool:
-        return self._value is not Sentinel('MayBe')
+        return self._value is not Sentinel('_MayBe_str')
 
     def __iter__(self) -> Iterator[D]:
         if self:
@@ -81,11 +77,11 @@ class MayBe[D]:
         return False
 
     @overload
-    def get(self) -> D | Never: ...
+    def get(self) -> D: ...
     @overload
     def get(self, alt: D) -> D: ...
 
-    def get(self, alt: D | Sentinel[str] = Sentinel('MayBe')) -> D | Never:
+    def get(self, alt: D | Sentinel[str] = Sentinel('_MayBe_str')) -> D:
         """Return the contained value if it exists, otherwise an alternate value.
 
         .. warning::
@@ -94,10 +90,11 @@ class MayBe[D]:
             and an alt return value not given. Best practice is to first check
             the MayBe in a boolean context.
 
+        :param alt: an "optional" alternative value to return
         :raises ValueError: when an alternate value is not provided but needed
 
         """
-        _sentinel: Final[Sentinel[str]] = Sentinel('MayBe')
+        _sentinel: Final[Sentinel[str]] = Sentinel('_MayBe_str')
         if self._value is not _sentinel:
             return cast(D, self._value)
         if alt is _sentinel:
@@ -118,22 +115,19 @@ class MayBe[D]:
 
     @staticmethod
     def sequence[U](sequence_mb_u: 'Sequence[MayBe[U]]') -> 'MayBe[Sequence[U]]':
-        """Sequence a mutable indexable of type ``MayBe[~U]``
+        """
+        Sequence a mutable indexable of type ``Sequence[MayBe[U]]``.
 
-        If the iterated `MayBe` values are not all empty,
-
-        - return a MayBe of the Sequence subtype of the contained values
-        - otherwise return an empty MayBe
+        :param sequence_mb_u: Sequence of type ``Maybe[U]``
+        :returns: MayBe of Sequence subtype if all values non-empty, otherwise an empty Maybe
 
         """
-        list_items: list[U] = list()
+        sequenced_items: list[U] = []
 
         for mb_u in sequence_mb_u:
             if mb_u:
-                list_items.append(mb_u.get())
+                sequenced_items.append(mb_u.get())
             else:
                 return MayBe()
 
-        sequence_type = cast(Sequence[U], type(sequence_mb_u))
-
-        return MayBe(sequence_type(list_items))  # type: ignore # subclass will be callable
+        return MayBe(type(sequence_mb_u)(sequenced_items))  # type: ignore

@@ -26,16 +26,12 @@ Non-strict delayed function evaluation.
 """
 
 from collections.abc import Callable
-from typing import Any, Final, Never, TypeVar, ParamSpec
+from typing import Any, Final
 from .function import sequenced
 from .either import Either, LEFT, RIGHT
 from .maybe import MayBe
 
 __all__ = ['Lazy', 'lazy', 'real_lazy']
-
-D = TypeVar('D')
-R = TypeVar('R', contravariant=True)
-P = ParamSpec('P')
 
 
 class Lazy[D, R]:
@@ -104,7 +100,7 @@ class Lazy[D, R]:
         """Return true if Lazy raised exception."""
         return self._exceptional
 
-    def get(self, alt: R | None = None) -> R | Never:
+    def get(self, alt: R | None = None) -> R:
         """Get result only if evaluated and no exceptions occurred, otherwise
         return an alternate value.
 

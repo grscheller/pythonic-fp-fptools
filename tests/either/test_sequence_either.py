@@ -22,7 +22,7 @@ class TestEitherSequence:
     """Test Either sequence class function"""
 
     def test_no_rights(self) -> None:
-        """Test with omly left values"""
+        """Test with only left values"""
         list_of_either_int_str: list[Either[int, str]] = list(
             map(lambda x: Either(x, LEFT), range(1, 2501))
         )

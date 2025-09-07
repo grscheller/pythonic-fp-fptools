@@ -42,15 +42,7 @@ A pure FP immutable implementation for the State Monad.
 __all__ = ['State']
 
 from collections.abc import Callable
-from typing import TypeVar
 from pythonic_fp.circulararray.auto import CA
-
-S = TypeVar('S')
-A = TypeVar('A')
-B = TypeVar('B')
-C = TypeVar('C')
-ST = TypeVar('ST')
-AA = TypeVar('AA')
 
 
 class State[S, A]:

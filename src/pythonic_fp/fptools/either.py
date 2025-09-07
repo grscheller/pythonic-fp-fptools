@@ -15,12 +15,9 @@
 __all__ = ['Either', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
-from typing import cast, Never, overload, TypeVar
+from typing import cast, overload
 from pythonic_fp.booleans.subtypable import SBool
 from .maybe import MayBe
-
-L = TypeVar('L', covariant=True)
-R = TypeVar('R', covariant=True)
 
 
 class EitherBool(SBool):
@@ -72,10 +69,6 @@ class Either[L, R]:
 
     __slots__ = '_value', '_side'
     __match_args__ = ('_value', '_side')
-
-    U = TypeVar('U', covariant=True)
-    V = TypeVar('V', covariant=True)
-    T = TypeVar('T')
 
     @overload
     def __init__(self, value: L) -> None: ...
@@ -132,7 +125,7 @@ class Either[L, R]:
 
         return False
 
-    def get(self) -> L | Never:
+    def get(self) -> L:
         """Get value if a left.
 
         .. warning::

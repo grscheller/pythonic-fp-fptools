@@ -14,7 +14,7 @@
 
 from pythonic_fp.containers.functional_tuple import FTuple
 from pythonic_fp.fptools.maybe import MayBe
-from pythonic_fp.containers.queues.de import DEQueue as DQ, de_queue as dq
+from pythonic_fp.containers.queues.de import DEQueue, de_queue
 
 
 class Test_MB_sequence:
@@ -25,7 +25,7 @@ class Test_MB_sequence:
         list_mb_int = list(map(MayBe, range(1, 2501)))
         tuple_mb_int = tuple(map(MayBe, range(1, 2501)))
         ftuple_mb_int = FTuple(map(MayBe, range(1, 2501)))
-        dqueue_mb_int = DQ(map(MayBe, range(1, 2501)))
+        dqueue_mb_int = DEQueue(map(MayBe, range(1, 2501)))
 
         mb_list_int = MayBe.sequence(list_mb_int)
         mb_tuple_int = MayBe.sequence(tuple_mb_int)
@@ -35,14 +35,14 @@ class Test_MB_sequence:
         assert mb_list_int == MayBe(list(range(1, 2501)))
         assert mb_tuple_int == MayBe(tuple(range(1, 2501)))
         assert mb_ftuple_int == MayBe(FTuple(range(1, 2501)))
-        assert mb_dqueue_int == MayBe(DQ(range(1, 2501)))
+        assert mb_dqueue_int == MayBe(DEQueue(range(1, 2501)))
 
     def test_with_empties(self) -> None:
         """Test with empty MayBe values"""
         list_of_mb_int = [MayBe[int](), MayBe(2), MayBe(3), MayBe(4)]
         tuple_of_mb_int = MayBe(1), MayBe[int](), MayBe(3), MayBe(4)
         ftuple_of_mb_int = FTuple([MayBe(1), MayBe(2), MayBe[int](), MayBe(4)])
-        dqueue_of_mb_int = dq(MayBe(1), MayBe(2), MayBe(3), MayBe[int]())
+        dqueue_of_mb_int = de_queue(MayBe(1), MayBe(2), MayBe(3), MayBe[int]())
 
         mb_list_int = MayBe.sequence(list_of_mb_int)
         mb_tuple_int = MayBe.sequence(tuple_of_mb_int)

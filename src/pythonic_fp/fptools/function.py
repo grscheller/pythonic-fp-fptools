@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Pythonic FP - FP tools for functions
-
-Not a replacement for the std library's `functools` which is more about
-modifying function behavior through decorators than functional composition
-and application.
+"""
+FP tools for functions
+======================
 
 FP utilities to manipulate and partially apply functions
 
@@ -36,12 +34,29 @@ P = ParamSpec('P')
 
 
 def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
-    """Swap arguments of a two argument function."""
+    """
+    Swap args
+    ---------
+
+    Swap arguments of a two argument function.
+
+    :param f: Two argument function.
+    :returns: A version of ``f`` with its arguments swapped.
+
+    """
     return lambda v, u: f(u, v)
 
 
 def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
-    """Take a predicate and return its negation."""
+    """
+    Negate predicate
+    ----------------
+
+    Take a predicate and return its negation.
+
+    :param f: a function ``f`` which returns a bool
+    :returns: the function ``not f``
+    """
 
     def ff(*args: P.args, **kwargs: P.kwargs) -> bool:
         return not f(*args, **kwargs)
@@ -50,15 +65,17 @@ def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
 
 
 def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
-    """Convert a function with arbitrary positional arguments to one taking
+    """
+    Multi-to-single valued
+    ----------------------
+
+    Convert a function with arbitrary positional arguments to one taking
     a tuple of the original arguments.
 
     - was awaiting typing and mypy "improvements" to ParamSpec
 
       - return type: Callable[tuple[P.args], R]   ???
       - return type: Callable[[tuple[P.args]], R] ???
-
-    - not going to happen, `see <https://github.com/python/mypy/pull/18278>`_
 
     TODO: Look into replacing this function with a Callable class?
 
@@ -71,7 +88,11 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
 
 
 def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
-    """Partially apply arguments to a function, left to right.
+    """
+    Partial application
+    -------------------
+
+    Partially apply arguments to a function, left to right.
 
     - type-wise the only thing guaranteed is the return type
     - best practice is to cast the result immediately

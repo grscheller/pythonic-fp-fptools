@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Pythonic FP - Functional Programming Tools
+"""
+Pythonic FP - Functional Programming Tools
+==========================================
 
 Functions as first class objects, Lazy (non-strict) function evaluation,
 and classical Functional Programming data structures.

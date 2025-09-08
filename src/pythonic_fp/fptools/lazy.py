@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Pythonic FP - Lazy function evaluation
+"""
+Lazy function evaluation
+========================
 
 Delayed function evaluations. FP tools for "non-strict" function evaluations.
 Useful to delay a function's evaluation until some inner scope.
@@ -35,29 +37,33 @@ __all__ = ['Lazy', 'lazy', 'real_lazy']
 
 
 class Lazy[D, R]:
-    """Delayed evaluation of a singled valued function.
+    """
+    Non-strict function evaluation
+    ------------------------------
+
+    Delayed evaluation of a singled valued function.
 
     Class instance delays the executable of a function where ``Lazy(f, arg)``
     constructs an object that can evaluate the Callable ``f`` with its argument
     at a later time.
 
-    - first argument ``f`` taking values of type ``D`` to values of type ``R``
-    - second argument ``arg: D`` is the argument to be passed to ``f``
+    .. note::
 
-      - where the type ``D`` is the ``tuple`` type of the argument types to ``f``
-
-    - function is evaluated when the ``eval`` method is called
-    - result is cached unless ``pure`` is set to ``False``
-    - returns True in Boolean context if evaluated
-
-    Usually use case is to make a function "non-strict" by passing some of its
-    arguments wrapped in Lazy instances.
+        Usually use case is to make a function "non-strict" by passing some of its
+        arguments wrapped in Lazy instances.
 
     """
 
     __slots__ = ('_f', '_d', '_result', '_pure', '_evaluated', '_exceptional')
 
     def __init__(self, f: Callable[[D], R], d: D, pure: bool = True) -> None:
+        """
+        :param f: single argument function
+        :param d: argument to be passed to ``f``
+        :param pure: if true, cache the result for future ``eval`` method calls
+        :returns: an object that can call the function ``f`` at a later time
+
+        """
         self._f: Final[Callable[[D], R]] = f
         self._d: Final[D] = d
         self._pure: bool = pure
@@ -72,8 +78,8 @@ class Lazy[D, R]:
         """Evaluate function with its argument.
 
         - evaluate function
-        - cache result or exception if ``pure == True``
-        - reevaluate if ``pure == False``
+        - cache result or exception if ``pure is True``
+        - reevaluate if ``pure is False``
 
         """
         if not (self._pure and self._evaluated):
@@ -93,19 +99,26 @@ class Lazy[D, R]:
                 )
 
     def got_result(self) -> MayBe[bool]:
-        """Return true if an evaluated Lazy did not raise an exception."""
+        """
+        :returns: ``True`` only if an evaluated ``Lazy`` did not raise an exception.
+
+        """
         return self._exceptional.bind(lambda x: MayBe(not x))
 
     def got_exception(self) -> MayBe[bool]:
-        """Return true if Lazy raised exception."""
+        """Return true if Lazy raised exception.
+        :returns: ``True`` only if ``Lazy`` raised an exception.
+
+        """
         return self._exceptional
 
     def get(self, alt: R | None = None) -> R:
         """Get result only if evaluated and no exceptions occurred, otherwise
         return an alternate value.
 
-        A possible use case would be if the calculation is expensive, but if it
-        has already been done, its result is better than the alternate value.
+        :param alt: optional alternate value to return if ``Lazy`` is exceptional
+        :returns: the successfully evaluated result, otherwise ``alt`` if given
+        :raises ValueError: if method called on a ``Lazy`` which was not yet evaluated 
 
         """
         if self._evaluated and self._result:
@@ -116,13 +129,21 @@ class Lazy[D, R]:
         raise ValueError(msg)
 
     def get_result(self) -> MayBe[R]:
-        """Get result only if evaluated and not exceptional."""
+        """Get result only if evaluated and not exceptional.
+
+        :returns: The result wrapped in a maybe monad.
+
+        """
         if self._evaluated and self._result:
             return self._result.get_left()
         return MayBe()
 
     def get_exception(self) -> MayBe[Exception]:
-        """Get result only if evaluate and exceptional."""
+        """Get result only if evaluate and exceptional.
+
+        :returns: The exception thrown wrapped in a maybe monad.
+
+        """
         if self._evaluated and not self._result:
             return self._result.get_right()
         return MayBe()
@@ -131,19 +152,17 @@ class Lazy[D, R]:
 def lazy[**P, R](
     f: Callable[P, R], *args: P.args, **kwargs: P.kwargs
 ) -> Lazy[tuple[Any, ...], R]:
-    """Delayed evaluation of a function with arbitrary positional arguments.
+    """
+    Delayed evaluations
+    -------------------
 
     Function returning a delayed evaluation of a function of an arbitrary number
     of positional arguments.
 
-    - first positional argument ``f`` takes a function
-    - next positional arguments are the arguments to be applied later to ``f``
-
-      - ``f`` is reevaluated whenever ``eval`` method of the returned ``Lazy`` is called
-
-    - any kwargs passed are ignored
-
-      - if ``f`` needs them, then wrap ``f`` in another function
+    :param f: Function whose evaluation is to be delayed.
+    :param args: Positional arguments to be passed to ``f``.
+    :param kwargs: Any kwargs given are ignored.
+    :returns: a ``Lazy`` object wrapping the evaluation of ``f``
 
     """
     return Lazy(sequenced(f), args, pure=False)
@@ -152,20 +171,17 @@ def lazy[**P, R](
 def real_lazy[**P, R](
     f: Callable[P, R], *args: P.args, **kwargs: P.kwargs
 ) -> Lazy[tuple[Any, ...], R]:
-    """Cached delayed evaluation of a function with arbitrary positional arguments.
+    """
+    Cached Delayed evaluations
+    --------------------------
 
     Function returning a delayed evaluation of a function of an arbitrary number
-    of positional arguments.
+    of positional arguments. Evaluation is cached.
 
-    - first positional argument ``f`` takes a function
-    - next positional arguments are the arguments to be applied later to ``f``
-
-      - ``f`` is evaluated when ``eval`` method of the returned ``Lazy`` is called
-      - ``f`` is evaluated only once with results cached
-
-    - any kwargs passed are ignored
-
-      - if ``f`` needs them then wrap ``f`` in another function
+    :param f: Function whose evaluation is to be delayed.
+    :param args: Positional arguments to be passed to ``f``.
+    :param kwargs: Any kwargs given are ignored.
+    :returns: a ``Lazy`` object wrapping the evaluation of ``f``
 
     """
     return Lazy(sequenced(f), args)

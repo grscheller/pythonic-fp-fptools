@@ -32,28 +32,32 @@ RIGHT = EitherBool(False)
 
 
 class Either[L, R]:
-    """Either monad, data structure semantically containing either a left
+    """
+    Either Monad
+    ------------
+
+    Data structure semantically containing either a left
     or a right value, but not both.
 
     Implements a left biased Either Monad.
 
-    - `Either(value: +L, LEFT)` produces a left `Either`
-    - `Either(value: +L, RIGHT)` produces a right `Either`
+    - ``Either(value: +L, LEFT)`` produces a left ``Either``
+    - ``Either(value: +L, RIGHT)`` produces a right ``Either``
 
     In a Boolean context
 
-    - `True` if a left `Either`
-    - `False` if a right `Either`
+    - A left ``Either`` is "truthy"
+    - A right ``Either`` is "falsy"
 
-    Two `Either` objects compare as equal when
+    Two ``Either`` objects compare as equal when
 
     - both are left values or both are right values whose values
 
       - are the same object
       - compare as equal
 
-    Immutable, an `Either` does not change after being created. Therefore
-    map & bind return new instances
+    Immutable, an ``Either`` does not change after being created.
+    Therefore ``map`` & ``bind`` return new instances.
 
     .. warning::
 
@@ -62,8 +66,8 @@ class Either[L, R]:
 
     .. note::
 
-        ``Either(value: +L, side: Left): Either[+L, +R] -> left: Either[+L, +R]``
-        ``Either(value: +R, side: Right): Either[+L, +R] -> right: Either[+L, +R]``
+        ``Either(value: +L, side: Left): Either[L, R] -> left: Either[L, R]``
+        ``Either(value: +R, side: Right): Either[L, R] -> right: Either[L, R]``
 
     """
 
@@ -134,8 +138,7 @@ class Either[L, R]:
             is a right. Best practice is to first check the ``Either`` in
             a boolean context.
 
-        :return: its value if a Left
-        :rtype: +L
+        :returns: its value if a Left
         :raises ValueError: if not a left
 
         """
@@ -145,10 +148,9 @@ class Either[L, R]:
         return cast(L, self._value)
 
     def get_left(self) -> MayBe[L]:
-        """Get value of `Either` if a left. Safer version of `get` method.
+        """Get value of ``Either`` if a left. Safer version of ``get`` method.
 
-        - if `Either` contains a left value, return it wrapped in a MayBe
-        - if `Either` contains a right value, return MayBe()
+        :returns: MayBe[L]
 
         """
         if self._side == LEFT:
@@ -156,10 +158,9 @@ class Either[L, R]:
         return MayBe()
 
     def get_right(self) -> MayBe[R]:
-        """Get value of `Either` if a right
+        """Get value of ``Either`` if a right.
 
-        - if `Either` contains a right value, return it wrapped in a MayBe
-        - if `Either` contains a left value, return MayBe()
+        :returns: MayBe[R]
 
         """
         if self._side == RIGHT:
@@ -167,19 +168,34 @@ class Either[L, R]:
         return MayBe()
 
     def map_right[V](self, f: Callable[[R], V]) -> 'Either[L, V]':
-        """Construct new Either with a different right."""
+        """Construct new Either with a different right.
+
+        :param f: function to map a right value
+        :returns: a new Either if a right, otherwise itself
+
+        """
         if self._side == LEFT:
             return cast(Either[L, V], self)
         return Either[L, V](f(cast(R, self._value)), RIGHT)
 
     def map[U](self, f: Callable[[L], U]) -> 'Either[U, R]':
-        """Map over if a left value. Return new instance."""
+        """Map over if a left value. Return new instance.
+
+        :param f: function to map a left value
+        :returns: a new Either if a left, otherwise itself
+
+        """
         if self._side == RIGHT:
             return cast(Either[U, R], self)
         return Either(f(cast(L, self._value)), LEFT)
 
     def bind[U](self, f: 'Callable[[L], Either[U, R]]') -> 'Either[U, R]':
-        """Flatmap over the left value, propagate right values."""
+        """Flatmap over the left value, propagate right values.
+
+        :param f: function to flatmap a left value
+        :returns: a new Either if a left, otherwise itself
+
+        """
         if self:
             return f(cast(L, self._value))
         return cast(Either[U, R], self)
@@ -187,16 +203,20 @@ class Either[L, R]:
     def map_except[U](self, f: Callable[[L], U], fallback_right: R) -> 'Either[U, R]':
         """Map over if a left value - with fallback upon exception.
 
-        - if `Either` is a left then map `f` over its value
+        - if ``Either`` is a left then map ``f`` over its value
 
-          - if `f` successful return a left `Either[+U, +R]`
-          - if `f` unsuccessful return right `Either[+U, +R]`
+          - if ``f`` returns normally, then return a left ``Either[U, R]``
+          - if ``f`` raises an exception, return right ``Either[U, R]``
 
-            - swallows many exceptions `f` may throw at run time
+        - if ``Either`` is a right
 
-        - if `Either` is a right
+          - return new ``Either(right=self._right): Either[+U, +R]``
 
-          - return new `Either(right=self._right): Either[+U, +R]`
+        .. warning::
+            Swallows exceptions.
+
+        .. note
+            The fallback type must be the same type as the ``Either``
 
         """
         if self._side == RIGHT:
@@ -225,12 +245,17 @@ class Either[L, R]:
     def bind_except[U](
         self, f: 'Callable[[L], Either[U, R]]', fallback_right: R
     ) -> 'Either[U, R]':
-        """Flatmap `Either` with function `f` with fallback right
+        """Flatmap ``Either`` with function ``f`` with a fallback right
+        if exception is thrown.
 
         .. warning::
             Swallows exceptions.
 
+        .. note
+            The fallback type must be the same type as the ``Either``.
+
         :param fallback_right: fallback value if exception thrown
+        :returns: a successfully mapped left, a propagated right, or a right with fallback value
 
         """
         if self._side == RIGHT:
@@ -261,10 +286,10 @@ class Either[L, R]:
     def sequence[U, V](
         sequence_xor_uv: 'Sequence[Either[U, V]]',
     ) -> 'Either[Sequence[U], V]':
-        """Sequence an indexable of type `Either[~U, ~V]`
+        """Sequence an indexable of type ``Either[U, V]``
 
-        If the iterated `Either` values are all lefts, then return an `Either` of
-        an iterable of the left values. Otherwise return a right Either containing
+        If the iterated ``Either`` values are all lefts, then return an ``Either`` of
+        an iterable of the left values. Otherwise return a right ``Either`` containing
         the first right encountered.
 
         """

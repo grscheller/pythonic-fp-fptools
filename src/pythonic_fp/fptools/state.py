@@ -12,33 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Pythonic FP - State Monad
-
-Handling state functionally.
-
-##### *class* State - Classic FP State Monad
-
-A pure FP immutable implementation for the State Monad.
-
-- translated to Python from the book "Functional Programming in Scala"
-
-  - authors Chiusana & Bjarnason
-  - run "action" returns a tuple ``(a, s)`` reversed to the type ``State[S, A]``
-
-    - the standard convention seen in the FP community
-    - another "factoid" to remember
-
-- choose the name ``bind`` instead of ``flatmap``
-
-  - the ``flatmap`` name is misleading for non-container-like monads
-  - ``flatmap`` name too long, ``bind`` shorter to type
-
-    - without "do-notation", code tends to march to the right
-
-- typing for the ``modify`` class method may be a bit suspect
-
-"""
-
 __all__ = ['State']
 
 from collections.abc import Callable
@@ -46,7 +19,12 @@ from pythonic_fp.circulararray.auto import CA
 
 
 class State[S, A]:
-    """Data structure generating values while propagating changes of state.
+    """
+    State Monad
+    -----------
+
+    Data structure generating values while propagating changes of state.
+    A pure FP implementation for the State Monad
 
     - class ``State`` represents neither a state nor (value, state) pair
 

@@ -5,13 +5,16 @@ PyPI project
 `pythonic-fp.fptools
 <https://pypi.org/project/pythonic-fp.fptools>`_.
 
-Tools to aid with functional programming in Python yet still endeavoring to
-remain Pythonic.
+Tools to aid with functional programming in Python while still
+endeavoring to be Pythonic.
 
 - Functions as first class objects
 - Lazy (non-strict) function evaluation
 - Maybe monad - representing a possible missing value
-- Either monad - left bias either monad representing either a LEFT or RIGHT value
+- Either monad - representing either a LEFT or RIGHT value, not both
+
+  - left biased
+
 - State monad implementation
 
   - pure FP handling of state (the state monad)

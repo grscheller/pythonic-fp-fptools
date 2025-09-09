@@ -85,10 +85,8 @@ class State[S, A]:
     def put[ST](s: ST) -> 'State[ST, tuple[()]]':
         """Manually insert a state.
 
-        THe run action.
-
         - ignores previous state and swaps in a new state
-        - assigns a canonically meaningless value to current value
+        - assigns a canonically meaningless value for current value
 
         """
         return State(lambda _: ((), s))

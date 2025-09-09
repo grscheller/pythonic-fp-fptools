@@ -17,8 +17,8 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-5.1.0 - TBD
-~~~~~~~~~~~
+5.1.0 - 2025-09-09
+~~~~~~~~~~~~~~~~~~
 
 Updated docstrings for new Sphinx docs structure. Probably just a PATCH release,
 made it a MINOR release due to introducing .pyi files.

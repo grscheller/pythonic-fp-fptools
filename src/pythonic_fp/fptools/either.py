@@ -286,7 +286,7 @@ class Either[L, R]:
     def sequence[U, V](
         sequence_xor_uv: 'Sequence[Either[U, V]]',
     ) -> 'Either[Sequence[U], V]':
-        """Sequence an indexable of type ``Either[U, V]``
+        """Sequence a sequence subtype of Sequence[Either[U, V]]``
 
         If the iterated ``Either`` values are all lefts, then return an ``Either`` of
         an iterable of the left values. Otherwise return a right ``Either`` containing

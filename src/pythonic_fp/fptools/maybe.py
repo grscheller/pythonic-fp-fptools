@@ -121,7 +121,7 @@ class MayBe[D]:
     @staticmethod
     def sequence[U](sequence_mb_u: 'Sequence[MayBe[U]]') -> 'MayBe[Sequence[U]]':
         """
-        Sequence a mutable indexable of type ``Sequence[MayBe[U]]``.
+        Sequence a subtype of ``Sequence[MayBe[U]]``.
 
         :param sequence_mb_u: Sequence of type ``Maybe[U]``
         :returns: MayBe of Sequence subtype if all items non-empty, otherwise an empty Maybe

@@ -25,15 +25,15 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "pythonic-fp-booleans>=1.1.1",
-  "pythonic-fp-circulararray>=5.3.2",
-  "pythonic-fp-sentinels>=2.1.0",
+  "pythonic-fp-booleans>=2.0.0",
+  "pythonic-fp-circulararray>=5.3.3",
+  "pythonic-fp-sentinels>=2.1.1",
 ]
 dynamic = ["description"]
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp/fptools/development/build/html/releases.html"
+Documentation = "https://grscheller.github.io/pythonic-fp/fptools/development/build/html/index.html"
 Homepage = "https://github.com/grscheller/pythonic-fp/blob/main/README.md"
 Source = "https://github.com/grscheller/pythonic-fp-fptools"
 

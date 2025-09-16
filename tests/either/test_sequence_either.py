@@ -15,7 +15,7 @@
 from typing import Final
 from pythonic_fp.containers.functional_tuple import FTuple
 from pythonic_fp.fptools.either import Either, LEFT, RIGHT
-from pythonic_fp.containers.queues.fifo import FIFOQueue
+from pythonic_fp.queues.fifo import FIFOQueue
 
 
 class TestEitherSequence:

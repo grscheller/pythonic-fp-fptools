@@ -145,10 +145,8 @@ Added fp.function module.
 - combine and partially apply functions as first class objects
 - some tests may be lacking
 
-1.0.2.0 - 2024-10-20
-~~~~~~~~~~~~~~~~~~~~
-
-Development environment only.
+Version 1.0.2.0 - 2024-10-20 (Devel environment only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - breaking API changes, next PyPI release will be 1.1.0.
 - renamed module ``nothingness`` to ``singletons``
@@ -188,25 +186,23 @@ PyPI 0.4.0 - 2024-10-03
 
 Long overdue PyPI release.
 
-0.3.5.1 - 2024-10-03
-~~~~~~~~~~~~~~~~~~~~
+Version 0.3.5.1 - 2024-10-03 (Devel environment only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Development environment only.
+New module ``grscheller.fp.nothingness`` which contains
 
-- New module ``grscheller.fp.nothingness`` for
+- Singleton ``noValue`` representing a missing value
 
-  - Singleton ``noValue`` representing a missing value
+  - similar to ``None`` but while
 
-    - similar to ``None`` but while
+    - ``None`` represent "returned no values"
+    - ``noValue: _NoValue = _NoValue()`` represents an absent value
 
-      - ``None`` represent "returned no values"
-      - ``noValue: _NoValue = _NoValue()`` represents an absent value
+  - mostly used as an implementation detail
 
-    - mostly used as an implementation detail
+    - allows client code to use ``None`` as a sentinel value
 
-      - allows client code to use ``None`` as a sentinel value
-
-    - prefer class ``MB`` to represent a missing value in client code
+  - prefer class ``MB`` to represent a missing value in client code
 
 PyPI 0.3.3 - 2024-08-25
 ~~~~~~~~~~~~~~~~~~~~~~~

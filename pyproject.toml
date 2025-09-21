@@ -27,7 +27,7 @@ classifiers = [
 dependencies = [
   "pythonic-fp-booleans>=2.0.0",
   "pythonic-fp-circulararray>=5.3.3",
-  "pythonic-fp-sentinels>=2.1.1",
+  "pythonic-fp-gadgets>=3.1.0",
 ]
 dynamic = ["description"]
 
@@ -40,7 +40,7 @@ Source = "https://github.com/grscheller/pythonic-fp-fptools"
 [project.optional-dependencies]
 test = [
   "pytest>=8.4.1",
-  "pythonic-fp-containers>=3.0.0",
+  "pythonic-fp-containers>=4.0.0",
 ]
 
 [build-system]

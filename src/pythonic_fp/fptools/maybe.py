@@ -18,7 +18,7 @@ __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Final, overload
-from pythonic_fp.sentinels.flavored import Sentinel
+from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
 
 class MayBe[D]:

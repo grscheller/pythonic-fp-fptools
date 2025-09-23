@@ -22,9 +22,10 @@ endeavoring to be Pythonic.
 
     - the monad encapsulates a state transformation, not a "state"
 
-This PyPI project is part of the
-`pythonic-fp namespace projects
-<https://github.com/grscheller/pythonic-fp/blob/main/README.md>`_
+Part of the
+`pythonic-fp
+<https://grscheller.github.io/pythonic-fp/overview/next/build/html/index.html>`_
+PyPI projects.
 
 Documentation
 -------------

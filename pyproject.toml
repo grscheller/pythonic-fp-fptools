@@ -33,14 +33,16 @@ dynamic = ["description"]
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp/fptools/development/build/html/index.html"
-Homepage = "https://github.com/grscheller/pythonic-fp/blob/main/README.md"
+Documentation = "https://grscheller.github.io/pythonic-fp/fptools/development/build/html/"
+Homepage = "https://grscheller.github.io/pythonic-fp/homepage/build/html/"
 Source = "https://github.com/grscheller/pythonic-fp-fptools"
 
 [project.optional-dependencies]
 test = [
   "pytest>=8.4.1",
   "pythonic-fp-containers>=4.0.0",
+  "pythonic-fp-iterables>=5.1.2",
+  "pythonic-fp-queues>=4.1.0",
 ]
 
 [build-system]

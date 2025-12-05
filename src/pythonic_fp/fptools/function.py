@@ -19,8 +19,9 @@ FP tools for functions
 FP utilities to manipulate and partially apply functions
 
 - *function* **swap** - Swap the arguments of a 2 argument function
-- *function* **sequenced** - Convert function to take a sequence of its arguments
+- *function* **compose** - Function composition
 - *function* **negate** - Transforms a predicate to its negation
+- *function* **sequenced** - Convert function to take a sequence of its arguments
 - *function* **partial** - Returns a partially applied function
 
 """
@@ -28,15 +29,14 @@ FP utilities to manipulate and partially apply functions
 from collections.abc import Callable
 from typing import Any, ParamSpec
 
-__all__ = ['swap', 'sequenced', 'partial', 'negate']
+__all__ = ['swap', 'compose', 'negate', 'sequenced', 'partial']
 
 P = ParamSpec('P')
 
 
 def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
     """
-    Swap args
-    ---------
+    **Swap arguments**
 
     Swap arguments of a two argument function.
 
@@ -47,17 +47,27 @@ def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
     return lambda v, u: f(u, v)
 
 
+def compose[D, T, R](f: Callable[[D], T], g: Callable[[T], R]) -> Callable[[D], R]:
+    """
+    **Function Composition**
+
+    :param f: Function called first with domain D and range T.
+    :param g: Function called on result with domain T and range R.
+    :returns: The composite function g∘f(d) = g(f(d))
+
+    """
+    return lambda d: g(f(d))
+
+
 def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
     """
-    Negate predicate
-    ----------------
+    **Negate predicate**
 
     Take a predicate and return its negation.
 
     :param f: a function ``f`` which returns a bool
     :returns: the function ``not f``
     """
-
     def ff(*args: P.args, **kwargs: P.kwargs) -> bool:
         return not f(*args, **kwargs)
 
@@ -66,8 +76,7 @@ def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
 
 def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
     """
-    Multi-to-single valued
-    ----------------------
+    **Multi-to-single valued**
 
     Convert a function with arbitrary positional arguments to one taking
     a tuple of the original arguments.
@@ -80,7 +89,6 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
     TODO: Look into replacing this function with a Callable class?
 
     """
-
     def ff(tupled_args: tuple[Any]) -> R:
         return f(*tupled_args)
 
@@ -89,8 +97,7 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
 
 def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
     """
-    Partial application
-    -------------------
+    **Partial function application**
 
     Partially apply arguments to a function, left to right.
 
@@ -98,7 +105,6 @@ def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
     - best practice is to cast the result immediately
 
     """
-
     def finish(*rest: Any) -> R:
         return sequenced(f)(args + rest)
 

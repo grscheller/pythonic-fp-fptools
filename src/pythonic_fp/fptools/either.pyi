@@ -4,7 +4,7 @@ from collections.abc import Callable, Iterator, Sequence
 from pythonic_fp.booleans.subtypable import SBool
 from typing import overload
 
-__all__ = ['Either', 'LEFT', 'RIGHT']
+__all__ = ['Either', 'EitherBool', 'LEFT', 'RIGHT']
 
 class EitherBool(SBool): ...
 

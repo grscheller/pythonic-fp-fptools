@@ -13,16 +13,15 @@
 # limitations under the License.
 
 """
-FP tools for functions
-======================
+.. admonition:: FP tools for functions
 
-FP utilities to manipulate and partially apply functions
+    FP utilities to manipulate and partially apply functions.
 
-- *function* **swap** - Swap the arguments of a 2 argument function
-- *function* **compose** - Function composition
-- *function* **negate** - Transforms a predicate to its negation
-- *function* **sequenced** - Convert function to take a sequence of its arguments
-- *function* **partial** - Returns a partially applied function
+    - *function* **swap** - Swap the arguments of a 2 argument function
+    - *function* **compose** - Function composition
+    - *function* **negate** - Transforms a predicate to its negation
+    - *function* **sequenced** - Convert function to take a sequence of its arguments
+    - *function* **partial** - Returns a partially applied function
 
 """
 
@@ -35,10 +34,7 @@ P = ParamSpec('P')
 
 
 def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
-    """
-    **Swap arguments**
-
-    Swap arguments of a two argument function.
+    """Swap arguments of a two argument function.
 
     :param f: Two argument function.
     :returns: A version of ``f`` with its arguments swapped.
@@ -48,8 +44,7 @@ def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
 
 
 def compose[D, T, R](f: Callable[[D], T], g: Callable[[T], R]) -> Callable[[D], R]:
-    """
-    **Function Composition**
+    """Function Composition
 
     :param f: Function called first with domain D and range T.
     :param g: Function called on result with domain T and range R.
@@ -60,10 +55,7 @@ def compose[D, T, R](f: Callable[[D], T], g: Callable[[T], R]) -> Callable[[D], 
 
 
 def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
-    """
-    **Negate predicate**
-
-    Take a predicate and return its negation.
+    """Take a predicate and return its negation.
 
     :param f: a function ``f`` which returns a bool
     :returns: the function ``not f``
@@ -75,8 +67,7 @@ def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
 
 
 def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
-    """
-    **Multi-to-single valued**
+    """Convert a function from multi-to-single valued.
 
     Convert a function with arbitrary positional arguments to one taking
     a tuple of the original arguments.
@@ -96,8 +87,7 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
 
 
 def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
-    """
-    **Partial function application**
+    """Partial function application.
 
     Partially apply arguments to a function, left to right.
 

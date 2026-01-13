@@ -13,17 +13,16 @@
 # limitations under the License.
 
 """
-Lazy function evaluation
-========================
+.. admonition:: Lazy function evaluation
 
-Delayed function evaluations. FP tools for "non-strict" function evaluations.
-Useful to delay a function's evaluation until some inner scope.
+    Delayed function evaluations. FP tools for "non-strict" function evaluations.
+    Useful to delay a function's evaluation until some inner scope.
 
-Non-strict delayed function evaluation.
+    Non-strict delayed function evaluation.
 
-- *class* **Lazy** - Delay evaluation of functions taking & returning single values
-- *function* **lazy** - Delay evaluation of functions taking any number of values
-- *function* **real_lazy** - Version of ``lazy`` which caches its result
+    - *class* **Lazy** - Delay evaluation of functions taking & returning single values
+    - *function* **lazy** - Delay evaluation of functions taking any number of values
+    - *function* **real_lazy** - Version of ``lazy`` which caches its result
 
 """
 
@@ -38,14 +37,13 @@ __all__ = ['Lazy', 'lazy', 'real_lazy']
 
 class Lazy[D, R]:
     """
-    Non-strict function evaluation
-    ------------------------------
+    .. admonition:: Non-strict function evaluation
 
-    Delayed evaluation of a singled valued function.
+        Delayed evaluation of a singled valued function.
 
-    Class instance delays the executable of a function where ``Lazy(f, arg)``
-    constructs an object that can evaluate the Callable ``f`` with its argument
-    at a later time.
+        Class instance delays the executable of a function where ``Lazy(f, arg)``
+        constructs an object that can evaluate the Callable ``f`` with its argument
+        at a later time.
 
     .. note::
 
@@ -153,11 +151,10 @@ def lazy[**P, R](
     f: Callable[P, R], *args: P.args, **kwargs: P.kwargs
 ) -> Lazy[tuple[Any, ...], R]:
     """
-    Delayed evaluations
-    -------------------
+    .. admonition:: Delayed evaluations
 
-    Function returning a delayed evaluation of a function of an arbitrary number
-    of positional arguments.
+        Function returning a delayed evaluation of a function of an arbitrary number
+        of positional arguments.
 
     :param f: Function whose evaluation is to be delayed.
     :param args: Positional arguments to be passed to ``f``.
@@ -172,11 +169,10 @@ def real_lazy[**P, R](
     f: Callable[P, R], *args: P.args, **kwargs: P.kwargs
 ) -> Lazy[tuple[Any, ...], R]:
     """
-    Cached Delayed evaluations
-    --------------------------
+    .. admonition:: Cached Delayed evaluations
 
-    Function returning a delayed evaluation of a function of an arbitrary number
-    of positional arguments. Evaluation is cached.
+        Function returning a delayed evaluation of a function of an
+        arbitrary number of positional arguments. Evaluation is cached.
 
     :param f: Function whose evaluation is to be delayed.
     :param args: Positional arguments to be passed to ``f``.

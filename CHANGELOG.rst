@@ -17,6 +17,16 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI 5.2.0 - 2026-01-13
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Added function.compose back on 2025-12-04. Docstring updates for Sphinx.
+
+PyPI 5.1.2 - 2025-09-28
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Patch bump for pythonic-fp PyPI coordinated release 3.3.3.
+
 PyPI 5.1.1 - 2025-09-09
 ~~~~~~~~~~~~~~~~~~~~~~~
 

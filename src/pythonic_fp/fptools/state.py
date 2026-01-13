@@ -20,17 +20,16 @@ from pythonic_fp.circulararray.auto import CA
 
 class State[S, A]:
     """
-    State Monad
-    -----------
+    .. admonition:: State Monad
 
-    Data structure generating values while propagating changes of state.
-    A pure FP implementation for the State Monad
+        Data structure generating values while propagating changes of state.
+        A pure FP implementation for the State Monad
 
-    - class ``State`` represents neither a state nor (value, state) pair
+        - class ``State`` represents neither a state nor a (value, state) pair
 
-      - it wraps a transformation old_state -> (value, new_state)
-      - the ``run`` method is this wrapped transformation
-      - ``bind`` is just state propagating function composition
+        - it wraps a transformation old_state -> (value, new_state)
+        - the ``run`` method is this wrapped transformation
+        - ``bind`` is just state propagating function composition
 
     """
 

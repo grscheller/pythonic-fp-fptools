@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__all__ = ['Either', 'LEFT', 'RIGHT']
+__all__ = ['Either', 'EitherBool', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, overload
@@ -21,6 +21,12 @@ from .maybe import MayBe
 
 
 class EitherBool(SBool):
+    """Boolean-like type used by Either constructor.
+
+    - A "truthy" value passed to constructor produces the unique ``LEFT`` value.
+    - A "falsy" value passed to constructor produces the unique ``RIGHT`` value.
+
+    """
     def __repr__(self) -> str:
         if self:
             return 'LEFT'
@@ -28,36 +34,38 @@ class EitherBool(SBool):
 
 
 LEFT = EitherBool(True)
+"""Singleton value signaling ``Either`` constructor to produce a ``LEFT`` Either, the default."""
+
 RIGHT = EitherBool(False)
+"""Singleton value signaling ``Either`` constructor to produce a ``RIGHT`` Either."""
 
 
 class Either[L, R]:
     """
-    Either Monad
-    ------------
+    .. admonition:: Either Monad
 
-    Data structure semantically containing either a left
-    or a right value, but not both.
+        Data structure semantically containing either a left
+        or a right value, but not both.
 
-    Implements a left biased Either Monad.
+        Implements a left biased Either Monad.
 
-    - ``Either(value: +L, LEFT)`` produces a left ``Either``
-    - ``Either(value: +L, RIGHT)`` produces a right ``Either``
+        - ``Either(value: +L, LEFT)`` produces a left ``Either``
+        - ``Either(value: +L, RIGHT)`` produces a right ``Either``
 
-    In a Boolean context
+        In a Boolean context
 
-    - A left ``Either`` is "truthy"
-    - A right ``Either`` is "falsy"
+        - A left ``Either`` is "truthy"
+        - A right ``Either`` is "falsy"
 
-    Two ``Either`` objects compare as equal when
+        Two ``Either`` objects compare as equal when
 
-    - both are left values or both are right values whose values
+        - both are left values or both are right values whose values
 
-      - are the same object
-      - compare as equal
+        - are the same object
+        - compare as equal
 
-    Immutable, an ``Either`` does not change after being created.
-    Therefore ``map`` & ``bind`` return new instances.
+        Immutable, an ``Either`` does not change after being created.
+        Therefore ``map`` & ``bind`` return new instances.
 
     .. warning::
 

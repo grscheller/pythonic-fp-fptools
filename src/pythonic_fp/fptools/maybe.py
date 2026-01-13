@@ -23,18 +23,17 @@ from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
 class MayBe[D]:
     """
-    Maybe Monad
-    -----------
+    .. admonition:: Maybe Monad
 
-    Data structure wrapping a potentially missing item.
+        Data structure wrapping a potentially missing item.
 
-    Immutable semantics
+        Immutable semantics
 
-    - can store any item of any type, including ``None``
+        - can store any item of any type, including ``None``
 
-      - with one hidden implementation dependent exception
+        - with one hidden implementation dependent exception
 
-    - immutable semantics, therefore covariant
+        - immutable semantics
 
     .. warning::
 

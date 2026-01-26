@@ -14,24 +14,20 @@
 
 """
 Pythonic FP - Functional Programming Tools
-==========================================
+------------------------------------------
 
 Functions as first class objects, Lazy (non-strict) function evaluation,
 and classical Functional Programming data structures.
 
-+--------------------------+------------------------------+
-| Description              | Module                       |
-+==========================+==============================+
-| Function manipulation    | pythonic_fp.fptools.function |
-+--------------------------+------------------------------+
-| Lazy function evaluation | pythonic_fp.fptools.lazy     |
-+--------------------------+------------------------------+
-| Maybe monad              | pythonic_fp.fptools.maybe    |
-+--------------------------+------------------------------+
-| Either monad             | pythonic_fp.fptools.either   |
-+--------------------------+------------------------------+
-| State monad              | pythonic_fp.fptools.state    |
-+--------------------------+------------------------------+
+======================== ============================
+Description              Module
+======================== ============================
+Function manipulation    pythonic_fp.fptools.function
+Lazy function evaluation pythonic_fp.fptools.lazy
+Maybe monad              pythonic_fp.fptools.maybe
+Either monad             pythonic_fp.fptools.either
+State monad              pythonic_fp.fptools.state
+======================== ============================
 
 """
 

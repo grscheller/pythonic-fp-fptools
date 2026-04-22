@@ -1,6 +1,10 @@
 # Minimal version - only add to when necessary
 **/__pycache__/
 dist/
+docs/build/release
+docs/build/development
+docs/source/conf.py
+docs/source/index.rst
 **/.dmypy.json
 **/.mypy_cache/
 **/.pytest_cache/

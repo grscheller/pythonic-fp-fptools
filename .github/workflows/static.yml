@@ -27,7 +27,9 @@ jobs:
           python-version: '3.14'
 
       - name: Install Sphinx Dependencies
-        run: pip install -r docs/requirements.txt
+        run: |
+          pip install -r docs/requirements.txt
+          sudo apt-get install -y graphviz
 
       - name: Build Release Docs
         run: |

@@ -3,7 +3,7 @@ Pythonic FP - Functional tools
 
 PyPI project
 `pythonic-fp.fptools
-<https://pypi.org/project/pythonic-fp.fptools>`_.
+<https://pypi.org/project/pythonic-fp-fptools>`_.
 
 Tools to aid with functional programming in Python while still
 endeavoring to be Pythonic.
@@ -24,7 +24,7 @@ endeavoring to be Pythonic.
 
 Part of the
 `pythonic-fp
-<https://grscheller.github.io/pythonic-fp>`_
+<https://grscheller.github.io/pythonic-fp/homepage/html/>`_
 PyPI projects.
 
 Documentation
@@ -32,10 +32,10 @@ Documentation
 
 Documentation for this project is hosted on
 `GitHub Pages
-<https://grscheller.github.io/pythonic-fp/fptools>`_.
+<https://grscheller.github.io/pythonic-fp-fptools>`_.
 
 Copyright and License
 ---------------------
 
-Copyright (c) 2023-2025 Geoffrey R. Scheller. Licensed under the Apache
+Copyright (c) 2023-2026 Geoffrey R. Scheller. Licensed under the Apache
 License, Version 2.0. See the LICENSE file for details.

@@ -1,5 +1,5 @@
 pythonic-fp-fptools
--------------------
+===================
 
 Project
 `pythonic-fp-fptools <https://pypi.org/project/pythonic-fp-fptools/>`_

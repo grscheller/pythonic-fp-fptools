@@ -1,22 +1,15 @@
-# workflow for building and deploying static content to GitHub Pages
-name: Build and deploy static Furo themed Sphinx content to Pages
+name: Build and Deploy Furo Themed Sphinx Documentation
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -26,37 +19,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Select Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.14'
 
-      - name: Install sphinx dependencies
+      - name: Install Sphinx Dependencies
         run: pip install -r docs/requirements.txt
 
-      - name: Build release docs
+      - name: Build Release Docs
         run: |
           pip install pythonic-fp-fptools
           cp docs/index_release.rst docs/source/index.rst
           cp docs/conf_release.py docs/source/conf.py
           sphinx-build -M html docs/source docs/build/release
 
-      - name: Build development docs
+      - name: Build Development Docs
         run: |
           pip install -e .
           cp docs/index_devel.rst docs/source/index.rst
+          cp docs/conf_devel.py docs/source/conf.py
           sphinx-build -M html docs/source docs/build/development
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v5
         with:
           path: docs/build
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         id: deployment

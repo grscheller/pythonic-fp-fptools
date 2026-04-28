@@ -24,15 +24,15 @@ endeavoring to be Pythonic.
 
 Part of the
 `pythonic-fp
-<https://grscheller.github.io/pythonic-fp/homepage/html/>`_
+<https://grscheller.github.io/pythonic-fp/>`_
 PyPI projects.
 
 Documentation
 -------------
 
-Documentation for this project is hosted on
+Documentation and other links for this project are hosted on
 `GitHub Pages
-<https://grscheller.github.io/pythonic-fp-fptools/development/html/>`_.
+<https://grscheller.github.io/pythonic-fp/projects/fptools.html>`_.
 
 Copyright and License
 ---------------------

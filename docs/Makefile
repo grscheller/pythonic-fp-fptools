@@ -18,19 +18,19 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
 setup_devel:
-	rm -rf "$(BUILDDIR)"/development
-	cp index_devel.rst "$(SOURCEDIR)"/index.rst
-	cp conf_devel.py "$(SOURCEDIR)"/conf.py
+	@rm -rf "$(BUILDDIR)"/development
+	@cp index_devel.rst "$(SOURCEDIR)"/index.rst
+	@cp conf_devel.py "$(SOURCEDIR)"/conf.py
 
 setup_release:
-	rm -rf "$(BUILDDIR)"/release
-	cp index_release.rst "$(SOURCEDIR)"/index.rst
-	cp conf_release.py "$(SOURCEDIR)"/conf.py
+	@rm -rf "$(BUILDDIR)"/release
+	@cp index_release.rst "$(SOURCEDIR)"/index.rst
+	@cp conf_release.py "$(SOURCEDIR)"/conf.py
 
 setup_custom:
-	rm -rf "$(BUILDDIR)"/custom
-	cp index_custom.rst "$(SOURCEDIR)"/index.rst
-	cp conf_custom.py "$(SOURCEDIR)"/conf.py
+	@rm -rf "$(BUILDDIR)"/custom
+	@cp index_custom.rst "$(SOURCEDIR)"/index.rst
+	@cp conf_custom.py "$(SOURCEDIR)"/conf.py
 
 clean_source:
 	@rm -f "$(SOURCEDIR)"/conf.py "$(SOURCEDIR)"/index.rst
@@ -45,7 +45,7 @@ clean_custom: clean_source
 	@rm -rf "$(BUILDDIR)"/custom
 
 clean: clean_devel clean_release clean_custom
-	rmdir --ignore-fail-on-non-empty $(BUILDDIR) 2>/dev/null
+	@rmdir --ignore-fail-on-non-empty $(BUILDDIR) 2>/dev/null
 	@echo Removed all doc build artifacts.
 
 .PHONY: help Makefile

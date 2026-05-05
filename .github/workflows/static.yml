@@ -5,6 +5,11 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+env:
+  RELEASE: '5.2.0'
+  DEVEL: '5.2.1'
+  PYTHON: '3.14'
+
 permissions:
   contents: read
   pages: write
@@ -37,15 +42,13 @@ jobs:
       - name: Build Release Docs
         run: |
           pip install pythonic-fp-fptools
-          cp docs/index_release.rst docs/source/index.rst
-          cp docs/conf_release.py docs/source/conf.py
+          docs/gen_conf.py release ${{ env.RELEASE }} "FP Tools" fptools > docs/source/conf.py
           sphinx-build -M html docs/source docs/build/release
 
       - name: Build Development Docs
         run: |
           pip install -e .
-          cp docs/index_devel.rst docs/source/index.rst
-          cp docs/conf_devel.py docs/source/conf.py
+          docs/gen_conf.py devel ${{ env.DEVEL }} "FP Tools" fptools > docs/source/conf.py
           sphinx-build -M html docs/source docs/build/development
 
       - name: Setup Pages

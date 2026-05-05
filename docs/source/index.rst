@@ -2,12 +2,12 @@ pythonic-fp-fptools
 ===================
 
 Project
-`pythonic-fp-fptools <https://pypi.org/project/pythonic-fp-fptools/>`_
+`Pythonic FP - FP Tools <https://pypi.org/project/pythonic-fp-fptools/>`_
 one of the
 `Pythonic FP <https://grscheller.github.io/pythonic-fp/>`_
 PyPI projects.
 
-**PyPI 5.2.0 release**
+|RELEASE_STRING|
 
 .. toctree::
     :caption: Overview

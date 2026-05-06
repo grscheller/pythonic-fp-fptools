@@ -12,6 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+.. admonition:: The Either Monad
+
+    Data structure semantically containing either
+    a "left" value or a "right" value, but not both.
+
+    - Module implements a left biased either monad
+
+      - left value is intended for the "expected" result
+      - right value gives information on something "exceptional"
+
+    - left and right values can be the same or different types
+    - in a boolean context
+
+      - left values are truthy
+      - right values are falsy
+
+    .. tip:: Happy path without exceptions
+
+        Can be used in lieu of exceptions. 
+
+        Instead of catching an exception when the "happy path" fails,
+        have the "happy path" process the left values and either deal
+        with or propagate right values.
+
+    .. tip:: Sentinel values
+
+        Use rights as sentinel values.
+
+"""
+
 __all__ = ['Either', 'EitherBool', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
@@ -21,41 +52,56 @@ from .maybe import MayBe
 
 
 class EitherBool(SBool):
-    """Boolean-like type used by Either constructor.
+    """
+    .. admonition:: The type of the ``LEFT`` and ``RIGHT`` singletons.
+
+        Boolean-like type for signaling the construction of
+        a left or right ``Either`` instance.
 
     - A "truthy" value passed to constructor produces the unique ``LEFT`` value.
     - A "falsy" value passed to constructor produces the unique ``RIGHT`` value.
 
     """
     def __repr__(self) -> str:
+        """
+        .. admonition:: String representation
+
+            Two values 'LEFT' or 'RIGHT' for the truthy and falsy
+            singletons respectfully. Also the default user string.
+
+        """
         if self:
             return 'LEFT'
         return 'RIGHT'
 
 
 LEFT = EitherBool(True)
-"""Singleton value signaling ``Either`` constructor to produce a ``LEFT`` Either, the default."""
+"""
+.. admonition:: The truthy singleton.
+
+    Passed to the ``Either`` constructor to produce
+    a left ``Either``, the default.
+
+"""
 
 RIGHT = EitherBool(False)
-"""Singleton value signaling ``Either`` constructor to produce a ``RIGHT`` Either."""
+"""
+.. admonition:: The falsy singleton.
+
+    Passed to the ``Either`` constructor to produce
+    a right ``Either``.
+
+"""
 
 
 class Either[L, R]:
     """
     .. admonition:: Either Monad
 
-        Data structure semantically containing either a left
-        or a right value, but not both.
+        Left biased Either Monad.
 
-        Implements a left biased Either Monad.
-
-        - ``Either(value: +L, LEFT)`` produces a left ``Either``
-        - ``Either(value: +L, RIGHT)`` produces a right ``Either``
-
-        In a Boolean context
-
-        - A left ``Either`` is "truthy"
-        - A right ``Either`` is "falsy"
+        - ``Either(value: L, LEFT)`` produces a left ``Either``
+        - ``Either(value: R, RIGHT)`` produces a right ``Either``
 
         Two ``Either`` objects compare as equal when
 
@@ -66,11 +112,6 @@ class Either[L, R]:
 
         Immutable, an ``Either`` does not change after being created.
         Therefore ``map`` & ``bind`` return new instances.
-
-    .. warning::
-
-        The contained value need not be immutable, therefore
-        not hashable if value is mutable.
 
     .. note::
 
@@ -90,6 +131,16 @@ class Either[L, R]:
     def __init__(self, value: R, side: EitherBool) -> None: ...
 
     def __init__(self, value: L | R, side: EitherBool = LEFT) -> None:
+        """
+        .. admonition:: Initializer
+
+            Initialize the ``Either`` instance as a "left" or a "right".
+
+        :param value: The value contained in the ``Either``.
+        :param side: Determines whether to produce
+                     a left or right ``Either``.
+
+        """
         self._value: L | R
         self._side: EitherBool
         if side:
@@ -100,7 +151,13 @@ class Either[L, R]:
             self._side = RIGHT
 
     def __hash__(self) -> int:
-        return hash((self, self._value, self._side))
+        """`
+        .. warning::
+
+            The contained value need not be immutable, therefore
+            not hashable if value is mutable.
+        """
+        return hash((self._value, self._side))
 
     def __bool__(self) -> bool:
         return self._side is LEFT
@@ -120,7 +177,14 @@ class Either[L, R]:
         return '< | ' + str(self._value) + ' >'
 
     def __len__(self) -> int:
-        """An Either always contains just one value."""
+        """
+        .. admonition:: Length
+
+            Either always contains just one value.
+
+        :returns: 1
+
+        """
         return 1
 
     def __eq__(self, other: object) -> bool:

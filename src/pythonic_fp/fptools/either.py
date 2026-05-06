@@ -46,11 +46,12 @@
 __all__ = ['Either', 'EitherBool', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
-from typing import cast, overload
+from typing import cast, Final, final, overload
 from pythonic_fp.booleans.subtypable import SBool
 from .maybe import MayBe
 
 
+@final
 class EitherBool(SBool):
     """
     .. admonition:: The type of the ``LEFT`` and ``RIGHT`` singletons.
@@ -75,7 +76,7 @@ class EitherBool(SBool):
         return 'RIGHT'
 
 
-LEFT = EitherBool(True)
+LEFT: Final[EitherBool] = EitherBool(True)
 """
 .. admonition:: The truthy singleton.
 
@@ -84,7 +85,7 @@ LEFT = EitherBool(True)
 
 """
 
-RIGHT = EitherBool(False)
+RIGHT: Final[EitherBool] = EitherBool(False)
 """
 .. admonition:: The falsy singleton.
 
@@ -94,6 +95,7 @@ RIGHT = EitherBool(False)
 """
 
 
+@final
 class Either[L, R]:
     """
     .. admonition:: Either Monad
@@ -113,14 +115,8 @@ class Either[L, R]:
         Immutable, an ``Either`` does not change after being created.
         Therefore ``map`` & ``bind`` return new instances.
 
-    .. note::
-
-        ``Either(value: +L, side: Left): Either[L, R] -> left: Either[L, R]``
-        ``Either(value: +R, side: Right): Either[L, R] -> right: Either[L, R]``
-
     """
-
-    __slots__ = '_value', '_side'
+    __slots__ = '_value', '_side', '_hash'
     __match_args__ = ('_value', '_side')
 
     @overload
@@ -149,15 +145,23 @@ class Either[L, R]:
         else:
             self._value = value
             self._side = RIGHT
+        self._hash: int | None = None
 
     def __hash__(self) -> int:
-        """`
-        .. warning::
-
-            The contained value need not be immutable, therefore
-            not hashable if value is mutable.
         """
-        return hash((self._value, self._side))
+        .. admonition:: Hashability
+
+            If the contained value is hashable, its hash value is
+            used to calculate the hash, otherwise the `id` of the
+            contained value is used.
+
+        """
+        if self._hash is None:
+            try:
+                self._hash = hash((self._value, self._side))
+            except TypeError:
+                self._hash = hash((id(self._value), self._side))
+        return self._hash
 
     def __bool__(self) -> bool:
         return self._side is LEFT

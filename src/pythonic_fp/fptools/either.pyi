@@ -2,14 +2,14 @@ from .maybe import MayBe
 from _typeshed import Incomplete
 from collections.abc import Callable, Iterator, Sequence
 from pythonic_fp.booleans.subtypable import SBool
-from typing import overload
+from typing import Final, overload
 
 __all__ = ['Either', 'EitherBool', 'LEFT', 'RIGHT']
 
 class EitherBool(SBool): ...
 
-LEFT: Incomplete
-RIGHT: Incomplete
+LEFT: Final[EitherBool]
+RIGHT: Final[EitherBool]
 
 class Either[L, R]:
     __match_args__: Incomplete

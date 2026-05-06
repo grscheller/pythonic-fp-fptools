@@ -17,10 +17,13 @@
 __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
-from typing import cast, Final, overload
+from typing import cast, Final, final, overload
 from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
+type _Sentinel = Sentinel[str]
+_sentinel: Final[_Sentinel] = Sentinel('_MayBe_sentinel')
 
+@final
 class MayBe[D]:
     """
     .. admonition:: Maybe Monad
@@ -41,7 +44,7 @@ class MayBe[D]:
 
     """
 
-    __slots__ = ('_item',)
+    __slots__ = ('_item', '_hash')
     __match_args__ = ('_item',)
 
     @overload
@@ -49,14 +52,28 @@ class MayBe[D]:
     @overload
     def __init__(self, item: D) -> None: ...
 
-    def __init__(self, item: D | Sentinel[str] = Sentinel('_MayBe_str')) -> None:
-        self._item: D | Sentinel[str] = item
+    def __init__(self, item: D | _Sentinel = _sentinel) -> None:
+        self._item: D | _Sentinel = item
+        self._hash: int | None = None
 
     def __hash__(self) -> int:
-        return hash((Sentinel('_MayBe_str'), self._item))
+        """
+        .. admonition:: Hashability
+
+            If the contained value is hashable, its hash value is
+            used to calculate the hash, otherwise the `id` of the
+            contained value is used.
+
+        """
+        if self._hash is None:
+            try:
+                self._hash = hash((self._item, type(self._item), _Sentinel))
+            except TypeError:
+                self._hash = hash((id(self._item), type(self._item), _Sentinel))
+        return self._hash
 
     def __bool__(self) -> bool:
-        return self._item is not Sentinel('_MayBe_str')
+        return self._item is not _sentinel
 
     def __iter__(self) -> Iterator[D]:
         if self:
@@ -84,7 +101,7 @@ class MayBe[D]:
     @overload
     def get(self, alt: D) -> D: ...
 
-    def get(self, alt: D | Sentinel[str] = Sentinel('_MayBe_str')) -> D:
+    def get(self, alt: D | _Sentinel = _sentinel) -> D:
         """Return the contained item if it exists, otherwise an alternate item.
 
         .. warning::
@@ -98,7 +115,6 @@ class MayBe[D]:
         :raises ValueError: when an alternate item is not provided but needed
 
         """
-        _sentinel: Final[Sentinel[str]] = Sentinel('_MayBe_str')
         if self._item is not _sentinel:
             return cast(D, self._item)
         if alt is _sentinel:

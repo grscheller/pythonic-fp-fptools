@@ -7,7 +7,7 @@ on:
 
 env:
   RELEASE: '5.2.0'
-  DEVEL: '5.2.1'
+  DEVEL: '6.0.0'
   PYTHON: '3.14'
 
 permissions:

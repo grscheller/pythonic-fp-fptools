@@ -1,9 +1,11 @@
 from _typeshed import Incomplete
 from collections.abc import Callable, Iterator, Sequence
+from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 from typing import overload
 
 __all__ = ['MayBe']
 
+type _Sentinel = Sentinel[str]
 class MayBe[D]:
     __match_args__: Incomplete
     @overload

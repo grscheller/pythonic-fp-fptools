@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-.. admonition:: Maybe Monad
-
-"""
-
 __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
@@ -42,7 +37,7 @@ class MayBe[D]:
             If contained item not hashable, item's identity is
             used for hash calculation.
 
-        .. note::
+        .. warning::
 
             ``MayBe()`` is not a singleton.
 
@@ -58,11 +53,9 @@ class MayBe[D]:
 
     def __init__(self, item: D | _Sentinel = _sentinel) -> None:
         """
-        .. admonition:: Initialize
+        .. admonition:: initialize
 
-            Initialize ``MayBe`` with at most 1 items.
-
-        :param item: If provided, item to wrap.
+            Setup ``MayBe`` with 1 or 0 items.
 
         """
         self._item: D | _Sentinel = item
@@ -70,7 +63,7 @@ class MayBe[D]:
 
     def __hash__(self) -> int:
         """
-        .. admonition:: Hashability
+        .. admonition:: hashability
 
             If contained item hashable, use its hash value in
             the hash calculation, otherwise use item's identity.
@@ -88,36 +81,27 @@ class MayBe[D]:
 
     def __bool__(self) -> bool:
         """
-        .. admonition:: Bool
+        .. admonition:: bool
 
-            Truthy with item, falsy if empty.
-
-        :returns: ``True`` when not empty, ``False`` otherwise.
+            Truthy when not empty.
 
         """
         return self._item is not _sentinel
 
     def __len__(self) -> int:
         """
-        .. admonition:: Length
+        .. admonition:: len
 
-            Number of items in the ``MayBe``.
-
-        :returns: 1 or 0 if item present or not.
+            Zero or one items.
 
         """
         return 1 if self else 0
 
     def __eq__(self, other: object) -> bool:
         """
-        .. admonition:: Equality comparison
+        .. admonition:: equality comparison
 
             Compare ``MayBe`` to another object.
-
-        :param other: The object to be compared.
-        :returns: ``True`` if ``other`` is a ``MayBe`` whose
-                  corresponding item compare as equal to the contained
-                  item, or both empty. Otherwise ``False``.
 
         """
         if not isinstance(other, type(self)):
@@ -183,20 +167,20 @@ class MayBe[D]:
 
     def get(self, alt: D | _Sentinel = _sentinel) -> D:
         """
-        .. admonition:: Get item
+        .. admonition:: get
 
-        Return the item if it exists, otherwise an optional
-        alternate item.
+            Return the item if it exists, otherwise an optional
+            alternate item.
 
-        .. warning::
+            .. warning::
 
-            Unsafe method ``get`` will raise ``ValueError`` if the
-            ``MayBe`` is empty and an ``alt`` return item not provided.
+                Unsafe method ``get`` will raise ``ValueError`` if the
+                ``MayBe`` is empty and an ``alt`` return item not provided.
 
-            .. tip::
+                .. tip::
 
-                Best practice is to first check the ``MayBe`` in
-                a boolean context.
+                    Best practice is to first check the ``MayBe`` in
+                    a boolean context.
 
         :param alt: Optional alternative item to return if``MayBe`` empty.
         :returns: The item if it exists.

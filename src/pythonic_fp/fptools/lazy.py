@@ -15,14 +15,11 @@
 """
 .. admonition:: Lazy function evaluation
 
-    Delayed function evaluations. FP tools for "non-strict" function evaluations.
-    Useful to delay a function's evaluation until some inner scope.
-
     Non-strict delayed function evaluation.
 
-    - *class* **Lazy** - Delay evaluation of functions taking & returning single values
-    - *function* **lazy** - Delay evaluation of functions taking any number of values
-    - *function* **real_lazy** - Version of ``lazy`` which caches its result
+    - *class* **Lazy** - Delay evaluation of single argument functions
+    - *function* **lazy** - Delay evaluation of functions taking any number of arguments
+    - *function* **real_lazy** - Caching version of ``lazy``.
 
 """
 
@@ -37,18 +34,14 @@ __all__ = ['Lazy', 'lazy', 'real_lazy']
 
 class Lazy[D, R]:
     """
-    .. admonition:: Non-strict function evaluation
+    .. admonition:: Lazy (delayed) function evaluation
 
         Delayed evaluation of a singled valued function.
 
-        Class instance delays the executable of a function where ``Lazy(f, arg)``
-        constructs an object that can evaluate the Callable ``f`` with its argument
-        at a later time.
+        .. tip::
 
-        .. note::
-
-            Usually use case is to make a function "non-strict" by passing some of its
-            arguments wrapped in Lazy instances.
+            Non-strict function evaluation. Make a function "non-strict"
+            by passing some of its arguments wrapped in Lazy instances.
 
     """
 
@@ -63,7 +56,7 @@ class Lazy[D, R]:
         :param f: single argument function
         :param d: argument to be passed to ``f``
         :param pure: if true, cache the result for future ``eval`` method calls
-        :returns: an object that can call the function ``f`` at a later time
+        :returns: A Lazy instance which can evaluate ``f(d)`` at a later time
 
         """
         self._f: Final[Callable[[D], R]] = f
@@ -77,7 +70,7 @@ class Lazy[D, R]:
         """
         .. admonition:: bool
 
-            A Lazy becomes truthy when evaluated.
+            A Lazy becomes truthy when successfully evaluated.
 
         :returns: ``True`` when evaluated, ``False`` when not evaluated.
 
@@ -130,8 +123,8 @@ class Lazy[D, R]:
             Check if exception thrown.
 
         :returns: ``MayBe()`` if not evaluated,
-                  ``MayBe(True)`` if exception thrown,
-                  ``MayBe(False)`` if exception not thrown.
+        :returns: ``MayBe(True)`` if exception thrown,
+        :returns: ``MayBe(False)`` if exception not thrown.
 
         """
         return self._exceptional

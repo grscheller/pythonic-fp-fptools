@@ -31,15 +31,15 @@
 
     .. tip::
 
-        Happy path without exceptions. Can be used in lieu of exceptions. 
+        Happy path without exceptions.
 
-        Instead of catching an exception when the "happy path" fails,
-        have the "happy path" process the left values and either deal
-        with or propagate right values.
+        Instead of catching an exception whenever the "happy path"
+        fails, process the left values and either deal with or
+        propagate right values.
 
     .. tip::
 
-        Right ``Either`` can be used as sentinel values.
+        Right ``Either`` instances can be used as sentinel values.
 
 """
 
@@ -54,10 +54,10 @@ from .maybe import MayBe
 @final
 class EitherBool(SBool):
     """
-    .. admonition:: The type of the ``LEFT`` and ``RIGHT`` singletons.
+    .. admonition:: Type for the ``LEFT`` and ``RIGHT`` singletons.
 
-        Boolean-like type for signaling the ``Eithee`` constructor to
-        make a left or right ``Either`` instance.
+        Boolean-like type for signaling the ``Either`` initializer
+        to make a left or right ``Either`` instance.
 
     """
     def __repr__(self) -> str:
@@ -75,19 +75,17 @@ class EitherBool(SBool):
 
 LEFT: Final[EitherBool] = EitherBool(True)
 """
-.. admonition:: The truthy singleton.
+.. admonition:: Truthy Either singleton.
 
-    Passed to the ``Either`` constructor to produce
-    a left ``Either``, the default.
+    Passed  to ``Either`` initializer to make a right ``Either``.
 
 """
 
 RIGHT: Final[EitherBool] = EitherBool(False)
 """
-.. admonition:: The falsy singleton.
+.. admonition:: Falsy Either singleton.
 
-    Passed to the ``Either`` constructor to produce
-    a right ``Either``.
+    Passed to ``Either`` initializer to make a right ``Either``.
 
 """
 
@@ -121,7 +119,7 @@ class Either[L, R]:
 
     def __init__(self, value: L | R, side: EitherBool = LEFT) -> None:
         """
-        .. admonition:: Initializer
+        .. admonition:: initializer
 
             Initialize the ``Either`` instance as a "left" or a "right".
 
@@ -142,12 +140,12 @@ class Either[L, R]:
 
     def __hash__(self) -> int:
         """
-        .. admonition:: Hashability
+        .. admonition:: hashability
 
             If the contained value is hashable, its hash value is
             used to calculate the hash, otherwise the identity of
             the contained value is used. Hash also depends whether
-            the ``Either``is a left or a right.
+            the ``Either`` is a left or a right.
 
         """
         if self._hash is None:
@@ -159,10 +157,10 @@ class Either[L, R]:
 
     def __bool__(self) -> bool:
         """
-        .. admonition:: Bool
+        .. admonition:: bool
 
-            - truthy for a left ``Either``
-            - falsy for a right ``Either``
+            - left ``Either`` truthy
+            - right ``Either`` falsy
 
         :returns: ``True`` when a left, ``False`` when a right.
 

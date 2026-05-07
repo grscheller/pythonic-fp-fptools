@@ -22,25 +22,42 @@ class State[S, A]:
     """
     .. admonition:: State Monad
 
-        Data structure generating values while propagating changes of state.
-        A pure FP implementation for the State Monad
+        Data structure generating values while propagating changes
+        of state. A pure FP implementation for the State Monad
 
-        - class ``State`` represents neither a state nor a (value, state) pair
+        The ``State`` class represents neither a state nor a (value, state) pair.
 
-        - it wraps a transformation old_state -> (value, new_state)
-        - the ``run`` method is this wrapped transformation
-        - ``bind`` is just state propagating function composition
+        - It wraps a state transformation old_state -> (value, new_state)
+
+          - THis state transformation is also known as a "state action".
+          - The ``run`` property is this the state action wrapped by the monad.
+          - The ``bind`` method performs function composition on state actions.
+          - The ``eval`` method evaluates the state action by supplying it
+            an initial state and returning the resulting value.
 
     """
 
     __slots__ = ('run',)
 
     def __init__(self, run: Callable[[S], tuple[A, S]]) -> None:
+        """
+        .. admonition:: Initialize
+
+            Wrap a state transformation, also called a state action.
+
+        :param run: State action to wrap.
+
+        """
         self.run = run
 
     def bind[B](self, g: 'Callable[[A], State[S, B]]') -> 'State[S, B]':
-        """Perform function composition while propagating state."""
+        """
+        .. admonition:: State action composition
 
+            Perform state action composition resulting in a new
+            wrapped combined state action.
+
+        """
         def compose(s: S) -> tuple[B, S]:
             a, s = self.run(s)
             return g(a).run(s)
@@ -48,51 +65,103 @@ class State[S, A]:
         return State(compose)
 
     def eval(self, init: S) -> A:
-        """Evaluate the Monad via passing an initial state."""
+        """
+        .. admonition:: Evaluate state action
+
+            Evaluate the state action by passing in an initial state
+            and returning the produced value. Eval is sometimes referred
+            to as the run action.
+
+        :param init: The initial state to pass into the state action.
+        :returns: The final value produced by the final chain of
+                  evaluations making up the state action.
+
+        """
         a, _ = self.run(init)
         return a
 
     def map[B](self, f: Callable[[A], B]) -> 'State[S, B]':
-        """Map a function over a run action."""
+        """
+        .. admonition:: Map
+
+            Map a function over the resulting value of a
+            state action.
+
+        """
         return self.bind(lambda a: State.unit(f(a)))
 
     def map2[B, C](self, sb: 'State[S, B]', f: Callable[[A, B], C]) -> 'State[S, C]':
-        """Map a function of two variables over two state actions."""
+        """
+        .. admonition:: Map2
+
+            Map a function of two variables over two state actions.
+
+        """
         return self.bind(lambda a: sb.map(lambda b: f(a, b)))
 
     def both[B](self, rb: 'State[S, B]') -> 'State[S, tuple[A, B]]':
-        """Return a tuple of two state actions."""
+        """
+        .. admonition:: Both
+
+            Return a tuple of two state actions.
+
+        """
         return self.map2(rb, lambda a, b: (a, b))
 
     @staticmethod
     def unit[ST, B](b: B) -> 'State[ST, B]':
-        """Create a State action returning the given value."""
+        """
+        .. admonition:: unit
+
+            Create a State action returning the given value
+            and propagating the present state.
+
+        :param b: Value state action to return.
+        :returns: Create a State monad from a value ``b: B``.
+
+        """
         return State(lambda s: (b, s))
 
     @staticmethod
     def get[ST]() -> 'State[ST, ST]':
-        """Set run action to return the current state
+        """
+        .. admonition:: get
 
-        - the current state is propagated unchanged
-        - current value now set to current state
-        - will need type annotation
+            Set state action to return the current state and
+            propagate it unchanged.
+
+            - the current state is propagated unchanged
+            - current value now set to current state
+            - will need type annotation
+
+        :returns: State monad wrapping a state action returning and
+                  propagating the current state unchanged.
 
         """
         return State[ST, ST](lambda s: (s, s))
 
     @staticmethod
     def put[ST](s: ST) -> 'State[ST, tuple[()]]':
-        """Manually insert a state.
+        """
+        .. admonition:: put
 
-        - ignores previous state and swaps in a new state
-        - assigns a canonically meaningless value for current value
+            Manually insert a state.
 
+            - ignores previous state and swaps in a new state
+            - assigns a canonically meaningless value for current value
+
+        :param s: State to insert ignoring 
+        :returns: State monad wrapping a state action which ignores any
+                  initial state passed in when evaluated.
         """
         return State(lambda _: ((), s))
 
     @staticmethod
     def modify[ST](f: Callable[[ST], ST]) -> 'State[ST, tuple[()]]':
-        """Modify previous state.
+        """
+        .. admonition:: modify
+
+            Modify previous state with a function.
 
         - like put, but modify previous state via ``f``
         - will need type annotation
@@ -104,7 +173,10 @@ class State[S, A]:
 
     @staticmethod
     def sequence[ST, AA](sas: 'list[State[ST, AA]]') -> 'State[ST, list[AA]]':
-        """Combine a list of state actions into a state action of a list.
+        """
+        .. admonition:: sequence a list
+
+            Combine a list of state actions into a state action of a list.
 
         - all state actions must be of the same type
         - run method evaluates list front to back

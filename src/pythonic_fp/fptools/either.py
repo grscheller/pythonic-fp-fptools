@@ -37,7 +37,7 @@
         have the "happy path" process the left values and either deal
         with or propagate right values.
 
-    .. tip:: Sentinel values
+    .. tip::
 
         Right ``Either`` can be used as sentinel values.
 
@@ -223,8 +223,12 @@ class Either[L, R]:
             .. warning::
 
                 Unsafe method ``get``. Will raise ``ValueError`` if ``Either``
-                is a right. Best practice is to first check the ``Either`` in
-                a boolean context.
+                is a right.
+
+                .. tip::
+
+                    Best practice is to first check the ``Either`` in
+                    a boolean context.
 
         :returns: The value if a left.
         :raises ValueError: If not a left.

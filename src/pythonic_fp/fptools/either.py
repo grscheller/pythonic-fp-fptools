@@ -29,9 +29,9 @@
       - left values are truthy
       - right values are falsy
 
-    .. tip:: Happy path without exceptions
+    .. tip::
 
-        Can be used in lieu of exceptions. 
+        Happy path without exceptions. Can be used in lieu of exceptions. 
 
         Instead of catching an exception when the "happy path" fails,
         have the "happy path" process the left values and either deal
@@ -39,7 +39,7 @@
 
     .. tip:: Sentinel values
 
-        Use rights as sentinel values.
+        Right ``Either`` can be used as sentinel values.
 
 """
 
@@ -56,11 +56,8 @@ class EitherBool(SBool):
     """
     .. admonition:: The type of the ``LEFT`` and ``RIGHT`` singletons.
 
-        Boolean-like type for signaling the construction of
-        a left or right ``Either`` instance.
-
-    - A "truthy" value passed to constructor produces the unique ``LEFT`` value.
-    - A "falsy" value passed to constructor produces the unique ``RIGHT`` value.
+        Boolean-like type for signaling the ``Eithee`` constructor to
+        make a left or right ``Either`` instance.
 
     """
     def __repr__(self) -> str:
@@ -68,7 +65,7 @@ class EitherBool(SBool):
         .. admonition:: String representation
 
             Two values 'LEFT' or 'RIGHT' for the truthy and falsy
-            singletons respectfully. Also the default user string.
+            singletons respectfully. Also the default user strings.
 
         """
         if self:

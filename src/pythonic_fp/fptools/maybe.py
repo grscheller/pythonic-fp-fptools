@@ -35,15 +35,16 @@ class MayBe[D]:
 
         - immutable semantics
         - can store any item of any type, including ``None``
-
-          - with one hidden implementation dependent exception
-
         - hashable
 
         .. note::
 
-            If contained item is not hashable, item's identity is
-            used in the hash calculation.
+            If contained item not hashable, item's identity is
+            used for hash calculation.
+
+        .. note::
+
+            ``MayBe()`` is not a singleton.
 
     """
 
@@ -57,11 +58,11 @@ class MayBe[D]:
 
     def __init__(self, item: D | _Sentinel = _sentinel) -> None:
         """
-        .. admonition:: Initializer
+        .. admonition:: Initialize
 
-            Initialize ``MayBe`` with 0 or 1 items.
+            Initialize ``MayBe`` with at most 1 items.
 
-        :param item: Optional item to include.
+        :param item: If provided, item to wrap.
 
         """
         self._item: D | _Sentinel = item
@@ -73,6 +74,8 @@ class MayBe[D]:
 
             If contained item hashable, use its hash value in
             the hash calculation, otherwise use item's identity.
+
+        :returns: A lazily evaluated integer hash value.
 
         """
         if self._hash is None:
@@ -87,8 +90,7 @@ class MayBe[D]:
         """
         .. admonition:: Bool
 
-            - truthy when item present
-            - falsy when item missing
+            Truthy with item, falsy if empty.
 
         :returns: ``True`` when not empty, ``False`` otherwise.
 
@@ -101,7 +103,7 @@ class MayBe[D]:
 
             Number of items in the ``MayBe``.
 
-        :returns: 1 if item present, 0 if missing.
+        :returns: 1 or 0 if item present or not.
 
         """
         return 1 if self else 0
@@ -113,9 +115,9 @@ class MayBe[D]:
             Compare ``MayBe`` to another object.
 
         :param other: The object to be compared.
-        :returns: ``True`` if ``other`` is another ``MayBe`` whose
-                  contents compare as equal to the corresponding
-                  contents of the ``MayBe``, otherwise ``False``.
+        :returns: ``True`` if ``other`` is a ``MayBe`` whose
+                  corresponding item compare as equal to the contained
+                  item, or both empty. Otherwise ``False``.
 
         """
         if not isinstance(other, type(self)):
@@ -132,6 +134,8 @@ class MayBe[D]:
 
             Iterate ``item`` if present.
 
+        :returns: Iterator of the contents of the ``MayBe``.
+
         """
         if self:
             yield cast(D, self._item)
@@ -140,14 +144,14 @@ class MayBe[D]:
         """
         .. admonition:: Representation string
 
-            Construct the string
+            Return the strings
 
-            - 'MayBe(repr_item)' when not empty
-            - 'MayBe()` when empty
+            - 'MayBe(repr_item)' if not empty
+            - 'MayBe()' if empty
 
             where ``repr_item = repr(item)``.
 
-        :returns: A string to reproduce the ``MayBe``. 
+        :returns: String representation.
 
         """
         if self:
@@ -158,14 +162,14 @@ class MayBe[D]:
         """
         .. admonition:: User string
 
-            Construct the string
+            Return the strings
 
             - 'MayBe(str_item)' when not empty
-            - 'MayBe()` when empty
+            - 'MayBe()' when empty
 
             where ``str_item = str(item)``.
 
-        :returns: A string to reproduce the ``MayBe``. 
+        :returns: User string. 
 
         """
         if self:
@@ -181,7 +185,8 @@ class MayBe[D]:
         """
         .. admonition:: Get item
 
-        Return the contained item if it exists, otherwise an alternate item.
+        Return the item if it exists, otherwise an optional
+        alternate item.
 
         .. warning::
 
@@ -193,9 +198,9 @@ class MayBe[D]:
                 Best practice is to first check the ``MayBe`` in
                 a boolean context.
 
-        :param alt: an "optional" alternative item to return
-        :returns: the contained item if it exists
-        :raises ValueError: when an alternate item is not provided but needed
+        :param alt: Optional alternative item to return if``MayBe`` empty.
+        :returns: The item if it exists.
+        :raises ValueError: When an alternate item is not provided but needed.
 
         """
         if self._item is not _sentinel:
@@ -210,9 +215,9 @@ class MayBe[D]:
         """
         .. admonition:: Map
 
-            Map function `f` over contents.
+            Map function ``f`` over the ``MayBe``.
 
-        :param f: Function used to map over items.
+        :param f: Function used for the map.
         :returns: A new ``MayBe`` if not empty, otherwise ``self``.
 
         """
@@ -244,8 +249,8 @@ class MayBe[D]:
             an empty ``Maybe``.
 
         :param sequence_mb_u: ``Sequence[MayBe[U]]``
-        :returns: ``MayBe`` of a ``Sequence`` subtype of items if
-                  all the sequence elements are non-empty, otherwise
+        :returns: ``MayBe`` of a subtype of ``Sequence`` items if
+                  all the sequenced elements are non-empty, otherwise
                   an empty ``MayBe[U]``.
 
         """

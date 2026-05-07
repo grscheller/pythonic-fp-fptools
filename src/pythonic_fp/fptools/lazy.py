@@ -45,10 +45,10 @@ class Lazy[D, R]:
         constructs an object that can evaluate the Callable ``f`` with its argument
         at a later time.
 
-    .. note::
+        .. note::
 
-        Usually use case is to make a function "non-strict" by passing some of its
-        arguments wrapped in Lazy instances.
+            Usually use case is to make a function "non-strict" by passing some of its
+            arguments wrapped in Lazy instances.
 
     """
 
@@ -56,6 +56,10 @@ class Lazy[D, R]:
 
     def __init__(self, f: Callable[[D], R], d: D, pure: bool = True) -> None:
         """
+        .. admonition:: Initialize
+
+            Delayed evaluation of a single argument function.
+
         :param f: single argument function
         :param d: argument to be passed to ``f``
         :param pure: if true, cache the result for future ``eval`` method calls
@@ -70,14 +74,24 @@ class Lazy[D, R]:
         self._result: Either[R, Exception]
 
     def __bool__(self) -> bool:
+        """
+        .. admonition:: bool
+
+            A Lazy becomes truthy when evaluated.
+
+        :returns: ``True`` when evaluated, ``False`` when not evaluated.
+
+        """
         return self._evaluated
 
     def eval(self) -> None:
-        """Evaluate function with its argument.
+        """
+        .. admonition:: evaluate
 
-        - evaluate function
-        - cache result or exception if ``pure is True``
-        - reevaluate if ``pure is False``
+            Evaluate function with its argument.
+
+            - cache result or exception if ``pure is True``
+            - reevaluate if ``pure is False``
 
         """
         if not (self._pure and self._evaluated):
@@ -98,25 +112,40 @@ class Lazy[D, R]:
 
     def got_result(self) -> MayBe[bool]:
         """
-        :returns: ``True`` only if an evaluated ``Lazy`` did not raise an exception.
+        .. admonition:: Got valid result
+
+            Check if result is valid.
+
+        :returns: ``MayBe()`` if not evaluated,
+                  ``MayBe(True)`` if got result,
+                  ``MayBe(False)`` if exception thrown.
 
         """
         return self._exceptional.bind(lambda x: MayBe(not x))
 
     def got_exception(self) -> MayBe[bool]:
-        """Return true if Lazy raised exception.
-        :returns: ``True`` only if ``Lazy`` raised an exception.
+        """
+        .. admonition:: Exception raised
+
+            Check if exception thrown.
+
+        :returns: ``MayBe()`` if not evaluated,
+                  ``MayBe(True)`` if exception thrown,
+                  ``MayBe(False)`` if exception not thrown.
 
         """
         return self._exceptional
 
     def get(self, alt: R | None = None) -> R:
-        """Get result only if evaluated and no exceptions occurred, otherwise
-        return an alternate value.
+        """
+        .. admonition:: get
 
-        :param alt: optional alternate value to return if ``Lazy`` is exceptional
-        :returns: the successfully evaluated result, otherwise ``alt`` if given
-        :raises ValueError: if method called on a ``Lazy`` which was not yet evaluated 
+            Get result only if evaluated and no exceptions occurred,
+            otherwise return an alternate value.
+
+        :param alt: Optional alternate value to return if ``Lazy`` is not evaluated or exceptional.
+        :returns: The successfully evaluated result or an alternate value if given.
+        :raises ValueError: if ``Lazy`` not evaluated or exceptional and ``alt`` not given.
 
         """
         if self._evaluated and self._result:
@@ -127,7 +156,10 @@ class Lazy[D, R]:
         raise ValueError(msg)
 
     def get_result(self) -> MayBe[R]:
-        """Get result only if evaluated and not exceptional.
+        """
+        .. admonition:: get result
+
+            Get result only if evaluated and not exceptional.
 
         :returns: The result wrapped in a maybe monad.
 
@@ -137,7 +169,10 @@ class Lazy[D, R]:
         return MayBe()
 
     def get_exception(self) -> MayBe[Exception]:
-        """Get result only if evaluate and exceptional.
+        """
+        .. admonition:: get exception
+
+            Get result only if evaluate and exceptional.
 
         :returns: The exception thrown wrapped in a maybe monad.
 
@@ -151,7 +186,7 @@ def lazy[**P, R](
     f: Callable[P, R], *args: P.args, **kwargs: P.kwargs
 ) -> Lazy[tuple[Any, ...], R]:
     """
-    .. admonition:: Delayed evaluations
+    .. admonition:: delayed evaluations
 
         Function returning a delayed evaluation of a function of an arbitrary number
         of positional arguments.
@@ -169,7 +204,7 @@ def real_lazy[**P, R](
     f: Callable[P, R], *args: P.args, **kwargs: P.kwargs
 ) -> Lazy[tuple[Any, ...], R]:
     """
-    .. admonition:: Cached Delayed evaluations
+    .. admonition:: cached delayed evaluations
 
         Function returning a delayed evaluation of a function of an
         arbitrary number of positional arguments. Evaluation is cached.

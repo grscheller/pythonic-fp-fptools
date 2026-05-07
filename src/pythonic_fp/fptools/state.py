@@ -15,25 +15,50 @@
 __all__ = ['State']
 
 from collections.abc import Callable
+from typing import final
 from pythonic_fp.circulararray.auto import CA
 
 
+@final
 class State[S, A]:
     """
     .. admonition:: State Monad
 
-        Data structure generating values while propagating changes
-        of state. A pure FP implementation for the State Monad
+        A pure FP implementation of the State Monad, a data structure
+        generating values while propagating changes of state.
 
-        The ``State`` class represents neither a state nor a (value, state) pair.
+        .. note::
 
-        - It wraps a state transformation old_state -> (value, new_state)
+            A monad is a value in a context. The State monad wraps neither
+            a state nor a (value, state) pair. It wraps a transformation
+            ``old_state -> (value, new_state)`` called a "state action".
 
-          - THis state transformation is also known as a "state action".
-          - The ``run`` property is this the state action wrapped by the monad.
-          - The ``bind`` method performs function composition on state actions.
-          - The ``eval`` method evaluates the state action by supplying it
-            an initial state and returning the resulting value.
+            .. admonition:: Class State
+
+                Instance members:
+
+                - Property ``run`` is the **state action**
+                - Method ``bind`` performs state action composition
+                - Method ``eval`` is the **run action**
+
+                  - the **run action** evaluates the **state action** by
+
+                    - supplying an initial state
+                    - returning the resulting value
+
+                Static members:
+
+                - Method ``unit`` creates a ``State`` whose
+                  run action returns a given constant value.
+                - Method ``get`` creates a ``State`` whose
+                  run action returns the current state.
+                - Method ``set`` creates a ``State`` which
+                  ignores the old state and swaps in a new one.
+                - Method ``modify`` creates a ``State`` which
+                  modifies the previous state via a function.
+                - Method ``sequence`` combine a list of ``States``
+                  into a ``State`` whose run action returns the
+                  list of generated values.
 
     """
 
@@ -41,23 +66,24 @@ class State[S, A]:
 
     def __init__(self, run: Callable[[S], tuple[A, S]]) -> None:
         """
-        .. admonition:: Initialize
+        .. admonition:: initialize
 
-            Wrap a state transformation, also called a state action.
+            Initialso called a state action.
 
-        :param run: State action to wrap.
+        :param run: State action.
 
         """
         self.run = run
 
     def bind[B](self, g: 'Callable[[A], State[S, B]]') -> 'State[S, B]':
         """
-        .. admonition:: State action composition
+        .. admonition:: state action composition
 
             Perform state action composition resulting in a new
             wrapped combined state action.
 
         """
+
         def compose(s: S) -> tuple[B, S]:
             a, s = self.run(s)
             return g(a).run(s)
@@ -66,15 +92,13 @@ class State[S, A]:
 
     def eval(self, init: S) -> A:
         """
-        .. admonition:: Evaluate state action
+        .. admonition:: run action
 
             Evaluate the state action by passing in an initial state
-            and returning the produced value. Eval is sometimes referred
-            to as the run action.
+            and returning the produced value.
 
         :param init: The initial state to pass into the state action.
-        :returns: The final value produced by the final chain of
-                  evaluations making up the state action.
+        :returns: The value produced by the run action.
 
         """
         a, _ = self.run(init)
@@ -82,7 +106,7 @@ class State[S, A]:
 
     def map[B](self, f: Callable[[A], B]) -> 'State[S, B]':
         """
-        .. admonition:: Map
+        .. admonition:: map
 
             Map a function over the resulting value of a
             state action.
@@ -92,7 +116,7 @@ class State[S, A]:
 
     def map2[B, C](self, sb: 'State[S, B]', f: Callable[[A, B], C]) -> 'State[S, C]':
         """
-        .. admonition:: Map2
+        .. admonition:: map2
 
             Map a function of two variables over two state actions.
 
@@ -101,7 +125,7 @@ class State[S, A]:
 
     def both[B](self, rb: 'State[S, B]') -> 'State[S, tuple[A, B]]':
         """
-        .. admonition:: Both
+        .. admonition:: both
 
             Return a tuple of two state actions.
 
@@ -113,8 +137,8 @@ class State[S, A]:
         """
         .. admonition:: unit
 
-            Create a State action returning the given value
-            and propagating the present state.
+            Create a State whose run action returns a given constant.
+            Propagate the present state.
 
         :param b: Value state action to return.
         :returns: Create a State monad from a value ``b: B``.
@@ -127,7 +151,7 @@ class State[S, A]:
         """
         .. admonition:: get
 
-            Set state action to return the current state and
+            Set run action to return the current state and
             propagate it unchanged.
 
             - the current state is propagated unchanged
@@ -148,9 +172,9 @@ class State[S, A]:
             Manually insert a state.
 
             - ignores previous state and swaps in a new state
-            - assigns a canonically meaningless value for current value
+            - assigns a canonically meaningless value for generated value
 
-        :param s: State to insert ignoring 
+        :param s: The state to swap in for current state
         :returns: State monad wrapping a state action which ignores any
                   initial state passed in when evaluated.
         """
@@ -163,11 +187,13 @@ class State[S, A]:
 
             Modify previous state with a function.
 
-        - like put, but modify previous state via ``f``
-        - will need type annotation
+            - like put, but modify previous state via ``f``
+            - will need type annotation
 
-          - mypy has no "a priori" way to know what ST is
+              - mypy has no "a priori" way to know what ST is
 
+        :param f: Function to modify the current state.
+        :returns: A State monad with a modified state.
         """
         return State.get().bind(lambda a: State.put(f(a)))  # type: ignore
 
@@ -176,10 +202,11 @@ class State[S, A]:
         """
         .. admonition:: sequence a list
 
-            Combine a list of state actions into a state action of a list.
+            Combine a list of state monads into a state monad whose
+            run action returns a list of the values returned by each monad.
 
-        - all state actions must be of the same type
-        - run method evaluates list front to back
+            - all state actions must be of the same type
+            - run action evaluates the run actions of the list front to back
 
         """
 

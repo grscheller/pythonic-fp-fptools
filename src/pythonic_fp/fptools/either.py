@@ -60,6 +60,7 @@ class EitherBool(SBool):
         to make a left or right ``Either`` instance.
 
     """
+
     def __repr__(self) -> str:
         """
         .. admonition:: String representation
@@ -77,7 +78,7 @@ LEFT: Final[EitherBool] = EitherBool(True)
 """
 .. admonition:: Truthy Either singleton.
 
-    Passed  to ``Either`` initializer to make a right ``Either``.
+    Used by ``Either`` initializer to make a right ``Either``.
 
 """
 
@@ -85,7 +86,7 @@ RIGHT: Final[EitherBool] = EitherBool(False)
 """
 .. admonition:: Falsy Either singleton.
 
-    Passed to ``Either`` initializer to make a right ``Either``.
+    Used by ``Either`` initializer to make a right ``Either``.
 
 """
 
@@ -98,7 +99,7 @@ class Either[L, R]:
         Left biased Either Monad.
 
         - immutable semantics
-        - contains either a "left" or a "right" item, but not both.
+        - contains either a "left" or a "right" item, but not both
         - hashable
 
         .. note::
@@ -107,6 +108,7 @@ class Either[L, R]:
             used in the hash calculation.
 
     """
+
     __slots__ = '_value', '_side', '_hash'
     __match_args__ = ('_value', '_side')
 
@@ -121,10 +123,10 @@ class Either[L, R]:
         """
         .. admonition:: initializer
 
-            Initialize the ``Either`` instance as a "left" or a "right".
+            Initialize ``Either`` instance as a "left" or a "right".
 
-        :param value: The value contained in the ``Either``.
-        :param side: Determines whether to produce
+            :param value: The value contained in the ``Either``.
+            :param side: Determines whether to produce
                      a left or right ``Either``.
 
         """
@@ -142,10 +144,12 @@ class Either[L, R]:
         """
         .. admonition:: hashability
 
-            If the contained value is hashable, its hash value is
-            used to calculate the hash, otherwise the identity of
-            the contained value is used. Hash also depends whether
-            the ``Either`` is a left or a right.
+            If contained value hashable, use its hash value in
+            the hash calculation, otherwise use item's identity.
+
+            - should be safe, the ``Either`` holds a reference to the value
+            - lazily calculates hash value, then caches it
+            - hash also depends if ``Either`` is a left or right
 
         """
         if self._hash is None:
@@ -159,31 +163,17 @@ class Either[L, R]:
         """
         .. admonition:: bool
 
-            - left ``Either`` truthy
-            - right ``Either`` falsy
-
-        :returns: ``True`` when a left, ``False`` when a right.
+            - left ``Either`` is truthy
+            - right ``Either`` is falsy
 
         """
         return self._side is LEFT
-
-    def __repr__(self) -> str:
-        if self:
-            return 'Either(' + repr(self._value) + ', LEFT)'
-        return 'Either(' + repr(self._value) + ', RIGHT)'
-
-    def __str__(self) -> str:
-        if self:
-            return '< ' + str(self._value) + ' | >'
-        return '< | ' + str(self._value) + ' >'
 
     def __len__(self) -> int:
         """
         .. admonition:: Length
 
             Either always contains just one value.
-
-        :returns: 1
 
         """
         return 1
@@ -211,6 +201,38 @@ class Either[L, R]:
         """
         if self:
             yield cast(L, self._value)
+
+    def __repr__(self) -> str:
+        """
+        .. admonition:: representation string
+
+            Return the strings
+
+            - 'Either(repr_value, LEFT)' if a left
+            - 'Either(repr_value, RIGHT)' if if a right
+
+            Where ``repr_value = repr(value)``.
+
+        """
+        if self:
+            return 'Either(' + repr(self._value) + ', LEFT)'
+        return 'Either(' + repr(self._value) + ', RIGHT)'
+
+    def __str__(self) -> str:
+        """
+        .. admonition:: user string
+
+            Return the strings
+
+            - 'Either(str_value)' when a left
+            - 'Either(str_value, RIGHT)' when a right
+
+            Where ``str_value = str(value)``.
+
+        """
+        if self:
+            return '< ' + str(self._value) + ' | >'
+        return '< | ' + str(self._value) + ' >'
 
     def get(self) -> L:
         """
@@ -344,7 +366,9 @@ class Either[L, R]:
             return f(cast(L, self._value))
         return cast(Either[U, R], self)
 
-    def bind_except[U](self, f: 'Callable[[L], Either[U, R]]', fallback_right: R) -> 'Either[U, R]':
+    def bind_except[U](
+        self, f: 'Callable[[L], Either[U, R]]', fallback_right: R
+    ) -> 'Either[U, R]':
         """
         .. admonition:: Bind Except
 
@@ -385,7 +409,9 @@ class Either[L, R]:
         return applied.get()
 
     @staticmethod
-    def sequence[U, V](sequence_either_uv: 'Sequence[Either[U, V]]') -> 'Either[Sequence[U], V]':
+    def sequence[U, V](
+        sequence_either_uv: 'Sequence[Either[U, V]]',
+    ) -> 'Either[Sequence[U], V]':
         """
         .. admonition:: Sequence
 
@@ -396,19 +422,15 @@ class Either[L, R]:
             return a right ``Either`` containing the first right
             encountered.
 
-        :param sequence_either_uv: ``Sequence[Either[U, V]``
-        :returns: ``Either`` of ``Sequence`` subtype of left values if
-                    all sequence elements are lefts, otherwise
-                    the first right encountered.
-
         """
         sequenced_list: list[U] = []
 
-        for xor_uv in sequence_either_uv:
-            if xor_uv:
-                sequenced_list.append(xor_uv.get())
+        for either_uv in sequence_either_uv:
+            if either_uv:
+                sequenced_list.append(either_uv.get())
             else:
-                return Either(xor_uv.get_right().get(), RIGHT)
+                return Either(either_uv.get_right().get(), RIGHT)
 
         sequenced_items = type(sequence_either_uv)(sequenced_list)  # type: ignore
+
         return Either(cast(Sequence[U], sequenced_items))

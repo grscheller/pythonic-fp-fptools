@@ -68,7 +68,8 @@ class MayBe[D]:
             If contained item hashable, use its hash value in
             the hash calculation, otherwise use item's identity.
 
-        :returns: A lazily evaluated integer hash value.
+            - should be safe, the ``MayBe`` holds a reference to the item
+            - lazily calculates hash value, then caches it
 
         """
         if self._hash is None:
@@ -103,6 +104,8 @@ class MayBe[D]:
 
             Compare ``MayBe`` to another object.
 
+            - compare first by identity, then value
+
         """
         if not isinstance(other, type(self)):
             return False
@@ -114,11 +117,9 @@ class MayBe[D]:
 
     def __iter__(self) -> Iterator[D]:
         """
-        .. admonition:: Iterate
+        .. admonition:: iterate
 
             Iterate ``item`` if present.
-
-        :returns: Iterator of the contents of the ``MayBe``.
 
         """
         if self:
@@ -126,16 +127,14 @@ class MayBe[D]:
 
     def __repr__(self) -> str:
         """
-        .. admonition:: Representation string
+        .. admonition:: representation string
 
             Return the strings
 
             - 'MayBe(repr_item)' if not empty
             - 'MayBe()' if empty
 
-            where ``repr_item = repr(item)``.
-
-        :returns: String representation.
+            Where ``repr_item = repr(item)``.
 
         """
         if self:
@@ -144,16 +143,14 @@ class MayBe[D]:
 
     def __str__(self) -> str:
         """
-        .. admonition:: User string
+        .. admonition:: user string
 
             Return the strings
 
             - 'MayBe(str_item)' when not empty
             - 'MayBe()' when empty
 
-            where ``str_item = str(item)``.
-
-        :returns: User string. 
+            Where ``str_item = str(item)``.
 
         """
         if self:
@@ -216,7 +213,7 @@ class MayBe[D]:
             Flatmap function ``f`` over the contained item, if it exists.
 
         :param f: Function to bind.
-        :returns: A new ``MayBe`` if not empty, otherwise itself.
+        :returns: A new ``MayBe`` if not empty, otherwise ``self``.
 
         """
         return f(cast(D, self._item)) if self else cast(MayBe[U], self)
@@ -231,11 +228,6 @@ class MayBe[D]:
             If all ``MayBe`` have items, then return an ``MayBe``
             of the ``Sequence`` of contained items. Otherwise return
             an empty ``Maybe``.
-
-        :param sequence_mb_u: ``Sequence[MayBe[U]]``
-        :returns: ``MayBe`` of a subtype of ``Sequence`` items if
-                  all the sequenced elements are non-empty, otherwise
-                  an empty ``MayBe[U]``.
 
         """
         sequenced_list: list[U] = []

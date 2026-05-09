@@ -2,7 +2,7 @@ pythonic-fp-fptools
 ===================
 
 Project
-`Pythonic FP - FP Tools <https://pypi.org/project/pythonic-fp-fptools/>`_
+`Pythonic FP - Tools <https://pypi.org/project/pythonic-fp-fptools/>`_
 one of the
 `Pythonic FP <https://grscheller.github.io/pythonic-fp/>`_
 PyPI projects.

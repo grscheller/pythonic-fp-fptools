@@ -43,7 +43,7 @@
 
 """
 
-__all__ = ['Either', 'EitherBool', 'LEFT', 'RIGHT']
+__all__ = ['Either', 'EitherFlag', 'LEFT', 'RIGHT']
 
 from collections.abc import Callable, Iterator, Sequence
 from typing import cast, Final, final, overload
@@ -52,7 +52,7 @@ from .maybe import MayBe
 
 
 @final
-class EitherBool(SBool):
+class EitherFlag(SBool):
     """
     .. admonition:: Type for ``LEFT`` and ``RIGHT`` singleton flags
 
@@ -74,7 +74,7 @@ class EitherBool(SBool):
         return 'RIGHT'
 
 
-LEFT: Final[EitherBool] = EitherBool(True)
+LEFT: Final[EitherFlag] = EitherFlag(True)
 """
 .. admonition:: truthy Either flag
 
@@ -82,7 +82,7 @@ LEFT: Final[EitherBool] = EitherBool(True)
 
 """
 
-RIGHT: Final[EitherBool] = EitherBool(False)
+RIGHT: Final[EitherFlag] = EitherFlag(False)
 """
 .. admonition:: falsy Either flag
 
@@ -102,10 +102,9 @@ class Either[L, R]:
         - contains either a "left" or a "right" item, but not both
         - hashable
 
-        .. note::
+        .. important::
 
-            If contained item is not hashable, item's identity is
-            used in the hash calculation.
+            An ``Either`` is immutable once initialized.
 
     """
 
@@ -115,11 +114,11 @@ class Either[L, R]:
     @overload
     def __init__(self, value: L) -> None: ...
     @overload
-    def __init__(self, value: L, side: EitherBool) -> None: ...
+    def __init__(self, value: L, side: EitherFlag) -> None: ...
     @overload
-    def __init__(self, value: R, side: EitherBool) -> None: ...
+    def __init__(self, value: R, side: EitherFlag) -> None: ...
 
-    def __init__(self, value: L | R, side: EitherBool = LEFT) -> None:
+    def __init__(self, value: L | R, side: EitherFlag = LEFT) -> None:
         """
         .. admonition:: initializer
 
@@ -131,7 +130,7 @@ class Either[L, R]:
 
         """
         self._value: L | R
-        self._side: EitherBool
+        self._side: EitherFlag
         if side:
             self._value = value
             self._side = LEFT
@@ -179,6 +178,13 @@ class Either[L, R]:
         return 1
 
     def __eq__(self, other: object) -> bool:
+        """
+        .. admonition:: equality comparison
+
+            Compare ``Either`` to another object. Compare first
+            by identity, then value.
+
+        """
         if not isinstance(other, type(self)):
             return False
 
@@ -196,7 +202,7 @@ class Either[L, R]:
         """
         .. admonition:: iterate
 
-            Iterate ``value`` if a left ``Ether``.
+            Iterate ``value`` if a left ``Either``.
 
         """
         if self:
@@ -319,10 +325,6 @@ class Either[L, R]:
 
             Map ``f`` over left ``Either`` with a right fallback upon exception.
 
-            .. warning::
-
-                Swallows exceptions.
-
             :param f: Function used to map left values.
             :param fallback_right: Fallback value if exception thrown.
             :returns: A successfully mapped left, a propagated right,
@@ -379,10 +381,6 @@ class Either[L, R]:
 
             Flatmap function ``f`` over ``Either``, with fallback upon
             exception. Propagate right values.
-
-            .. warning::
-
-                Swallows exceptions.
 
             :param f: Function to bind over values.
             :param fallback_right: Fallback value if exception thrown.

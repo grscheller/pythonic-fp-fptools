@@ -32,15 +32,6 @@ class MayBe[D]:
         - can store any item of any type, including ``None``
         - hashable
 
-        .. note::
-
-            If contained item not hashable, item's identity is
-            used for hash calculation.
-
-        .. warning::
-
-            ``MayBe()`` is not a singleton.
-
     """
 
     __slots__ = ('_item', '_hash')
@@ -55,13 +46,14 @@ class MayBe[D]:
         """
         .. admonition:: initialize
 
-            Setup ``MayBe`` with 1 or 0 items.
+            Initialize ``MayBe`` with 1 or 0 items.
 
             :param item: Optional item for the ``MayBe``.
 
-            .. note::
+            .. important::
 
-                A ``MayBe`` is immutable once initialized.
+                - A ``MayBe`` is immutable once initialized.
+                - ``MayBe()`` is not a singleton.
 
         """
         self._item: D | _Sentinel = item
@@ -108,9 +100,8 @@ class MayBe[D]:
         """
         .. admonition:: equality comparison
 
-            Compare ``MayBe`` to another object.
-
-            - compare first by identity, then value
+            Compare ``MayBe`` to another object. Compare first
+            by identity, then value.
 
         """
         if not isinstance(other, type(self)):
@@ -231,9 +222,21 @@ class MayBe[D]:
 
             ``Sequence[MayBe[U]]`` -> ``MayBe[Sequence[U]]``
 
-            If all ``MayBe`` have items, then return an ``MayBe``
-            of the ``Sequence`` of contained items. Otherwise return
-            an empty ``Maybe``.
+            :param sequence_mb_u: A ``Sequence`` of ``MayBe`` of the same type.
+            :returns: Empty ``MayBe`` if one of the ``MayBe`` is empty.
+
+            ,, note::
+
+                A sequenced empty ``Sequence[MayBe[U]]`` would produce
+                a ``MayBe`` of an empty ``Sequence``, not an empty
+                ``MayBe``.
+
+                .. tip
+
+                    If above is confusing, replace the term "Sequence"
+                    above with a concrete example of a ``Sequence``
+                    like ``list`` or ``tuple``.
+
 
         """
         sequenced_list: list[U] = []

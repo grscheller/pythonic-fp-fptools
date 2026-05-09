@@ -17,21 +17,35 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI 5.3.0 - 2026-05-09
+~~~~~~~~~~~~~~~~~~~~~~~
+
+First PyPI release in over a year with substantive code changes.
+
+- Finally happy with the Sphinx/Furo based documentation.
+- Fixed errors with MayBe and Either hashing.
+- This will fix the PyPI link issues.
+- Next release will be 6.0.0 when I move the monads to
+  their own submodule.
+
 Development Status Reappraisal - 2026-05-05
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Maintainer appraised the Development Status for
+Maintainer reappraised the Development Status for
 pythonic-fp-fptools to be ``"5 - Production/Stable"``.
+
 
 PyPI 5.2.0 - 2026-01-13
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Added function.compose back on 2025-12-04. Docstring updates for Sphinx.
 
+
 PyPI 5.1.2 - 2025-09-28
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Patch bump for pythonic-fp PyPI coordinated release 3.3.3.
+
 
 PyPI 5.1.1 - 2025-09-09
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,9 +63,10 @@ made it a MINOR release due to introducing .pyi files.
 PyPI 5.0.0 - 2025-08-02
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Coordinated entire project pythonic-fp PyPI deployment.
+Coordinated moving entire project to the pythonic-fp PyPI name.
 
 - moved maybe.py and xor.py from containers, renamed xor.py -> either.py.
+
 
 PyPI 4.0.0 - 2025-07-13
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,15 +79,20 @@ Dropped developer status to Beta
 TODO: After next Boring Math (bm) deployment, I should be able to archive
 my dtools namespace repos
 
+
 PyPI 3.0.0 - 2025-07-06
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 First PyPI release as ``pythonic-fp.fptools``
 
-- dropping dtools namespace name because there is a repo by that name.
+- dropping dtools namespace name because there is a repo by that name
+  on PyPI.
+
 
 PyPI 2.0.0 - 2025-05-22
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+One more release as dtools.fp.
 
 - Moved dtools.fp.err_handling to the dtools.containers PyPI project
 
@@ -81,6 +101,7 @@ PyPI 2.0.0 - 2025-05-22
   - dropped lazy methods
 
     - will import dtools.fp.lazy directly for this functionality
+
 
 PyPI 1.7.0 - 2025-04-22
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,6 +112,7 @@ Last PyPI release as dtools.fp
 - typing improvements
 - docstring changes
 - pyproject.toml standardization
+
 
 PyPI 1.6.1.0 - 2025-04-17
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,10 +129,12 @@ PyPI 1.6.1.0 - 2025-04-17
 
 - Also noticed MB and XOR still have camelCase APIs
 
+
 PyPI 1.6.0 - 2025-04-07
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 - typing improvements
+
 
 PyPI 1.4.0 - 2025-03-16
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,10 +155,12 @@ PyPI 1.4.0 - 2025-03-16
 
     - avoid using these methods in pure code
 
+
 PyPI 1.3.1 - 2025-02-05
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 - added class method sequence to class State
+
 
 PyPI 1.3.0 - 2025-01-17
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,12 +172,14 @@ Repo name changes.
 - GitHub: fp -> dtools-fp
 - PyPI: grscheller.fp -> dtools.fp
 
+
 PyPI 1.2.0 - 2025-01-04
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 - added modules lazy and state
 - renamed flatmap methods to bind
 - minor MB and XOR updates/corrections
+
 
 PyPI 1.1.0 - 2024-11-18
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -160,6 +188,7 @@ Added fp.function module.
 
 - combine and partially apply functions as first class objects
 - some tests may be lacking
+
 
 Version 1.0.2.0 - 2024-10-20 (Devel environment only)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -178,6 +207,7 @@ Version 1.0.2.0 - 2024-10-20 (Devel environment only)
        
 - will redo docs in docs repo
 
+
 PyPI 1.0.1 - 2024-10-20
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -189,6 +219,7 @@ PyPI 1.0.1 - 2024-10-20
 PyPI 1.0.0 - 2024-10-18
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+
 Decided to make this release first stable release.
 
 - renamed module fp.woException to fp.err_handling
@@ -197,10 +228,12 @@ Decided to make this release first stable release.
    
 - pytest improvements based on pytest documentation
 
+
 PyPI 0.4.0 - 2024-10-03
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Long overdue PyPI release.
+
 
 Version 0.3.5.1 - 2024-10-03 (Devel environment only)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,6 +253,7 @@ New module ``grscheller.fp.nothingness`` which contains
 
   - prefer class ``MB`` to represent a missing value in client code
 
+
 PyPI 0.3.3 - 2024-08-25
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -232,12 +266,14 @@ PyPI 0.3.3 - 2024-08-25
   - makeRight(self, right: R|Nada=nada) -> XOR\[L, R\]:
   - swapRight(self, right: R) -> XOR\[L, R\]:
 
+
 PyPI 0.3.0 - 2024-08-17
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Class Nothing re-added but renamed class Nada.
 
 Version grscheller.untyped.nothing for more strictly typed code.
+
 
 PyPI 0.2.1 - 2024-07-26
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -246,6 +282,7 @@ PyPI grscheller.fp package release v0.2.1
 
 - forgot to update README.md on last PyPI release
 - simplified README.md to help alleviate this mistake in the future
+
 
 PyPI 0.2.0 - 2024-07-26
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,6 +295,7 @@ PyPI 0.2.0 - 2024-07-26
     - better "bottom" type than either None or ()
 
   - renamed ``fp.wo_exception`` to ``fp.woException``
+
 
 PyPI 0.1.0 - 2024-07-11
 ~~~~~~~~~~~~~~~~~~~~~~~

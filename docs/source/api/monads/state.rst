@@ -1,7 +1,5 @@
-fptools.state
--------------
-
-**An implementation of the State manad.**
+state monad
+===========
 
 .. automodule:: pythonic_fp.fptools.state
     :members:

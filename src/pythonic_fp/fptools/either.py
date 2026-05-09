@@ -240,6 +240,9 @@ class Either[L, R]:
 
             Get value if a left.
 
+            :returns: The value if a left.
+            :raises ValueError: If not a left.
+
             .. warning::
 
                 Unsafe method ``get``. Will raise ``ValueError`` if ``Either``
@@ -249,9 +252,6 @@ class Either[L, R]:
 
                     Best practice is to first check the ``Either`` in
                     a boolean context.
-
-            :returns: The value if a left.
-            :raises ValueError: If not a left.
 
         """
         if self._side == RIGHT:
@@ -328,6 +328,10 @@ class Either[L, R]:
             :returns: A successfully mapped left, a propagated right,
                     or a right with a fallback value.
 
+            .. warning::
+
+                Swallows exceptions.
+
         """
         if self._side == RIGHT:
             return cast(Either[U, R], self)
@@ -384,6 +388,10 @@ class Either[L, R]:
             :param fallback_right: Fallback value if exception thrown.
             :returns: A successfully bound left, a propagated right,
                     or a right with a fallback value.
+
+            .. warning::
+
+                Swallows exceptions.
 
         """
         if self._side == RIGHT:

@@ -1,11 +1,6 @@
 FP Tools
 ========
 
-.. automodule:: pythonic_fp.fptools
-    :no-members:
-    :ignore-module-all:
-    :no-index:
-
 .. toctree::
     :caption: Function manipulation
     :maxdepth: 1
@@ -20,8 +15,6 @@ FP Tools
 
 .. toctree::
     :caption: Monads
-    :maxdepth: 1
+    :maxdepth: 2
 
-    maybe
-    either
-    state
+    monads/index

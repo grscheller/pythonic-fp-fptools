@@ -1,7 +1,5 @@
-fptools.either
---------------
-
-**An implementation of the Either Monad.**
+either monad
+============
 
 .. automodule:: pythonic_fp.fptools.either
     :members:

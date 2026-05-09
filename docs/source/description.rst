@@ -2,6 +2,7 @@ Description
 -----------
 
 .. automodule:: pythonic_fp.fptools
-    :synopsis:
-    :noindex:
+    :no-members:
+    :ignore-module-all:
+    :no-index:
 

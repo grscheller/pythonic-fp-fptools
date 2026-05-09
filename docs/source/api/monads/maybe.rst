@@ -1,7 +1,5 @@
-fptools.maybe
--------------
-
-**An implementation of the Maybe Monad.**
+maybe monad
+===========
 
 .. automodule:: pythonic_fp.fptools.maybe
     :members:

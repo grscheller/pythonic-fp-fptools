@@ -57,11 +57,11 @@ class MayBe[D]:
 
             Setup ``MayBe`` with 1 or 0 items.
 
+            :param item: Optional item for the ``MayBe``.
+
             .. note::
 
                 A ``MayBe`` is immutable once initialized.
-
-            :param item: Optional item for the ``MayBe``.
 
         """
         self._item: D | _Sentinel = item

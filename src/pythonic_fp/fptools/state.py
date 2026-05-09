@@ -157,8 +157,8 @@ class State[S, A]:
             Create a State whose run action returns the given
             constant ``b``  and propagate the present state.
 
-        :param b: Value the new State's run action will return.
-        :returns: A new ``State[ST, B]`` from a value ``b: B``.
+            :param b: Value the new State's run action will return.
+            :returns: A new ``State[ST, B]`` from a value ``b: B``.
 
         """
         return State(lambda s: (b, s))
@@ -175,9 +175,9 @@ class State[S, A]:
             - current value now set to current state
             - will need type annotation
 
-        :returns: A state monad wrapping a state action to return
-                  the current state. Propagates the current state
-                  unchanged.
+            :returns: A state monad wrapping a state action to return
+                    the current state. Propagates the current state
+                    unchanged.
 
         """
         return State[ST, ST](lambda s: (s, s))
@@ -194,9 +194,9 @@ class State[S, A]:
 
               - the traditional canonically meaningless value in FP
 
-        :param s: The state to swap in for current state
-        :returns: State monad wrapping a state action which ignores any
-                  initial state passed in when evaluated.
+            :param s: The state to swap in for current state
+            :returns: State monad wrapping a state action which ignores
+                      any initial state passed in when evaluated.
         """
         return State(lambda _: ((), s))
 

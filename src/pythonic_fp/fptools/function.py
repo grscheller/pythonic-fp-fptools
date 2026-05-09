@@ -34,31 +34,41 @@ P = ParamSpec('P')
 
 
 def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
-    """Swap arguments of a two argument function.
+    """
+    .. admonition:: swap
 
-    :param f: Two argument function.
-    :returns: A version of ``f`` with its arguments swapped.
+        Swap arguments of a two argument function.
+
+        :param f: Two argument function.
+        :returns: A version of ``f`` with its arguments swapped.
 
     """
     return lambda v, u: f(u, v)
 
 
 def compose[D, T, R](f: Callable[[D], T], g: Callable[[T], R]) -> Callable[[D], R]:
-    """Function Composition
+    """
+    .. admonition:: compose
 
-    :param f: Function called first with domain D and range T.
-    :param g: Function called on result with domain T and range R.
-    :returns: The composite function g∘f(d) = g(f(d))
+        Function Composition
+
+        :param f: Function called first with domain ``D`` and range ``T``.
+        :param g: Function called on result with domain ``T`` and range ``R``.
+        :returns: The composite function ``g∘f(d) = g(f(d))``
 
     """
     return lambda d: g(f(d))
 
 
 def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
-    """Take a predicate and return its negation.
+    """
+    .. admonition:: negate
 
-    :param f: a function ``f`` which returns a bool
-    :returns: the function ``not f``
+        Take a predicate and return its negation.
+
+        :param f: a function ``f`` which returns a bool
+        :returns: the function ``not f``
+
     """
     def ff(*args: P.args, **kwargs: P.kwargs) -> bool:
         return not f(*args, **kwargs)
@@ -67,17 +77,15 @@ def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
 
 
 def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
-    """Convert a function from multi-to-single valued.
+    """
+    .. admonition:: sequenced
 
-    Convert a function with arbitrary positional arguments to one taking
-    a tuple of the original arguments.
+        Convert a function with arbitrary positional arguments to
+        one taking a tuple of the original arguments.
 
-    - was awaiting typing and mypy "improvements" to ParamSpec
-
-      - return type: Callable[tuple[P.args], R]   ???
-      - return type: Callable[[tuple[P.args]], R] ???
-
-    TODO: Look into replacing this function with a Callable class?
+        :param f: Function with just positional parameters
+        :returns: An equivalent function taking a tuple of
+                  the arguments to ``f``.
 
     """
     def ff(tupled_args: tuple[Any]) -> R:
@@ -87,12 +95,24 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
 
 
 def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
-    """Partial function application.
+    """
+    .. admonition:: partial
 
-    Partially apply arguments to a function, left to right.
+        Partially apply arguments to a function with positional
+        arguments left to right.
 
-    - type-wise the only thing guaranteed is the return type
-    - best practice is to cast the result immediately
+        :param f: Function with just positional arguments.
+        :param args: Arguments to partially apply to ``f``.
+
+        .. warning::
+
+            The types of the arguments are lost.
+
+            .. tip::
+
+                Best practice is to cast the result if it is not
+                consumed immediately.
+
 
     """
     def finish(*rest: Any) -> R:

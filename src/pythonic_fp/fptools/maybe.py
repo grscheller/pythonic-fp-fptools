@@ -57,6 +57,12 @@ class MayBe[D]:
 
             Setup ``MayBe`` with 1 or 0 items.
 
+            .. note::
+
+                A ``MayBe`` is immutable once initialized.
+
+            :param item: Optional item for the ``MayBe``.
+
         """
         self._item: D | _Sentinel = item
         self._hash: int | None = None
@@ -119,7 +125,7 @@ class MayBe[D]:
         """
         .. admonition:: iterate
 
-            Iterate ``item`` if present.
+           :yields: The contained ``item`` if non-empty.
 
         """
         if self:
@@ -131,10 +137,9 @@ class MayBe[D]:
 
             Return the strings
 
-            - 'MayBe(repr_item)' if not empty
-            - 'MayBe()' if empty
-
-            Where ``repr_item = repr(item)``.
+            :returns: 'MayBe()' if empty
+            :returns: 'MayBe(repr_item)' if not empty
+                      where ``repr_item = repr(item)``.
 
         """
         if self:
@@ -169,6 +174,11 @@ class MayBe[D]:
             Return the item if it exists, otherwise an optional
             alternate item.
 
+            :param alt: Optional alternative item to return if``MayBe`` empty.
+            :returns: The item if it exists.
+            :raises ValueError: When an alternate item is not provided but needed.
+
+
             .. warning::
 
                 Unsafe method ``get`` will raise ``ValueError`` if the
@@ -178,10 +188,6 @@ class MayBe[D]:
 
                     Best practice is to first check the ``MayBe`` in
                     a boolean context.
-
-        :param alt: Optional alternative item to return if``MayBe`` empty.
-        :returns: The item if it exists.
-        :raises ValueError: When an alternate item is not provided but needed.
 
         """
         if self._item is not _sentinel:
@@ -198,8 +204,8 @@ class MayBe[D]:
 
             Map function ``f`` over the ``MayBe``.
 
-        :param f: Function used for the map.
-        :returns: A new ``MayBe`` if not empty, otherwise ``self``.
+            :param f: Function used for the map.
+            :returns: A new ``MayBe`` if not empty, otherwise ``self``.
 
         """
         if self:
@@ -212,8 +218,8 @@ class MayBe[D]:
 
             Flatmap function ``f`` over the contained item, if it exists.
 
-        :param f: Function to bind.
-        :returns: A new ``MayBe`` if not empty, otherwise ``self``.
+            :param f: Function to bind.
+            :returns: A new ``MayBe`` if not empty, otherwise ``self``.
 
         """
         return f(cast(D, self._item)) if self else cast(MayBe[U], self)

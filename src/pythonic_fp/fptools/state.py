@@ -22,7 +22,7 @@ from pythonic_fp.circulararray.auto import CA
 @final
 class State[S, A]:
     """
-    .. admonition:: State Monad
+    .. admonition:: State monad
 
         A pure FP implementation of the State Monad, a data structure
         generating values while propagating changes of state.
@@ -68,9 +68,7 @@ class State[S, A]:
         """
         .. admonition:: initialize
 
-            Initialso called a state action.
-
-        :param run: State action.
+            :param run: State action.
 
         """
         self.run = run
@@ -79,11 +77,13 @@ class State[S, A]:
         """
         .. admonition:: state action composition
 
-            Perform state action composition resulting in a new
-            wrapped combined state action.
+            :param g: A function that produces a ``State[S, B]``
+                      from an ``A``.
+            :returns: A ``State[S, B]`` whose state action is the
+                      composition of the state actions from ``self``
+                      followed by the one produced by ``g``.
 
         """
-
         def compose(s: S) -> tuple[B, S]:
             a, s = self.run(s)
             return g(a).run(s)
@@ -97,8 +97,8 @@ class State[S, A]:
             Evaluate the state action by passing in an initial state
             and returning the produced value.
 
-        :param init: The initial state to pass into the state action.
-        :returns: The value produced by the run action.
+            :param init: An initial state to pass into the state action.
+            :returns: The value produced by the run action.
 
         """
         a, _ = self.run(init)
@@ -108,8 +108,13 @@ class State[S, A]:
         """
         .. admonition:: map
 
-            Map a function over the resulting value of a
-            state action.
+            Map function ``f`` over the resulting value of a
+            state action propagating the current state.
+
+            :param f: Function to map.
+            :returns: A `State` whose run action produces ``f(a)``
+                      where ``a`` is the value produced by
+                      the run action of ``self``.
 
         """
         return self.bind(lambda a: State.unit(f(a)))
@@ -118,7 +123,15 @@ class State[S, A]:
         """
         .. admonition:: map2
 
-            Map a function of two variables over two state actions.
+            Combine two state monads, ``self`` and ``sb``, with
+            a function. Resulting run action just propagates
+            the current state.
+
+            :param sb: ``State`` to combine with ``self``.
+            :param f: Function used by the resulting run action
+                      on the values produced by the run actions
+                      of ``self`` and ``sb`` from the same initial
+                      state.
 
         """
         return self.bind(lambda a: sb.map(lambda b: f(a, b)))
@@ -127,7 +140,11 @@ class State[S, A]:
         """
         .. admonition:: both
 
-            Return a tuple of two state actions.
+            Return a ``State`` whose run action returns a tuple
+            from from the run actions from .
+
+            :param sb: ``State`` to combine with ``self`` for the
+                       second element of tuple produced by run action.
 
         """
         return self.map2(rb, lambda a, b: (a, b))
@@ -137,11 +154,11 @@ class State[S, A]:
         """
         .. admonition:: unit
 
-            Create a State whose run action returns a given constant.
-            Propagate the present state.
+            Create a State whose run action returns the given
+            constant ``b``  and propagate the present state.
 
-        :param b: Value state action to return.
-        :returns: Create a State monad from a value ``b: B``.
+        :param b: Value the new State's run action will return.
+        :returns: A new ``State[ST, B]`` from a value ``b: B``.
 
         """
         return State(lambda s: (b, s))
@@ -149,7 +166,7 @@ class State[S, A]:
     @staticmethod
     def get[ST]() -> 'State[ST, ST]':
         """
-        .. admonition:: get
+        .. admonition:: get state
 
             Set run action to return the current state and
             propagate it unchanged.
@@ -158,8 +175,9 @@ class State[S, A]:
             - current value now set to current state
             - will need type annotation
 
-        :returns: State monad wrapping a state action returning and
-                  propagating the current state unchanged.
+        :returns: A state monad wrapping a state action to return
+                  the current state. Propagates the current state
+                  unchanged.
 
         """
         return State[ST, ST](lambda s: (s, s))
@@ -167,12 +185,14 @@ class State[S, A]:
     @staticmethod
     def put[ST](s: ST) -> 'State[ST, tuple[()]]':
         """
-        .. admonition:: put
+        .. admonition:: put state
 
-            Manually insert a state.
+            Manually insert a new state.
 
             - ignores previous state and swaps in a new state
-            - assigns a canonically meaningless value for generated value
+            - resulting run action will return an empty tuple
+
+              - the traditional canonically meaningless value in FP
 
         :param s: The state to swap in for current state
         :returns: State monad wrapping a state action which ignores any
@@ -185,15 +205,17 @@ class State[S, A]:
         """
         .. admonition:: modify
 
-            Modify previous state with a function.
+            Modify previous state with a function. Like put, but modify
+            previous state via ``f``.
 
-            - like put, but modify previous state via ``f``
-            - will need type annotation
+            :param f: Function to modify the current state.
+            :returns: A State monad with a modified state.
 
-              - mypy has no "a priori" way to know what ST is
+            .. note::
 
-        :param f: Function to modify the current state.
-        :returns: A State monad with a modified state.
+                Will need type annotation. Static type checkers like
+                mypy have no *a priori* knowledge of what ``ST``
+                could be.
         """
         return State.get().bind(lambda a: State.put(f(a)))  # type: ignore
 
@@ -203,10 +225,17 @@ class State[S, A]:
         .. admonition:: sequence a list
 
             Combine a list of state monads into a state monad whose
-            run action returns a list of the values returned by each monad.
+            run action returns a list of the values returned by each
+            run action from the original list.
 
-            - all state actions must be of the same type
-            - run action evaluates the run actions of the list front to back
+            :param sas: A list of state monads all of type ``State[ST, AA]``.
+            :returns: A state monad of type ``State[ST, list[AA]]``.
+ 
+            .. note::
+
+                The run action evaluates the run actions of the list
+                front to back. The state is also propagated, not
+                necessarily unchanged, front to back.
 
         """
 

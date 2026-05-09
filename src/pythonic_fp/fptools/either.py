@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-.. admonition:: The Either Monad
+.. admonition:: The Either monad
 
     Data structure semantically containing either
     a "left" value or a "right" value, but not both.
@@ -54,7 +54,7 @@ from .maybe import MayBe
 @final
 class EitherBool(SBool):
     """
-    .. admonition:: Type for the ``LEFT`` and ``RIGHT`` singletons.
+    .. admonition:: Type for ``LEFT`` and ``RIGHT`` singleton flags
 
         Boolean-like type for signaling the ``Either`` initializer
         to make a left or right ``Either`` instance.
@@ -63,7 +63,7 @@ class EitherBool(SBool):
 
     def __repr__(self) -> str:
         """
-        .. admonition:: String representation
+        .. admonition:: string representation
 
             Two values 'LEFT' or 'RIGHT' for the truthy and falsy
             singletons respectfully. Also the default user strings.
@@ -76,7 +76,7 @@ class EitherBool(SBool):
 
 LEFT: Final[EitherBool] = EitherBool(True)
 """
-.. admonition:: Truthy Either singleton.
+.. admonition:: truthy Either flag
 
     Used by ``Either`` initializer to make a right ``Either``.
 
@@ -84,7 +84,7 @@ LEFT: Final[EitherBool] = EitherBool(True)
 
 RIGHT: Final[EitherBool] = EitherBool(False)
 """
-.. admonition:: Falsy Either singleton.
+.. admonition:: falsy Either flag
 
     Used by ``Either`` initializer to make a right ``Either``.
 
@@ -94,9 +94,9 @@ RIGHT: Final[EitherBool] = EitherBool(False)
 @final
 class Either[L, R]:
     """
-    .. admonition:: Either Monad
+    .. admonition:: Either monad
 
-        Left biased Either Monad.
+        Left biased Either monad.
 
         - immutable semantics
         - contains either a "left" or a "right" item, but not both
@@ -171,7 +171,7 @@ class Either[L, R]:
 
     def __len__(self) -> int:
         """
-        .. admonition:: Length
+        .. admonition:: len
 
             Either always contains just one value.
 
@@ -194,7 +194,7 @@ class Either[L, R]:
 
     def __iter__(self) -> Iterator[L]:
         """
-        .. admonition:: Iterate
+        .. admonition:: iterate
 
             Iterate ``value`` if a left ``Ether``.
 
@@ -236,7 +236,7 @@ class Either[L, R]:
 
     def get(self) -> L:
         """
-        .. admonition:: Get
+        .. admonition:: get
 
             Get value if a left.
 
@@ -250,8 +250,8 @@ class Either[L, R]:
                     Best practice is to first check the ``Either`` in
                     a boolean context.
 
-        :returns: The value if a left.
-        :raises ValueError: If not a left.
+            :returns: The value if a left.
+            :raises ValueError: If not a left.
 
         """
         if self._side == RIGHT:
@@ -261,11 +261,11 @@ class Either[L, R]:
 
     def get_left(self) -> MayBe[L]:
         """
-        .. admonition:: Safer Get
+        .. admonition:: get left
 
             Get the value if a left.
 
-        :returns: ``MayBe[L]``
+            :returns: ``MayBe[L]``
 
         """
         if self._side == LEFT:
@@ -274,11 +274,11 @@ class Either[L, R]:
 
     def get_right(self) -> MayBe[R]:
         """
-        .. admonition:: Get Right
+        .. admonition:: get right
 
             Get the value if a right.
 
-        :returns: ``MayBe[R]``
+            :returns: ``MayBe[R]``
 
         """
         if self._side == RIGHT:
@@ -287,12 +287,12 @@ class Either[L, R]:
 
     def map_right[V](self, f: Callable[[R], V]) -> 'Either[L, V]':
         """
-        .. admonition:: Map Right
+        .. admonition:: map right
 
             Map function ``f`` over the contents of a right ``Either``.
 
-        :param f: function to map a right value
-        :returns: A new ``Either`` if a right, otherwise ``self``.
+            :param f: function to map a right value
+            :returns: A new ``Either`` if a right, otherwise ``self``.
 
         """
         if self._side == LEFT:
@@ -301,12 +301,12 @@ class Either[L, R]:
 
     def map[U](self, f: Callable[[L], U]) -> 'Either[U, R]':
         """
-        .. admonition:: Map
+        .. admonition:: map
 
             Map function ``f`` over left ``Either``.
 
-        :param f: Function used to map left values.
-        :returns: A new ``Either`` if a left, otherwise ``self``.
+            :param f: Function used to map left values.
+            :returns: A new ``Either`` if a left, otherwise ``self``.
 
         """
         if self._side == RIGHT:
@@ -315,17 +315,18 @@ class Either[L, R]:
 
     def map_except[U](self, f: Callable[[L], U], fallback_right: R) -> 'Either[U, R]':
         """
-        .. admonition:: Map Except
+        .. admonition:: map except
 
             Map ``f`` over left ``Either`` with a right fallback upon exception.
 
             .. warning::
+
                 Swallows exceptions.
 
-        :param f: Function used to map left values.
-        :param fallback_right: Fallback value if exception thrown.
-        :returns: A successfully mapped left, a propagated right,
-                  or a right with a fallback value.
+            :param f: Function used to map left values.
+            :param fallback_right: Fallback value if exception thrown.
+            :returns: A successfully mapped left, a propagated right,
+                    or a right with a fallback value.
 
         """
         if self._side == RIGHT:
@@ -353,13 +354,13 @@ class Either[L, R]:
 
     def bind[U](self, f: 'Callable[[L], Either[U, R]]') -> 'Either[U, R]':
         """
-        .. admonition:: Bind
+        .. admonition:: bind
 
             Flatmap function ``f`` over a left value. Propagate right
             values.
 
-        :param f: Function to bind.
-        :returns: A new Either if a left, otherwise itself.
+            :param f: Function to bind.
+            :returns: A new Either if a left, otherwise itself.
 
         """
         if self:
@@ -370,18 +371,19 @@ class Either[L, R]:
         self, f: 'Callable[[L], Either[U, R]]', fallback_right: R
     ) -> 'Either[U, R]':
         """
-        .. admonition:: Bind Except
+        .. admonition:: bind except
 
             Flatmap function ``f`` over ``Either``, with fallback upon
             exception. Propagate right values.
 
             .. warning::
+
                 Swallows exceptions.
 
-        :param f: Function to bind over values.
-        :param fallback_right: Fallback value if exception thrown.
-        :returns: A successfully bound left, a propagated right,
-                  or a right with a fallback value.
+            :param f: Function to bind over values.
+            :param fallback_right: Fallback value if exception thrown.
+            :returns: A successfully bound left, a propagated right,
+                    or a right with a fallback value.
 
         """
         if self._side == RIGHT:
@@ -413,7 +415,7 @@ class Either[L, R]:
         sequence_either_uv: 'Sequence[Either[U, V]]',
     ) -> 'Either[Sequence[U], V]':
         """
-        .. admonition:: Sequence
+        .. admonition:: sequence
 
             ``Sequence[Either[U, V]]`` -> ``Either[Sequence[U], V]``
 

@@ -5,8 +5,8 @@
 #  - later needs to agree with pyproject.toml
 PROJECT_NAME = FP Tools Array
 PYPI_NAME = fptools
-RELEASE_VERSION = 5.3.0
-DEVEL_VERSION = 5.3.0
+RELEASE_VERSION = 5.4.0
+DEVEL_VERSION = 5.4.1
 CUSTOM_VERSION = 0.0.0
 
 SPHINXOPTS ?=

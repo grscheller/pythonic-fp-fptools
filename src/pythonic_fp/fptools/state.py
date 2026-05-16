@@ -30,16 +30,18 @@ class State[S, A]:
         .. note::
 
             A monad is a value in a context. The State monad wraps neither
-            a state nor a (value, state) pair. It wraps a transformation
-            ``old_state -> (value, new_state)`` called a "state action".
+            a state nor a ``(value, state)`` pair.
+
+            It wraps a transformation ``old_state -> (value, new_state)``
+            called a "state action".
 
             .. admonition:: Class State
 
                 Instance members:
 
-                - Property ``run`` is the **state action**
-                - Method ``bind`` performs state action composition
-                - Method ``eval`` is the **run action**
+                - Property *run* is the **state action**
+                - Method *bind* performs state action composition
+                - Method *eval* performs the **run action**
 
                   - the **run action** evaluates the **state action** by
 
@@ -48,17 +50,17 @@ class State[S, A]:
 
                 Static members:
 
-                - Method ``unit`` creates a ``State`` whose
-                  run action returns a given constant value.
-                - Method ``get`` creates a ``State`` whose
+                - Method unit creates a State instance whose
+                  run action returns the supplied constant value.
+                - Method get creates a State instance whose
                   run action returns the current state.
-                - Method ``set`` creates a ``State`` which
-                  ignores the old state and swaps in a new one.
-                - Method ``modify`` creates a ``State`` which
+                - Method set creates a State which ignores
+                  the old state and swaps in a new one.
+                - Method modify creates a State instance which
                   modifies the previous state via a function.
-                - Method ``sequence`` combine a list of ``States``
-                  into a ``State`` whose run action returns the
-                  list of generated values.
+                - Method sequence combine a list of State instances
+                  into a State whose run action returns the list
+                  of generated values.
 
     """
 
@@ -66,9 +68,11 @@ class State[S, A]:
 
     def __init__(self, run: Callable[[S], tuple[A, S]]) -> None:
         """
-        .. admonition:: initialize
+        .. admonition:: init
 
             :param run: State action.
+            :type run: ``S -> (A, S)`` where A is the type of the
+                       generated value and S is the type of a state.
 
         """
         self.run = run
@@ -108,13 +112,13 @@ class State[S, A]:
         """
         .. admonition:: map
 
-            Map function ``f`` over the resulting value of a
+            Map function f over the resulting value of a
             state action propagating the current state.
 
             :param f: Function to map.
-            :returns: A `State` whose run action produces ``f(a)``
-                      where ``a`` is the value produced by
-                      the run action of ``self``.
+            :returns: A new State instance whose run action produces f(a)
+                      where a is the value produced by the current State
+                      instance and just propagates the current state.
 
         """
         return self.bind(lambda a: State.unit(f(a)))
@@ -123,15 +127,14 @@ class State[S, A]:
         """
         .. admonition:: map2
 
-            Combine two state monads, ``self`` and ``sb``, with
-            a function. Resulting run action just propagates
-            the current state.
+            Combine two state monads, self and sb, with a function.
+            Resulting run action just propagates the current state.
 
-            :param sb: ``State`` to combine with ``self``.
+            :param sb: State instance to combine with the current instance.
             :param f: Function used by the resulting run action
                       on the values produced by the run actions
-                      of ``self`` and ``sb`` from the same initial
-                      state.
+                      of the current State instance and ``sb`` using
+                      the same initial state.
 
         """
         return self.bind(lambda a: sb.map(lambda b: f(a, b)))
@@ -140,11 +143,10 @@ class State[S, A]:
         """
         .. admonition:: both
 
-            Return a ``State`` whose run action returns a tuple
-            from from the run actions from .
+            Return a State instance whose run action returns a tuple
+            from from the run actions of the current State and sb.
 
-            :param sb: ``State`` to combine with ``self`` for the
-                       second element of tuple produced by run action.
+            :param sb: A State instance to be combined with the current one.
 
         """
         return self.map2(rb, lambda a, b: (a, b))
@@ -155,10 +157,10 @@ class State[S, A]:
         .. admonition:: unit
 
             Create a State whose run action returns the given
-            constant ``b``  and propagate the present state.
+            constant b  and propagate the present state.
 
             :param b: Value the new State's run action will return.
-            :returns: A new ``State[ST, B]`` from a value ``b: B``.
+            :returns: A new State[ST, B] from a value b: B.
 
         """
         return State(lambda s: (b, s))
@@ -197,6 +199,8 @@ class State[S, A]:
             :param s: The state to swap in for current state
             :returns: State monad wrapping a state action which ignores
                       any initial state passed in when evaluated.
+            :rtype: State[ST, tuple[()]]
+
         """
         return State(lambda _: ((), s))
 
@@ -206,16 +210,18 @@ class State[S, A]:
         .. admonition:: modify
 
             Modify previous state with a function. Like put, but modify
-            previous state via ``f``.
+            previous state via f.
 
             :param f: Function to modify the current state.
             :returns: A State monad with a modified state.
+            :rtype: State[ST, tuple[()]]
 
             .. note::
 
                 Will need type annotation. Static type checkers like
                 mypy have no *a priori* knowledge of what ``ST``
                 could be.
+
         """
         return State.get().bind(lambda a: State.put(f(a)))  # type: ignore
 
@@ -229,7 +235,10 @@ class State[S, A]:
             run action from the original list.
 
             :param sas: A list of state monads all of type ``State[ST, AA]``.
-            :returns: A state monad of type ``State[ST, list[AA]]``.
+            :returns: A state monad whose run action produces a list of
+                      the values produced by the list of State actions
+                      provided to the method.
+            :rtype: State[ST, list[AA]]
  
             .. note::
 

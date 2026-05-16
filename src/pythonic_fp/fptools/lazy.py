@@ -19,7 +19,7 @@
 
     - *class* **Lazy** - Delay evaluation of single argument functions
     - *function* **lazy** - Delay evaluation of functions taking any number of arguments
-    - *function* **real_lazy** - Caching version of ``lazy``.
+    - *function* **real_lazy** - Caching version of lazy.
 
 """
 
@@ -40,8 +40,8 @@ class Lazy[D, R]:
 
         .. tip::
 
-            Make a function "non-strict" by passing some of
-            its arguments wrapped in Lazy instances.
+            Make functions "non-strict" by passing some of
+            their arguments wrapped in Lazy instances.
 
     """
 
@@ -54,9 +54,9 @@ class Lazy[D, R]:
             Delayed evaluation of a single argument function.
 
             :param f: Single argument function.
-            :param d: Argument to be passed to ``f``.
-            :param pure: If true, cache the result for future ``eval`` method calls.
-            :returns: A Lazy instance which can evaluate ``f(d)`` at a later time.
+            :param d: Argument to be passed to f.
+            :param pure: If true, cache the result for future eval method calls.
+            :returns: A Lazy instance which can evaluate f(d) at a later time.
 
         """
         self._f: Final[Callable[[D], R]] = f
@@ -72,8 +72,8 @@ class Lazy[D, R]:
 
             A Lazy becomes truthy when evaluated.
 
-            :returns: ``True`` when evaluated.
-            :returns: ``False`` when not evaluated.
+            :returns: True when evaluated.
+            :returns: False when not evaluated.
 
         """
         return self._evaluated
@@ -84,8 +84,8 @@ class Lazy[D, R]:
 
             Evaluate function with its argument.
 
-            - cache result or exception if ``pure is True``
-            - reevaluate if ``pure is False``
+            - Cache result or exception if pure is True.
+            - Reevaluate if pure is False.
 
         """
         if not (self._pure and self._evaluated):
@@ -110,9 +110,9 @@ class Lazy[D, R]:
 
             Check if a valid result was obtained.
 
-            :returns: ``MayBe()`` if not yet evaluated.
-            :returns: ``MayBe(True)`` if a result was gotten.
-            :returns: ``MayBe(False)`` if an exception was thrown.
+            :returns: MayBe() if not yet evaluated.
+            :returns: MayBe(True) if a result was gotten.
+            :returns: MayBe(False)` if an exception was thrown.
 
         """
         return self._exceptional.bind(lambda x: MayBe(not x))
@@ -123,9 +123,9 @@ class Lazy[D, R]:
 
             Check if exception thrown.
 
-            :returns: ``MayBe()`` if not yet evaluated.
-            :returns: ``MayBe(True)`` if an exception was thrown.
-            :returns: ``MayBe(False)`` if exception not thrown.
+            :returns: MayBe() if not yet evaluated.
+            :returns: MayBe(True) if an exception was thrown.
+            :returns: MayBe(False) if exception not thrown.
 
         """
         return self._exceptional
@@ -137,12 +137,12 @@ class Lazy[D, R]:
             Get result only if evaluated and no exceptions occurred,
             otherwise return an alternate value.
 
-            :param alt: Optional alternate value to return if ``Lazy``
+            :param alt: Optional alternate value to return if Lazy
                         is not evaluated or exceptional.
             :returns: The successfully evaluated result
-                      or `alt` if given.
-            :raises ValueError: if ``Lazy`` not evaluated,
-                                or exceptional and ``alt`` not given.
+                      or an alternate value if given.
+            :raises ValueError: If Lazy not evaluated or exceptional,
+                                and an alternate value not given.
 
         """
         if self._evaluated and self._result:
@@ -185,13 +185,13 @@ def lazy[**P, R](
     """
     .. admonition:: delayed evaluations
 
-        Function returning a delayed evaluation of a function of an arbitrary number
-        of positional arguments.
+        Function returning a delayed evaluation of a function of
+        an arbitrary number of positional arguments.
 
         :param f: Function whose evaluation is to be delayed.
-        :param args: Positional arguments to be passed to ``f``.
+        :param args: Positional arguments to be passed to f.
         :param kwargs: Any kwargs given are ignored.
-        :returns: a ``Lazy`` object wrapping the evaluation of ``f``
+        :returns: A Lazy instance wrapping the evaluation of f.
 
     """
     return Lazy(sequenced(f), args, pure=False)
@@ -203,13 +203,14 @@ def real_lazy[**P, R](
     """
     .. admonition:: cached delayed evaluations
 
-        Function returning a delayed evaluation of a function of an
-        arbitrary number of positional arguments. Evaluation is cached.
+        Function returning a delayed evaluation of a function of
+        an arbitrary number of positional arguments. The evaluation
+        is cached.
 
         :param f: Function whose evaluation is to be delayed.
-        :param args: Positional arguments to be passed to ``f``.
+        :param args: Positional arguments to be passed to f.
         :param kwargs: Any kwargs given are ignored.
-        :returns: a ``Lazy`` object wrapping the evaluation of ``f``
+        :returns: A Lazy instance wrapping the evaluation of f.
 
     """
     return Lazy(sequenced(f), args)

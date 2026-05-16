@@ -44,11 +44,11 @@ class MayBe[D]:
 
     def __init__(self, item: D | _Sentinel = _sentinel) -> None:
         """
-        .. admonition:: initialize
+        .. admonition:: init
 
-            Initialize ``MayBe`` with 1 or 0 items.
+            Initialize MayBe with 1 or 0 items.
 
-            :param item: Optional item for the ``MayBe``.
+            :param item: Optional item for the MayBe instance.
 
             .. important::
 
@@ -61,13 +61,13 @@ class MayBe[D]:
 
     def __hash__(self) -> int:
         """
-        .. admonition:: hashability
+        .. admonition:: hash
 
             If contained item hashable, use its hash value in
             the hash calculation, otherwise use item's identity.
 
-            - should be safe, the ``MayBe`` holds a reference to the item
-            - lazily calculates hash value, then caches it
+            - should be safe, the MayBe holds a reference to the item.
+            - Lazily calculates hash value, then caches it.
 
         """
         if self._hash is None:
@@ -83,6 +83,8 @@ class MayBe[D]:
         .. admonition:: bool
 
             Truthy when not empty.
+
+            :returns: True if not empty, False if empty.
 
         """
         return self._item is not _sentinel
@@ -100,9 +102,11 @@ class MayBe[D]:
         """
         .. admonition:: equality comparison
 
-            Compare ``MayBe`` to another object. Compare first
+            Compare MayBe instance to another object. Compare first
             by identity, then value.
 
+            :returns: True only if other object is a MayBe with
+                      a corresponding item, or both empty.
         """
         if not isinstance(other, type(self)):
             return False
@@ -116,7 +120,7 @@ class MayBe[D]:
         """
         .. admonition:: iterate
 
-           :yields: The contained ``item`` if non-empty.
+           :yields: The contained item if non-empty.
 
         """
         if self:
@@ -124,13 +128,16 @@ class MayBe[D]:
 
     def __repr__(self) -> str:
         """
-        .. admonition:: representation string
+        .. admonition:: repr string
 
             Return the strings
 
-            :returns: 'MayBe()' if empty
-            :returns: 'MayBe(repr_item)' if not empty
-                      where ``repr_item = repr(item)``.
+            - 'MayBe()' if empty
+            - 'MayBe(repr_item)' if not empty
+
+            Where ``repr_item = repr(item)``.
+
+            :returns: A string to reproduce the MayBe.
 
         """
         if self:
@@ -147,6 +154,8 @@ class MayBe[D]:
             - 'MayBe()' when empty
 
             Where ``str_item = str(item)``.
+
+            :returns: A string meaningful to an end user.
 
         """
         if self:
@@ -165,19 +174,18 @@ class MayBe[D]:
             Return the item if it exists, otherwise an optional
             alternate item.
 
-            :param alt: Optional alternative item to return if``MayBe`` empty.
+            :param alt: Optional alternative item to return if MayBe empty.
             :returns: The item if it exists.
             :raises ValueError: When an alternate item is not provided but needed.
 
-
             .. warning::
 
-                Unsafe method ``get`` will raise ``ValueError`` if the
-                ``MayBe`` is empty and an ``alt`` return item not provided.
+                Unsafe method get will raise ValueError if the MayBe
+                is empty and an alternate return item not provided.
 
                 .. tip::
 
-                    Best practice is to first check the ``MayBe`` in
+                    Best practice is to first check the MayBe in
                     a boolean context.
 
         """
@@ -193,10 +201,11 @@ class MayBe[D]:
         """
         .. admonition:: Map
 
-            Map function ``f`` over the ``MayBe``.
+            Map function f over the MayBe.
 
             :param f: Function used for the map.
-            :returns: A new ``MayBe`` if not empty, otherwise ``self``.
+            :returns: A new MayBe instance if not empty,
+                      otherwise itself.
 
         """
         if self:
@@ -207,10 +216,11 @@ class MayBe[D]:
         """
         .. admonition:: Bind
 
-            Flatmap function ``f`` over the contained item, if it exists.
+            Flatmap function f over the MayBe.
 
             :param f: Function to bind.
-            :returns: A new ``MayBe`` if not empty, otherwise ``self``.
+            :returns: A new MayBe instance if not empty,
+                      otherwise itself.
 
         """
         return f(cast(D, self._item)) if self else cast(MayBe[U], self)

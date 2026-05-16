@@ -13,10 +13,7 @@
 # limitations under the License.
 
 """
-Functional Programming Tools
-============================
-
-.. admonition:: Functional programming tools for Python.
+.. admonition:: Functional programming tools for Python
 
     Functions as first class objects, Lazy (non-strict) function evaluation,
     and classical Functional Programming data structures.

@@ -40,7 +40,7 @@ def swap[U, V, R](f: Callable[[U, V], R]) -> Callable[[V, U], R]:
         Swap arguments of a two argument function.
 
         :param f: Two argument function.
-        :returns: A version of ``f`` with its arguments swapped.
+        :returns: A version of f with its arguments swapped.
 
     """
     return lambda v, u: f(u, v)
@@ -52,8 +52,8 @@ def compose[D, T, R](f: Callable[[D], T], g: Callable[[T], R]) -> Callable[[D], 
 
         Function Composition
 
-        :param f: Function called first with domain ``D`` and range ``T``.
-        :param g: Function called on result with domain ``T`` and range ``R``.
+        :param f: Function called first with domain D and range T.
+        :param g: Function called on result with domain T and range R.
         :returns: The composite function ``g∘f(d) = g(f(d))``
 
     """
@@ -66,7 +66,7 @@ def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
 
         Take a predicate and return its negation.
 
-        :param f: a function ``f`` which returns a bool
+        :param f: A function ``f`` which returns a bool
         :returns: the function ``not f``
 
     """
@@ -85,7 +85,7 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
 
         :param f: Function with just positional parameters
         :returns: An equivalent function taking a tuple of
-                  the arguments to ``f``.
+                  the arguments to f.
 
     """
     def ff(tupled_args: tuple[Any]) -> R:
@@ -102,7 +102,7 @@ def partial[**P, R](f: Callable[P, R], *args: Any) -> Callable[..., R]:
         arguments left to right.
 
         :param f: Function with just positional arguments.
-        :param args: Arguments to partially apply to ``f``.
+        :param args: Arguments to partially apply to f.
 
         .. warning::
 

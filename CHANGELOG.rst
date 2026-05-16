@@ -17,6 +17,16 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI 5.4.0 - 2026-05-16
+~~~~~~~~~~~~~~~~~~~~~~~
+
+EitherFlag changes.
+
+- bugfix: fixed ``__repr__`` method to properly work with ``eval()``
+- API addition: added a ``__str__`` method 
+
+Documentation now in maintenance mode.
+
 PyPI 5.3.0 - 2026-05-09
 ~~~~~~~~~~~~~~~~~~~~~~~
 

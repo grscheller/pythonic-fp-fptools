@@ -34,7 +34,7 @@ dependencies = [
   "pythonic-fp-circulararray>=6.0.4",
   "pythonic-fp-gadgets>=4.0.2",
 ]
-dynamic = ["description"]
+description = "Functional programming tools for Python."
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
@@ -61,17 +61,8 @@ warn_redundant_casts = true
 warn_return_any = true
 warn_unused_configs = true
 
-[tool.pylsp-mypy]
-enabled = true
-live-mode = true
-dmypy = false
-strict = true
-report_progress = true
-
 [tool.pytest]
-addopts = [
-  "-ra",
-]
+addopts = ["-ra"]
 consider_namespace_packages = true
 testpaths = ["tests/"]
 

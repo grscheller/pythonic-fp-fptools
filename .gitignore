@@ -1,8 +1,11 @@
 # Minimal version - only add to when necessary
-**/__pycache__/
+.venv/
+uv.lock
+.python-version
 dist/
 docs/build/
 docs/source/conf.py
+**/__pycache__/
 **/.dmypy.json
 **/.mypy_cache/
 **/.pytest_cache/

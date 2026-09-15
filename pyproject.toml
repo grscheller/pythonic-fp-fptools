@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "pythonic-fp-fptools"
 version = "5.5.0"
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.13"
 authors = [
   { name = "Geoffrey R. Scheller", email = "geoffrey@scheller.com" },

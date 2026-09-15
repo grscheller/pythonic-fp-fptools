@@ -5,7 +5,6 @@ endeavoring to be Pythonic.
 
 PyPI project
 [pythonic-fp.fptools](https://pypi.org/project/pythonic-fp-fptools).
-
 Part of the
 [pythonic-fp](https://grscheller.github.io/pythonic-fp/)
 PyPI projects.

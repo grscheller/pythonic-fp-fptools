@@ -1,41 +1,31 @@
-Pythonic FP - Functional tools
-==============================
-
-PyPI project
-`pythonic-fp.fptools
-<https://pypi.org/project/pythonic-fp-fptools>`_.
+# Pythonic FP - Functional tools
 
 Tools to aid with functional programming in Python while still
 endeavoring to be Pythonic.
+
+PyPI project
+[pythonic-fp.fptools](https://pypi.org/project/pythonic-fp-fptools).
+
+Part of the
+[pythonic-fp](https://grscheller.github.io/pythonic-fp/)
+PyPI projects.
+
+## Documentation
+
+Documentation and other links for this project are hosted on
+[GitHub Pages](https://grscheller.github.io/pythonic-fp/projects/fptools.html).
 
 - Functions as first class objects
 - Lazy (non-strict) function evaluation
 - Maybe monad - representing a possible missing value
 - Either monad - representing either a LEFT or RIGHT value, not both
-
   - left biased
-
 - State monad implementation
-
   - pure FP handling of state (the state monad)
   - Classic FP implementation
-
     - the monad encapsulates a state transformation, not a "state"
 
-Part of the
-`pythonic-fp
-<https://grscheller.github.io/pythonic-fp/>`_
-PyPI projects.
-
-Documentation
--------------
-
-Documentation and other links for this project are hosted on
-`GitHub Pages
-<https://grscheller.github.io/pythonic-fp/projects/fptools.html>`_.
-
-Copyright and License
----------------------
+## Copyright and License
 
 Copyright (c) 2023-2026 Geoffrey R. Scheller. Licensed under the Apache
 License, Version 2.0. See the LICENSE file for details.

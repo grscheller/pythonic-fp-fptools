@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pythonic-fp-fptools"
-version = "5.4.0"
+version = "5.5.0"
 readme = "README.rst"
 requires-python = ">=3.13"
 authors = [
@@ -37,8 +37,7 @@ dependencies = [
 description = "Functional programming tools for Python."
 
 [project.urls]
-Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp/projects/fptools.html"
+Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.md"
 Homepage = "https://grscheller.github.io/pythonic-fp/"
 Source = "https://github.com/grscheller/pythonic-fp-fptools"
 

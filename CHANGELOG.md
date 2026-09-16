@@ -11,7 +11,7 @@ Strict 3 digit semantic versioning adopted 2025-05-19.
 - **MINOR** version incremented for backward compatible added functionality
 - **PATCH** version incremented for backward compatible bug fixes
 
-See `Semantic Versioning 2.0.0 <https://semver.org>`_.
+See [Semantic Versioning 2.0.0](https://semver.org).
 
 ## Releases and Important Milestones
 

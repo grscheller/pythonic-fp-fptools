@@ -11,8 +11,6 @@ wheels/
 
 # uv files
 uv.lock
-
-# pyenv files
 .python-version
 
 # for Neovim

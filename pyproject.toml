@@ -38,6 +38,7 @@ description = "Functional programming tools for Python."
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-fptools/blob/main/CHANGELOG.md"
+Documentation ="https://grscheller.github.io/pythonic-fp-fptools/release/html/"
 Homepage = "https://grscheller.github.io/pythonic-fp/"
 Source = "https://github.com/grscheller/pythonic-fp-fptools"
 

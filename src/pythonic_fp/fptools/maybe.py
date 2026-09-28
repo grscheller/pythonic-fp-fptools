@@ -15,7 +15,8 @@
 __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
-from typing import cast, Final, final, overload
+from typing import Final, cast, final, overload
+
 from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
 type _Sentinel = Sentinel[str]
@@ -34,7 +35,7 @@ class MayBe[D]:
 
     """
 
-    __slots__ = ('_item', '_hash')
+    __slots__ = '_hash', '_item'
     __match_args__ = ('_item',)
 
     @overload
@@ -112,9 +113,7 @@ class MayBe[D]:
             return False
         if self._item is other._item:
             return True
-        if self._item == other._item:
-            return True
-        return False
+        return self._item == other._item
 
     def __iter__(self) -> Iterator[D]:
         """
@@ -197,7 +196,7 @@ class MayBe[D]:
             raise ValueError(msg)
         return cast(D, alt)
 
-    def map[U](self, f: Callable[[D], U]) -> 'MayBe[U]':
+    def map[U](self, f: Callable[[D], U]) -> MayBe[U]:
         """
         .. admonition:: Map
 
@@ -212,7 +211,7 @@ class MayBe[D]:
             return MayBe(f(cast(D, self._item)))
         return cast(MayBe[U], self)
 
-    def bind[U](self, f: 'Callable[[D], MayBe[U]]') -> 'MayBe[U]':
+    def bind[U](self, f: Callable[[D], MayBe[U]]) -> MayBe[U]:
         """
         .. admonition:: Bind
 
@@ -226,7 +225,7 @@ class MayBe[D]:
         return f(cast(D, self._item)) if self else cast(MayBe[U], self)
 
     @staticmethod
-    def sequence[U](sequence_mb_u: 'Sequence[MayBe[U]]') -> 'MayBe[Sequence[U]]':
+    def sequence[U](sequence_mb_u: Sequence[MayBe[U]]) -> MayBe[Sequence[U]]:
         """
         .. admonition:: Sequence
 

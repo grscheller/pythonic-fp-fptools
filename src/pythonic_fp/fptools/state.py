@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__all__ = ['State']
-
 from collections.abc import Callable
 from typing import final
+
 from pythonic_fp.circulararray.auto import CA
 
+__all__ = ['State']
 
 @final
 class State[S, A]:
@@ -77,7 +77,7 @@ class State[S, A]:
         """
         self.run = run
 
-    def bind[B](self, g: 'Callable[[A], State[S, B]]') -> 'State[S, B]':
+    def bind[B](self, g: Callable[[A], State[S, B]]) -> State[S, B]:
         """
         .. admonition:: state action composition
 
@@ -108,7 +108,7 @@ class State[S, A]:
         a, _ = self.run(init)
         return a
 
-    def map[B](self, f: Callable[[A], B]) -> 'State[S, B]':
+    def map[B](self, f: Callable[[A], B]) -> State[S, B]:
         """
         .. admonition:: map
 
@@ -123,7 +123,7 @@ class State[S, A]:
         """
         return self.bind(lambda a: State.unit(f(a)))
 
-    def map2[B, C](self, sb: 'State[S, B]', f: Callable[[A, B], C]) -> 'State[S, C]':
+    def map2[B, C](self, sb: State[S, B], f: Callable[[A, B], C]) -> State[S, C]:
         """
         .. admonition:: map2
 
@@ -139,7 +139,7 @@ class State[S, A]:
         """
         return self.bind(lambda a: sb.map(lambda b: f(a, b)))
 
-    def both[B](self, rb: 'State[S, B]') -> 'State[S, tuple[A, B]]':
+    def both[B](self, rb: State[S, B]) -> State[S, tuple[A, B]]:
         """
         .. admonition:: both
 
@@ -152,7 +152,7 @@ class State[S, A]:
         return self.map2(rb, lambda a, b: (a, b))
 
     @staticmethod
-    def unit[ST, B](b: B) -> 'State[ST, B]':
+    def unit[ST, B](b: B) -> State[ST, B]:
         """
         .. admonition:: unit
 
@@ -166,7 +166,7 @@ class State[S, A]:
         return State(lambda s: (b, s))
 
     @staticmethod
-    def get[ST]() -> 'State[ST, ST]':
+    def get[ST]() -> State[ST, ST]:
         """
         .. admonition:: get state
 
@@ -185,7 +185,7 @@ class State[S, A]:
         return State[ST, ST](lambda s: (s, s))
 
     @staticmethod
-    def put[ST](s: ST) -> 'State[ST, tuple[()]]':
+    def put[ST](s: ST) -> State[ST, tuple[()]]:
         """
         .. admonition:: put state
 
@@ -205,7 +205,7 @@ class State[S, A]:
         return State(lambda _: ((), s))
 
     @staticmethod
-    def modify[ST](f: Callable[[ST], ST]) -> 'State[ST, tuple[()]]':
+    def modify[ST](f: Callable[[ST], ST]) -> State[ST, tuple[()]]:
         """
         .. admonition:: modify
 
@@ -223,10 +223,10 @@ class State[S, A]:
                 could be.
 
         """
-        return State.get().bind(lambda a: State.put(f(a)))  # type: ignore
+        return State.get().bind(lambda a: State.put(f(a)))
 
     @staticmethod
-    def sequence[ST, AA](sas: 'list[State[ST, AA]]') -> 'State[ST, list[AA]]':
+    def sequence[ST, AA](sas: list[State[ST, AA]]) -> State[ST, list[AA]]:
         """
         .. admonition:: sequence a list
 

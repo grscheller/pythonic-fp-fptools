@@ -24,9 +24,10 @@
 """
 
 from collections.abc import Callable
-from typing import Any, Final
+from typing import Any
+
+from .either import LEFT, RIGHT, Either
 from .function import sequenced
-from .either import Either, LEFT, RIGHT
 from .maybe import MayBe
 
 __all__ = ['Lazy', 'lazy', 'real_lazy']
@@ -45,7 +46,7 @@ class Lazy[D, R]:
 
     """
 
-    __slots__ = ('_f', '_d', '_result', '_pure', '_evaluated', '_exceptional')
+    __slots__ = '_d', '_evaluated', '_exceptional', '_f', '_pure', '_result'
 
     def __init__(self, f: Callable[[D], R], d: D, pure: bool = True) -> None:
         """
@@ -59,8 +60,8 @@ class Lazy[D, R]:
             :returns: A Lazy instance which can evaluate f(d) at a later time.
 
         """
-        self._f: Final[Callable[[D], R]] = f
-        self._d: Final[D] = d
+        self._f: Callable[[D], R] = f
+        self._d: D = d
         self._pure: bool = pure
         self._evaluated: bool = False
         self._exceptional: MayBe[bool] = MayBe()

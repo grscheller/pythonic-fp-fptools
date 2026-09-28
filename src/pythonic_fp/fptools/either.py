@@ -45,12 +45,14 @@
 
 """
 
-__all__ = ['Either', 'EitherFlag', 'LEFT', 'RIGHT']
-
 from collections.abc import Callable, Iterator, Sequence
-from typing import cast, Final, final, overload
+from typing import Final, cast, final, overload
+
 from pythonic_fp.booleans.subtypable import SBool
+
 from .maybe import MayBe
+
+__all__ = ['Either', 'EitherFlag', 'LEFT', 'RIGHT']
 
 
 @final
@@ -131,8 +133,7 @@ class Either[L, R]:
         - immutable
 
     """
-
-    __slots__ = '_value', '_side', '_hash'
+    __slots__ = '_hash', '_side', '_value',
     __match_args__ = ('_value', '_side')
 
     @overload
@@ -224,12 +225,10 @@ class Either[L, R]:
             return False
 
         if self and other:
-            if (self._value is other._value) or (self._value == other._value):
-                return True
+            return (self._value is other._value) or (self._value == other._value)
 
         if not self and not other:
-            if (self._value is other._value) or (self._value == other._value):
-                return True
+            return (self._value is other._value) or (self._value == other._value)
 
         return False
 
@@ -334,7 +333,7 @@ class Either[L, R]:
             return MayBe(cast(R, self._value))
         return MayBe()
 
-    def map_right[V](self, f: Callable[[R], V]) -> 'Either[L, V]':
+    def map_right[V](self, f: Callable[[R], V]) -> Either[L, V]:
         """
         .. admonition:: map right
 
@@ -349,7 +348,7 @@ class Either[L, R]:
             return cast(Either[L, V], self)
         return Either[L, V](f(cast(R, self._value)), RIGHT)
 
-    def map[U](self, f: Callable[[L], U]) -> 'Either[U, R]':
+    def map[U](self, f: Callable[[L], U]) -> Either[U, R]:
         """
         .. admonition:: map
 
@@ -364,7 +363,7 @@ class Either[L, R]:
             return cast(Either[U, R], self)
         return Either(f(cast(L, self._value)), LEFT)
 
-    def map_except[U](self, f: Callable[[L], U], fallback_right: R) -> 'Either[U, R]':
+    def map_except[U](self, f: Callable[[L], U], fallback_right: R) -> Either[U, R]:
         """
         .. admonition:: map except
 
@@ -404,7 +403,7 @@ class Either[L, R]:
             return fall_back.get()
         return applied.get()
 
-    def bind[U](self, f: 'Callable[[L], Either[U, R]]') -> 'Either[U, R]':
+    def bind[U](self, f: Callable[[L], Either[U, R]]) -> Either[U, R]:
         """
         .. admonition:: bind
 
@@ -419,8 +418,8 @@ class Either[L, R]:
         return cast(Either[U, R], self)
 
     def bind_except[U](
-        self, f: 'Callable[[L], Either[U, R]]', fallback_right: R
-    ) -> 'Either[U, R]':
+        self, f: Callable[[L], Either[U, R]], fallback_right: R
+    ) -> Either[U, R]:
         """
         .. admonition:: bind except
 
@@ -463,8 +462,8 @@ class Either[L, R]:
 
     @staticmethod
     def sequence[U, V](
-        sequence_either_uv: 'Sequence[Either[U, V]]',
-    ) -> 'Either[Sequence[U], V]':
+        sequence_either_uv: Sequence[Either[U, V]],
+    ) -> Either[Sequence[U], V]:
         """
         .. admonition:: sequence
 
@@ -483,6 +482,6 @@ class Either[L, R]:
             else:
                 return Either(either_uv.get_right().get(), RIGHT)
 
-        sequenced_items = type(sequence_either_uv)(sequenced_list)  # type: ignore
+        sequenced_items = type(sequence_either_uv)(sequenced_list)
 
         return Either(cast(Sequence[U], sequenced_items))

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from typing import Any
+
 from pythonic_fp.fptools.lazy import Lazy, lazy, real_lazy
 from pythonic_fp.fptools.maybe import MayBe as MB
 
@@ -73,7 +74,7 @@ class Test_Lazy_0_1:
 
 #---------------------------------------------------------------
 
-class Counter():
+class Counter:
     def __init__(self, n: int=0) -> None:
         self._cnt = n
 
@@ -191,16 +192,123 @@ class TestLazy01:
 
     """
     def test_lazy_01(self) -> None:
-        state = []
+        state: list[int] = []
 
-        def foo42() -> int:
+        def foo() -> int:
+            state.append(42)
             return 42
 
-        def bar42() -> int:
-            state.append (42)
-            raise TypeError('not 42')
+        def bar() -> int:
+            value = 42
+            divisor = 0
+            quotient = int(value/divisor)
+            state.append(quotient)
+            return value
 
-        class FooBar():
+        def baz() -> int:
+            value = int('forty-two')
+            return value
+
+        def buz() -> int:
+            value = 42 + 'forty-two'
+            return value
+
+        lz_foo = lazy(foo)
+        lz_bar = lazy(bar)
+        lz_baz = lazy(baz)
+        lz_buz = lazy(buz)
+        rlz_foo = real_lazy(foo)
+        rlz_bar = real_lazy(bar)
+        rlz_baz = real_lazy(baz)
+        rlz_buz = real_lazy(buz)
+
+        # test not yet evaluated
+        assert lz_foo.got_result() == MB()
+        assert lz_bar.got_result() == MB()
+        assert lz_baz.got_result() == MB()
+        assert lz_buz.got_result() == MB()
+        assert lz_foo.got_exception() == MB()
+        assert lz_bar.got_exception() == MB()
+        assert lz_baz.got_exception() == MB()
+        assert lz_buz.got_exception() == MB()
+        assert rlz_foo.got_result() == MB()
+        assert rlz_bar.got_result() == MB()
+        assert rlz_baz.got_result() == MB()
+        assert rlz_buz.got_result() == MB()
+        assert rlz_foo.got_exception() == MB()
+        assert rlz_bar.got_exception() == MB()
+        assert rlz_baz.got_exception() == MB()
+        assert rlz_buz.got_exception() == MB()
+
+        lz_foo.eval()
+        if lz_foo.got_result():
+            assert lz_foo.get_result() == MB(42)
+            assert lz_foo.get() == 42
+            assert lz_foo.get(100) == 42
+        else:
+            assert False
+
+        if lz_foo.got_exception():     # Confusing! API change needed
+            assert lz_foo.get_exception() == MB()
+        else:
+            assert False
+
+        assert len(state) == 1
+        lz_bar.eval()
+        if lz_bar.got_result():        # Confusing! MB(x: bool) always True 
+            assert lz_bar.get_result() == MB()
+        else:
+            assert False
+
+        if lz_bar.got_exception():
+            exc = lz_bar.get_exception().get()    # a bit verbose
+            assert isinstance(exc, ZeroDivisionError)
+        else:
+            assert False
+        assert len(state) == 1
+
+        rlz_foo.eval()
+        if rlz_foo.got_result().get():
+            assert rlz_foo.get_result() == MB(42)
+        else:
+            assert False
+
+        if rlz_foo.got_exception().get():
+            assert False
+        else:
+            assert rlz_foo.get_result() == MB(42)
+
+        lz_bar.eval()
+        if lz_bar.got_result().get():
+            assert False
+        else:
+            assert lz_bar.get_result() == MB()
+        assert len(state) == 2
+
+        if rlz_bar.got_exception():
+            assert False
+        assert len(state) == 2
+
+        rlz_bar.eval()
+        assert len(state) == 2
+        rlz_bar.eval()
+        assert len(state) == 2
+        lz_foo.eval()
+        assert len(state) == 3
+        lz_bar.eval()
+        assert len(state) == 3
+        rlz_bar.eval()
+        assert len(state) == 3
+
+        lz_baz.eval()
+        rlz_baz.eval()
+        assert lz_baz.got_exception() == MB(True)
+        assert rlz_baz.got_exception() == MB(True)
+
+class TestLazy_with_class:
+    """Test with class methods."""
+    def test_lazy_with_class(self) -> None:
+        class Secret:
             def __init__(self, secret: int):
                 self._secret = secret
 
@@ -210,75 +318,17 @@ class TestLazy01:
                 else:
                     raise RuntimeError(13)
 
-        foo = lazy(foo42)
-        bar = lazy(bar42)
-        lz_foo = real_lazy(foo42)
-        lz_bar = real_lazy(bar42)
+        secret10 = Secret(10)
+        secret13 = Secret(13)
 
-        # test not yet evaluated
-        assert foo.got_result() == MB()
-        assert bar.got_result() == MB()
-        assert foo.got_exception() == MB()
-        assert bar.got_exception() == MB()
-        assert lz_foo.got_result() == MB()
-        assert lz_bar.got_result() == MB()
-        assert lz_foo.got_exception() == MB()
-        assert lz_bar.got_exception() == MB()
+        lz_get_secret10 = lazy(secret10.get_secret)
+        lz_get_secret10.eval()
+        assert lz_get_secret10.got_exception() == MB(False)
+        assert lz_get_secret10.get_result() == MB(10)
+        assert lz_get_secret10.get_exception() == MB()
 
-        foo.eval()
-        if foo.got_result():
-            assert foo.get_result() == MB(42)
-            assert foo.get() == 42
-            assert foo.get(100) == 42
-        else:
-            assert False
-
-        if foo.got_exception():     # Confusing! API change needed
-            assert foo.get_exception() == MB()
-        else:
-            assert False
-
-        assert len(state) == 0
-        bar.eval()
-        if bar.got_result():        # Confusing! MB(x: bool) always True 
-            assert bar.get_result() == MB()
-        else:
-            assert False
-
-        if bar.got_exception():
-            exc = bar.get_exception().get()    # a bit verbose
-            assert isinstance(exc, TypeError)
-        else:
-            assert False
-        assert len(state) == 1
-
-        lz_foo.eval()
-        if lz_foo.got_result().get():
-            assert lz_foo.get_result() == MB(42)
-        else:
-            assert False
-
-        if lz_foo.got_exception().get():
-            assert False
-        else:
-            assert lz_foo.get_result() == MB(42)
-
-        bar.eval()
-        if bar.got_result().get():
-            assert False
-        else:
-            assert bar.get_result() == MB()
-        assert len(state) == 2
-
-        if lz_bar.got_exception():
-            assert False
-        assert len(state) == 2
-
-        lz_bar.eval()
-        assert len(state) == 3
-        lz_bar.eval()
-        assert len(state) == 3
-        bar.eval()
-        assert len(state) == 4
-        lz_bar.eval()
-        assert len(state) == 4
+        lz_get_secret13 = lazy(secret13.get_secret)
+        lz_get_secret13.eval()
+        assert lz_get_secret13.got_exception() == MB(True)
+        assert lz_get_secret13.get_result() == MB()
+        assert repr(lz_get_secret13.get_exception().get()) == 'RuntimeError(13)'

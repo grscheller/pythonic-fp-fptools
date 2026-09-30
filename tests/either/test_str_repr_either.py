@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.fptools.either import Either, LEFT, RIGHT
+from pythonic_fp.fptools.either import LEFT, RIGHT, Either
 from pythonic_fp.fptools.maybe import MayBe
 
 

@@ -25,12 +25,10 @@ class TestMayBe:
         n2: MayBe[int] = MayBe()
         o1 = MayBe(42)
         o2 = MayBe(40)
-        assert o1 is o1
         assert o1 is not o2
         o3 = o2.map(add2)
         assert o3 is not o2
         assert o1 is not o3
-        assert n1 is n1
         assert n1 is not n2
         assert o1 is not n1
         assert n2 is not o2
@@ -40,12 +38,10 @@ class TestMayBe:
         n2: MayBe[int] = MayBe()
         o1 = MayBe(42)
         o2 = MayBe(40)
-        assert o1 == o1
         assert o1 != o2
         o3 = o2.map(add2)
         assert o3 != o2
         assert o1 == o3
-        assert n1 == n1
         assert n1 == n2
         assert o1 != n1
         assert n2 != o2
@@ -54,15 +50,15 @@ class TestMayBe:
         o1 = MayBe(38)
         o2 = o1.map(add2).map(add2)
         n1: MayBe[int] = MayBe()
-        l1 = []
-        l2 = []
+        l1 = [5]
+        l2 = [3]
         for v in n1:
             l1.append(v)
         for v in o2:
             l2.append(v)
-        assert len(l1) == 0
-        assert len(l2) == 1
-        assert l2[0] == 42
+        assert len(l1) == 1
+        assert len(l2) == 2
+        assert l2[1] == 42
 
     def test_get(self) -> None:
         o1 = MayBe(1)
@@ -84,7 +80,9 @@ class TestMayBe:
 
     def test_equal_self(self) -> None:
         mb42 = MayBe(40 + 2)
+        ph42 = MayBe(42)
         mbno: MayBe[int] = MayBe()
+        phno: MayBe[int] = MayBe()
         assert mb42 != mbno
-        assert mb42 == mb42
-        assert mbno == mbno
+        assert mb42 == ph42
+        assert mbno == phno

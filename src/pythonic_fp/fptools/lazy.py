@@ -24,8 +24,9 @@
 """
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast
 
+from ._recoverable import RECOVERABLE
 from .either import LEFT, RIGHT, Either
 from .function import sequenced
 from .maybe import MayBe
@@ -92,14 +93,22 @@ class Lazy[D, R]:
         if not (self._pure and self._evaluated):
             try:
                 result = self._f(self._d)
-            except Exception as exc:
-                self._result, self._evaluated, self._exceptional = (
-                    Either(exc, RIGHT),
+            except RECOVERABLE as exc:
+                (
+                    self._result,
+                    self._evaluated,
+                    self._exceptional,
+                ) = (
+                    Either[R, Exception](exc, RIGHT),
                     True,
                     MayBe(True),
                 )
             else:
-                self._result, self._evaluated, self._exceptional = (
+                (
+                    self._result,
+                    self._evaluated,
+                    self._exceptional,
+                ) = (
                     Either(result, LEFT),
                     True,
                     MayBe(False),
@@ -195,7 +204,8 @@ def lazy[**P, R](
         :returns: A Lazy instance wrapping the evaluation of f.
 
     """
-    return Lazy(sequenced(f), args, pure=False)
+    packed = cast(tuple[Any, ...], args)
+    return Lazy[tuple[Any, ...], R](sequenced(f), packed, pure=False)
 
 
 def real_lazy[**P, R](
@@ -214,4 +224,5 @@ def real_lazy[**P, R](
         :returns: A Lazy instance wrapping the evaluation of f.
 
     """
-    return Lazy(sequenced(f), args)
+    packed = cast(tuple[Any, ...], args)
+    return Lazy[tuple[Any, ...], R](sequenced(f), packed)

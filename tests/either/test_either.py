@@ -12,15 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Never
+from pythonic_fp.fptools.either import LEFT, RIGHT, Either
 from pythonic_fp.fptools.maybe import MayBe
-from pythonic_fp.fptools.either import Either, LEFT, RIGHT
-
 
 # -- Simple contrived tests ----------------------------------------------------
 
 
-def gt42(x: int) -> bool | Never:
+def gt42(x: int) -> bool:
     """contrived function that fails for 42, returns a bool"""
     if x > 42:
         return True
@@ -29,114 +27,99 @@ def gt42(x: int) -> bool | Never:
     raise ValueError('x = 42')
 
 
-def lt42bool(x: int) -> Either[bool, str] | Never:
+def lt42bool(x: int) -> Either[bool, str]:
     """contrived function that fails for 42, returns an Either"""
     if x < 42:
-        return Either(True, LEFT)
+        return Either.left(True)
     if x > 42:
-        return Either(f'{x}', RIGHT)
+        return Either.right(f'{x}')
     raise ValueError('42 failed')
 
 
-def fail_int(x: int) -> int | Never:
+def fail_int(x: int) -> int:
     """contrived function that fails for all but 1 unusual argument"""
     if x != -666:
         raise ValueError
     return x
 
 
-def fail_str(s: str) -> str | Never:
+def fail_str(s: str) -> str:
     if s != '-666':
         raise ValueError
     return s
 
 
-class TestSimole:
+class TestSimple:
     """Simple tests"""
 
     def test_equal(self) -> None:
-        """some non-systematic tests"""
+        """some type signature change ups"""
         xor41 = Either[int, str](40 + 1, LEFT)
-        xor42: Either[int, str] = Either(40 + 2, LEFT)
-        xor43: Either[int, str] = Either(40 + 3, LEFT)
-        xor_no42: Either[int, str] = Either('no 42', RIGHT)
-        xor_fortytwo: Either[str, int] = Either('forty-two', LEFT)
-        xor_str_42: Either[str, int] = Either(21 * 2, RIGHT)
-        xor_42tuple: Either[int, tuple[int, ...]] = Either(42, LEFT)
-        xor42_tuple: Either[int, tuple[int, ...]] = Either((2, 3), side=RIGHT)
+        xor42 = Either[int, str](40 + 2, LEFT)
+        xor_42: Either[int, str] = Either.left(39 + 3)
+        xor43: Either[int, str] = Either.left(40 + 3)
+        xor_fortytwo_right = Either[int, str]('forty-two', RIGHT)
+        xor_fortytwo = Either[str, int]('forty-two', LEFT)
+        xor_str_42 = Either[str, int](21 * 2, RIGHT)
+        xor_42tuple = Either[int, tuple[int, ...]](42, LEFT)
+        xor42_tuple: Either[int, tuple[int, ...]] = Either.right((2, 3))
 
-        assert xor42 == xor42
-        assert xor_no42 == xor_no42
-        assert xor_fortytwo == xor_fortytwo
-        assert xor_str_42 == xor_str_42
-        assert xor_42tuple == xor_42tuple
-        assert xor42_tuple == xor42_tuple
-
+        assert xor42 == xor_42
         assert xor41 != xor43
         assert xor42 != xor_fortytwo
         assert xor42 != xor_str_42
         assert xor42 == xor_42tuple
         assert xor_42tuple != xor42_tuple
+        assert xor_str_42 != xor42
+        assert xor_fortytwo_right != xor_fortytwo
 
     def test_identity(self) -> None:
-        """identity tests"""
-        e1: Either[int, str] = Either(42, LEFT)
-        e2: Either[int, str] = Either(42, LEFT)
-        e3: Either[int, str] = Either('The secret is unknown', RIGHT)
-        e4: Either[int, str] = Either('not 42', RIGHT)
-        e5: Either[int, str] = Either('also not 42', RIGHT)
+        """identity tests with mixed signatures"""
+        e1 = Either[int, str](42, LEFT)
+        e2: Either[int, str] = Either.left(42)
+        e3: Either[int, str] = Either.right('The secret is unknown')
+        e4 = Either[int, str]('not 42', RIGHT)
+        e5 = Either[int, str]('also not 42', RIGHT)
         e6 = e3
-        assert e1 is e1
         assert e1 is not e2
         assert e1 is not e3
         assert e1 is not e4
         assert e1 is not e5
         assert e1 is not e6
-        assert e2 is e2
         assert e2 is not e3
         assert e2 is not e4
         assert e2 is not e5
         assert e2 is not e6
-        assert e3 is e3
         assert e3 is not e4
         assert e3 is not e5
         assert e3 is e6
-        assert e4 is e4
         assert e4 is not e5
         assert e4 is not e6
-        assert e5 is e5
         assert e5 is not e6
-        assert e6 is e6
 
     def test_equality(self) -> None:
-        """equality tests"""
-        e1: Either[int, str] = Either(42, LEFT)
-        e2: Either[int, str] = Either(42, LEFT)
-        e3: Either[int, str] = Either('not 42', RIGHT)
-        e4: Either[int, str] = Either('not 42', RIGHT)
-        e5: Either[int, str] = Either('also not 42', RIGHT)
+        """equality tests with consistent signatures"""
+        e1: Either[int, str] = Either.left(42)
+        e2: Either[int, str] = Either.left(42)
+        e3: Either[int, str] = Either.right('not 42')
+        e4: Either[int, str] = Either.right('not 42')
+        e5: Either[int, str] = Either.right('also not 42')
         e6 = e3
-        assert e1 == e1
         assert e1 == e2
         assert e1 != e3
         assert e1 != e4
         assert e1 != e5
         assert e1 != e6
-        assert e2 == e2
         assert e2 != e3
         assert e2 != e4
         assert e2 != e5
         assert e2 != e6
-        assert e3 == e3
         assert e3 == e4
         assert e3 != e5
         assert e3 == e6
-        assert e4 == e4
         assert e4 != e5
         assert e4 == e6
-        assert e5 == e5
         assert e5 != e6
-        assert e6 == e6
 
     def test_MB_Either(self) -> None:
         """Proving a nothing can be stored in a something"""
@@ -157,11 +140,7 @@ class TestSimole:
         none_to_the_right_1: Either[None, None] = Either(None, RIGHT)
         none_to_the_right_2: Either[None, None] = Either(None, RIGHT)
 
-        assert none_to_the_left_1 == none_to_the_left_1
-        assert none_to_the_left_2 == none_to_the_left_2
         assert none_to_the_left_1 == none_to_the_left_2
-        assert none_to_the_right_1 == none_to_the_right_1
-        assert none_to_the_right_2 == none_to_the_right_2
         assert none_to_the_right_1 == none_to_the_right_2
         assert none_to_the_left_1 != none_to_the_right_1
         assert none_to_the_left_2 != none_to_the_right_2
@@ -170,7 +149,7 @@ class TestSimole:
 # -- Test map and map_right ----------------------------------------------------------
 
 
-def add2ifLT5(x: int) -> int | Never:
+def add2ifLT5(x: int) -> int:
     """Contrived function to fail if given 5"""
     if x < 5:
         return x + 2
@@ -189,7 +168,7 @@ def add_1_if_gt_5(x: int) -> int:
     return x
 
 
-def chk_str_starts_map(s: str) -> str | Never:
+def chk_str_starts_map(s: str) -> str:
     """Contrived function to fail if str given does not start 'map'"""
     if s[0:3] == 'map':
         return f'{s}'
@@ -359,16 +338,16 @@ class TestMapExcept:
 
 def lessThan2(x: int) -> Either[int, str]:
     if x < 2:
-        return Either(x, LEFT)
+        return Either.left(x)
     else:
-        return Either(f'{x} >= 2', RIGHT)
+        return Either.right(f'{x} >= 2')
 
 
 def lessThan5(x: int) -> Either[int, str]:
     if x < 5:
-        return Either(x, LEFT)
+        return Either.left(x)
     else:
-        return Either(f'{x} >= 5', RIGHT)
+        return Either.right(f'{x} >= 5')
 
 
 class TestBind:
@@ -378,7 +357,7 @@ class TestBind:
         left1 = Either[int, str](1, LEFT)
         left4 = Either[int, str](4, LEFT)
         left7 = Either[int, str](7, LEFT)
-        right: Either[int, str] = Either('Nobody home.', RIGHT)
+        right = Either[int, str]('Nobody home.', RIGHT)
 
         nobody = right.bind(lessThan2)
         assert nobody == Either('Nobody home.', RIGHT)
@@ -397,7 +376,10 @@ class TestBind:
         lt5 = left7.bind(lessThan5)
         assert lt2 == Either('7 >= 2', RIGHT)
         assert lt5 == Either('7 >= 5', RIGHT)
-
+        assert lt5 == Either[str, str]('7 >= 5', RIGHT) # Note: Judgment call to allow
+                                                        # this to not be flagged by the
+                                                        # type checker. More Pythonic
+                                                        # not to violate Liskov Substitution.
         nobody = right.bind(lessThan5)
         assert nobody == Either('Nobody home.', RIGHT)
 
@@ -425,12 +407,12 @@ class TestEitherUsecases:
     def test_usecase(self) -> None:
         "Get Smart logic"
 
-        def lt42(x: int) -> Either[int, str] | Never:
+        def lt42(x: int) -> Either[int, str]:
             """contrived function that fails for 42, returns an Either"""
             if x < 42:
-                return Either(x, LEFT)
+                return Either[int, str](x, LEFT)
             if x > 42:
-                return Either(f'Agent {x}', RIGHT)
+                return Either[int, str](f'Agent {x}', RIGHT)
             raise ValueError('42 failed')
 
         xor_99 = Either[int, str](99, LEFT)
@@ -459,19 +441,19 @@ class TestEitherUsecases:
         kaos2 = xor_49.map(gt42)
         assert kaos0 == kaos1 == kaos2
 
-        kaos0 = Either(False, LEFT)
+        kaos0 = Either[bool, str](False, LEFT)
         kaos1 = xor_01.map(gt42)
         kaos2 = xor_86.map(gt42)
-        kaos3: Either[bool, str] = Either('Max', RIGHT)
+        kaos3: Either[bool, str] = Either.right('Max')
         assert kaos0 == kaos1 != kaos2 == kaos3
 
-        kaos0 = Either(False, LEFT)
+        kaos0 = Either[bool, str](False, LEFT)
         kaos1 = xor_12.map(gt42)
         kaos2 = xor_21.map(gt42)
         assert kaos0 == kaos1 == kaos2
 
-        kaos0 = Either('Kaos Reins!', RIGHT)
-        kaos1 = xor_42.map_except(gt42, 'Kaos Reins!' )
+        kaos0 = Either[bool, str]('Kaos Reins!', RIGHT)
+        kaos1 = xor_42.map_except(gt42, 'Kaos Reins!')
         assert kaos0 == kaos1
 
         # refactored by adding map_right
@@ -497,10 +479,22 @@ class TestEitherUsecases:
         assert chief4 == Either('Agent 99, you are a genius!', LEFT)
 
         hymie42: Either[str, str] = Either('I am a robot.', RIGHT)
-        hymie99 = xor_99.bind(lt42).map(lambda n: f'Hey {n}, got some oil?').map_right(lambda s: f'Hello {s}.')
-        hymie21 = xor_21.bind(lt42).map(lambda n: f'Hey {n}, got some oil?').map_right(lambda s: f'Hello {s}.')
+        hymie99 = (
+            xor_99.bind(lt42)
+            .map(lambda n: f'Hey {n}, got some oil?')
+            .map_right(lambda s: f'Hello {s}.')
+        )
+        hymie21 = (
+            xor_21.bind(lt42)
+            .map(lambda n: f'Hey {n}, got some oil?')
+            .map_right(lambda s: f'Hello {s}.')
+        )
         try:
-            hymie42 = xor_42.bind(lt42).map(lambda n: f'Hey {n}, got some oil?').map_right(lambda s: f'Hello {s}.')
+            hymie42 = (
+                xor_42.bind(lt42)
+                .map(lambda n: f'Hey {n}, got some oil?')
+                .map_right(lambda s: f'Hello {s}.')
+            )
         except ValueError:
             assert True
         else:

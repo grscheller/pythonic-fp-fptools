@@ -45,7 +45,7 @@
 
 """
 
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from typing import Final, cast, final, overload
 
 from pythonic_fp.booleans.subtypable import SBool
@@ -84,7 +84,6 @@ class EitherFlag(SBool):
         if self:
             return 'EitherFlag(True)'
         return 'EitherFlag(False)'
-
 
     def __str__(self) -> str:
         """
@@ -133,7 +132,12 @@ class Either[L, R]:
         - immutable
 
     """
-    __slots__ = '_hash', '_side', '_value',
+
+    __slots__ = (
+        '_hash',
+        '_side',
+        '_value',
+    )
     __match_args__ = ('_value', '_side')
 
     @overload
@@ -461,17 +465,46 @@ class Either[L, R]:
         return applied.get()
 
     @staticmethod
+    def left[U, V](value: U) -> Either[U, V]:
+        """
+        .. admonition:: Either.left
+
+            Helper static method to explicitly construct a left Either.
+
+            :param value: The left value to use when constructing the Either.
+            :returns: A Left Either
+
+        """
+        return Either[U, V](value, LEFT)
+
+    @staticmethod
+    def right[U, V](value: V) -> Either[U, V]:
+        """
+        .. admonition:: Either.right
+
+            Helper static method to explicitly construct a left Either.
+
+            :param value: The left value to use when constructing the Either.
+            :returns: A Left Either
+
+        """
+        return Either[U, V](value, RIGHT)
+
+    @staticmethod
     def sequence[U, V](
         sequence_either_uv: Sequence[Either[U, V]],
     ) -> Either[Sequence[U], V]:
         """
-        .. admonition:: sequence
+        .. admonition:: Either.sequence
 
             Sequence[Either[U, V]] -> Either[Sequence[U], V]
 
             If all Either are lefts, then return an Either of the
             Sequence of contained left values. Otherwise return
             a right Either containing the first right encountered.
+
+            :param sequence_either_uv: A Sequence of Either[U, V]
+            :returns: An Either[Sequence[U], V]
 
         """
         sequenced_list: list[U] = []
@@ -480,8 +513,7 @@ class Either[L, R]:
             if either_uv:
                 sequenced_list.append(either_uv.get())
             else:
-                return Either(either_uv.get_right().get(), RIGHT)
+                return Either[Sequence[U], V](either_uv.get_right().get(), RIGHT)
 
-        sequenced_items = type(sequence_either_uv)(sequenced_list)
-
-        return Either(cast(Sequence[U], sequenced_items))
+        seq_type = cast(Callable[[Iterable[U]], Sequence[U]], type(sequence_either_uv))
+        return Either(seq_type(sequenced_list))

@@ -76,7 +76,7 @@ def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
     return ff
 
 
-def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
+def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any, ...]], R]:
     """
     .. admonition:: sequenced
 
@@ -88,7 +88,7 @@ def sequenced[R](f: Callable[..., R]) -> Callable[[tuple[Any]], R]:
                   the arguments to f.
 
     """
-    def ff(tupled_args: tuple[Any]) -> R:
+    def ff(tupled_args: tuple[Any, ...]) -> R:
         return f(*tupled_args)
 
     return ff

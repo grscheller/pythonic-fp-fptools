@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from typing import Any
+
 from pythonic_fp.fptools.function import partial, sequenced, swap
 from pythonic_fp.iterables.drop_take import take
 from pythonic_fp.iterables.folding import maybe_fold_left

@@ -13,8 +13,9 @@
 # limitations under the License.
 
 from typing import Final
+
 from pythonic_fp.containers.functional_tuple import FTuple
-from pythonic_fp.fptools.either import Either, LEFT, RIGHT
+from pythonic_fp.fptools.either import LEFT, RIGHT, Either
 from pythonic_fp.queues.fifo import FIFOQueue
 
 
@@ -50,7 +51,7 @@ class TestEitherSequence:
     def test_with_a_right(self) -> None:
         """Test with a single right value, use multiple data structures"""
         list_of_either_int_str: list[Either[int, str]] = [
-            Either('1', RIGHT), Either(2, LEFT), Either(3, LEFT), Either(4, LEFT)
+            Either.right('1'), Either.left(2), Either.left(3), Either.left(4)
         ]
         tuple_of_either_int_str: tuple[Either[int, str], ...] = (
             Either(1, LEFT), Either('2', RIGHT), Either(3, LEFT), Either(4, LEFT)
@@ -78,7 +79,7 @@ class TestEitherSequence:
         type Letter = Either[str, int]
         type Letters = Either[list[str], int]
 
-        ALPHABET: Final[str] = ' abcdefghijklmnopqrstuvwxyz'
+        ALPHABET: str = ' abcdefghijklmnopqrstuvwxyz'
 
         def alphabet_position(char_str: str) -> int:
             """Letter position in ALPHABET"""
@@ -111,9 +112,9 @@ class TestEitherSequence:
         sequenced_data1 = Either.sequence(data1)
         sequenced_data2: Letters = Either.sequence(data2)
 
-        result0: Letters = Either([], LEFT)
-        result1: Letters = Either(letter_set_1, LEFT)
-        result2: Letters = Either(13, RIGHT)
+        result0: Letters = Either.left([])
+        result1: Letters = Either.left(letter_set_1)
+        result2: Letters = Either.right(13)
 
         assert sequenced_data0 == result0
         assert sequenced_data1 == result1

@@ -15,7 +15,7 @@
 __all__ = ['MayBe']
 
 from collections.abc import Callable, Iterator, Sequence
-from typing import Final, cast, final, overload
+from typing import Final, Iterable, cast, final, overload
 
 from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
@@ -225,7 +225,7 @@ class MayBe[D]:
         return f(cast(D, self._item)) if self else cast(MayBe[U], self)
 
     @staticmethod
-    def sequence[U](sequence_mb_u: Sequence[MayBe[U]]) -> MayBe[Sequence[U]]:
+    def sequence[U](sequence_mb_u: Iterable[MayBe[U]]) -> MayBe[Iterable[U]]:
         """
         .. admonition:: Sequence
 
@@ -257,4 +257,4 @@ class MayBe[D]:
                 return MayBe()
 
         sequenced_items = type(sequence_mb_u)(sequenced_list)  # type: ignore
-        return MayBe(cast(Sequence[U], sequenced_items))
+        return MayBe(type(sequence_mb_u)(sequenced_items))

@@ -40,16 +40,25 @@
 
     .. tip::
 
+        For more consistent type checking, use these convenience
+        static methods to create left and right Either objects.
+
+        - left_either = Either.left[int, str](42)
+        - right_either = Either.right[int, str]('Not forty-two')
+
+    .. tip::
+
         Right Either instances, as well as LEFT and RIGHT EitherFlag,
         can be used as hidden sentinel values.
 
 """
 
-from collections.abc import Callable, Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator
 from typing import Final, cast, final, overload
 
 from pythonic_fp.booleans.subtypable import SBool
 
+from ._recoverable import RECOVERABLE
 from .maybe import MayBe
 
 __all__ = ['Either', 'EitherFlag', 'LEFT', 'RIGHT']
@@ -220,6 +229,18 @@ class Either[L, R]:
             Compare Either to another object. Compare first
             by identity, then value.
 
+            .. note::
+
+                Pythonic choice was made to allow left or right
+                ``Either`` monads to compare as equal if they have
+                different right or left "phantom" types respectively.
+
+                - Allows for more flexible equality checking at the
+                  expense of not flagging possible type or name
+                  mismatches.
+                - Flagging such a type mismatch would require a Liskov
+                  Substitution Principle violation.
+
             :param other: The object to be compared.
             :returns: True only if other is a Either of the same side
                       containing objects which compare as equal.
@@ -369,7 +390,7 @@ class Either[L, R]:
 
     def map_except[U](self, f: Callable[[L], U], fallback_right: R) -> Either[U, R]:
         """
-        .. admonition:: map except
+        .. admonition:: map_except
 
             Map function f over left Either with a right fallback
             upon exception.
@@ -377,11 +398,24 @@ class Either[L, R]:
             :param f: Function used to map left values.
             :param fallback_right: Fallback value if exception thrown.
             :returns: A successfully mapped left, a propagated right,
-                    or a right with a fallback value.
+                      or a right with a fallback value.
 
             .. warning::
 
-                Swallows exceptions.
+                Swallows exceptions of types
+
+                - LookupError
+                - ValueError
+                - ArithmeticError
+                - RuntimeError
+
+                Does not attempt to stop exceptions
+
+                - TypeError
+                - AttributeError
+
+                Since these my indicate a programming error and not
+                a calculation or runtime event.
 
         """
         if self._side == RIGHT:
@@ -390,18 +424,9 @@ class Either[L, R]:
         applied: MayBe[Either[U, R]] = MayBe()
         fall_back: MayBe[Either[U, R]] = MayBe()
         try:
-            applied = MayBe(Either(f(cast(L, self._value)), LEFT))
-        except (
-            LookupError,
-            ValueError,
-            TypeError,
-            BufferError,
-            ArithmeticError,
-            RecursionError,
-            ReferenceError,
-            RuntimeError,
-        ):
-            fall_back = MayBe(cast(Either[U, R], Either(fallback_right, RIGHT)))
+            applied = MayBe(Either.left(f(cast(L, self._value))))
+        except RECOVERABLE:
+            fall_back = MayBe(Either.right(fallback_right))
 
         if fall_back:
             return fall_back.get()
@@ -425,7 +450,7 @@ class Either[L, R]:
         self, f: Callable[[L], Either[U, R]], fallback_right: R
     ) -> Either[U, R]:
         """
-        .. admonition:: bind except
+        .. admonition:: bind_except
 
             Flatmap function f over the Either, with fallback upon
             exception. Propagate right values.
@@ -448,16 +473,7 @@ class Either[L, R]:
         try:
             if self:
                 applied = MayBe(f(cast(L, self._value)))
-        except (
-            LookupError,
-            ValueError,
-            TypeError,
-            BufferError,
-            ArithmeticError,
-            RecursionError,
-            ReferenceError,
-            RuntimeError,
-        ):
+        except RECOVERABLE:
             fall_back = MayBe(cast(Either[U, R], Either(fallback_right, RIGHT)))
 
         if fall_back:
@@ -472,7 +488,7 @@ class Either[L, R]:
             Helper static method to explicitly construct a left Either.
 
             :param value: The left value to use when constructing the Either.
-            :returns: A Left Either
+            :returns: A left Either
 
         """
         return Either[U, V](value, LEFT)
@@ -485,26 +501,26 @@ class Either[L, R]:
             Helper static method to explicitly construct a left Either.
 
             :param value: The left value to use when constructing the Either.
-            :returns: A Left Either
+            :returns: A right Either
 
         """
         return Either[U, V](value, RIGHT)
 
     @staticmethod
     def sequence[U, V](
-        sequence_either_uv: Sequence[Either[U, V]],
-    ) -> Either[Sequence[U], V]:
+        sequence_either_uv: Iterable[Either[U, V]],
+    ) -> Either[Iterable[U], V]:
         """
         .. admonition:: Either.sequence
 
-            Sequence[Either[U, V]] -> Either[Sequence[U], V]
+            Iterable[Either[U, V]] -> Either[Iterable[U], V]
 
-            If all Either are lefts, then return an Either of the
-            Sequence of contained left values. Otherwise return
+            If all Either are lefts, then return an Either of an
+            Iterable of contained left values. Otherwise return
             a right Either containing the first right encountered.
 
-            :param sequence_either_uv: A Sequence of Either[U, V]
-            :returns: An Either[Sequence[U], V]
+            :param sequence_either_uv: An Iterable of Either[U, V]
+            :returns: An Either[Iterable[U], V]
 
         """
         sequenced_list: list[U] = []
@@ -513,7 +529,6 @@ class Either[L, R]:
             if either_uv:
                 sequenced_list.append(either_uv.get())
             else:
-                return Either[Sequence[U], V](either_uv.get_right().get(), RIGHT)
+                return Either.right(either_uv.get_right().get())
 
-        seq_type = cast(Callable[[Iterable[U]], Sequence[U]], type(sequence_either_uv))
-        return Either(seq_type(sequenced_list))
+        return Either(type(sequence_either_uv)(sequenced_list))

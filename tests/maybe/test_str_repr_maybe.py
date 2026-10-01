@@ -82,7 +82,7 @@ class Test_repr:
         mb_none = MayBe(None)
         mb_none_2 = eval(repr(mb_none))
         assert mb_none_2 == mb_none
-        assert repr(mb_none_2) == repr(mb_none_2) =="MayBe(None)"
+        assert repr(mb_none_2) == "MayBe(None)"
         if mb_none:
             assert True
         else:
@@ -118,7 +118,7 @@ class Test_repr:
         mbmb_none = MayBe(MayBe(None))
         mbmb_none_2 = eval(repr(mbmb_none))
         assert mbmb_none_2 == mbmb_none
-        assert repr(mbmb_none_2) == repr(mbmb_none_2) =="MayBe(MayBe(None))"
+        assert repr(mbmb_none_2) == "MayBe(MayBe(None))"
         if mbmb_none:
             assert True
         else:

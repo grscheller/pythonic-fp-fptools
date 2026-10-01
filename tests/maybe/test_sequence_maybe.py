@@ -13,8 +13,9 @@
 # limitations under the License.
 
 from pythonic_fp.containers.functional_tuple import FTuple
-from pythonic_fp.fptools.maybe import MayBe
 from pythonic_fp.queues.de import DEQueue, de_queue
+
+from pythonic_fp.fptools.maybe import MayBe
 
 
 class Test_MB_sequence:

@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Geoffrey R. Scheller
+# Copyright 2023-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Final
-
 from pythonic_fp.containers.functional_tuple import FTuple
-from pythonic_fp.fptools.either import LEFT, RIGHT, Either
 from pythonic_fp.queues.fifo import FIFOQueue
+
+from pythonic_fp.fptools.either import Either
 
 
 class TestEitherSequence:
@@ -24,17 +23,17 @@ class TestEitherSequence:
 
     def test_no_rights(self) -> None:
         """Test with only left values"""
-        list_of_either_int_str: list[Either[int, str]] = list(
-            map(lambda x: Either(x, LEFT), range(1, 2501))
-        )
+        list_of_either_int_str: list[Either[int, str]] = [
+            Either.left(x) for x in range(1, 2501)
+        ]
         tuple_of_either_int_str: tuple[Either[int, str], ...] = tuple(
-            map(lambda x: Either(x, LEFT), range(1, 2501))
+            Either.left(x) for x in range(1, 2501)
         )
         ftuple_of_either_int_str: FTuple[Either[int, str]] = FTuple(
-            map(lambda x: Either(x, LEFT), range(1, 2501))
+            Either.left(x) for x in range(1, 2501)
         )
         fifo_of_either_int_str: FIFOQueue[Either[int, str]] = FIFOQueue(
-            map(lambda x: Either(x, LEFT), range(1, 2501))
+            Either.left(x) for x in range(1, 2501)
         )
 
         either_listInt_str = Either.sequence(list_of_either_int_str)
@@ -42,25 +41,30 @@ class TestEitherSequence:
         either_ftuple_int_str = Either.sequence(ftuple_of_either_int_str)
         either_fifo_int_str = Either.sequence(fifo_of_either_int_str)
 
-
-        assert either_listInt_str == Either(list(range(1, 2501)), LEFT)
-        assert either_tupleInt_str == Either(tuple(range(1, 2501)), LEFT)
-        assert either_ftuple_int_str == Either(FTuple(range(1, 2501)), LEFT)
-        assert either_fifo_int_str == Either(FIFOQueue(range(1, 2501)), LEFT)
+        assert either_listInt_str == Either.left(list(range(1, 2501)))
+        assert either_tupleInt_str == Either.left(tuple(range(1, 2501)))
+        assert either_ftuple_int_str == Either.left(FTuple(range(1, 2501)))
+        assert either_fifo_int_str == Either.left(FIFOQueue(range(1, 2501)))
 
     def test_with_a_right(self) -> None:
         """Test with a single right value, use multiple data structures"""
         list_of_either_int_str: list[Either[int, str]] = [
-            Either.right('1'), Either.left(2), Either.left(3), Either.left(4)
+            Either.right('1'),
+            Either.left(2),
+            Either.left(3),
+            Either.left(4),
         ]
         tuple_of_either_int_str: tuple[Either[int, str], ...] = (
-            Either(1, LEFT), Either('2', RIGHT), Either(3, LEFT), Either(4, LEFT)
+            Either.left(1),
+            Either.right('2'),
+            Either.left(3),
+            Either.left(4),
         )
         ftuple_of_either_int_str = FTuple(
-            (Either(1, LEFT), Either(2, LEFT), Either('3', RIGHT), Either(4, LEFT),)
+            (Either.left(1), Either.left(2), Either.right('3'), Either.left(4))
         )
         fifo_of_either_int_str = FIFOQueue(
-            (Either(1, LEFT), Either(2, LEFT), Either(3, LEFT), Either('4', RIGHT),)
+            (Either.left(1), Either.left(2), Either.left(3), Either.right('4'))
         )
 
         either_list_int = Either.sequence(list_of_either_int_str)
@@ -68,10 +72,10 @@ class TestEitherSequence:
         either_ftuple_int = Either.sequence(ftuple_of_either_int_str)
         either_fifo_int: Either[FIFOQueue[int], str] = Either.sequence(fifo_of_either_int_str)
 
-        assert either_list_int == Either('1', RIGHT)
-        assert either_tuple_int == Either('2', RIGHT)
-        assert either_ftuple_int == Either('3', RIGHT)
-        assert either_fifo_int == Either('4', RIGHT)
+        assert either_list_int == Either.right('1')
+        assert either_tuple_int == Either.right('2')
+        assert either_ftuple_int == Either.right('3')
+        assert either_fifo_int == Either.right('4')
 
     def test_with_multiple_rights(self) -> None:
         """Test with a multiple right value"""
@@ -92,16 +96,16 @@ class TestEitherSequence:
 
         def letter_left(letter: str) -> Letter:
             pos = alphabet_position(letter)
-            return Either(ALPHABET[pos], LEFT)
+            return Either.left(ALPHABET[pos])
 
         def letter_right(letter: str) -> Letter:
             pos = alphabet_position(letter)
-            return Either(pos, RIGHT)
+            return Either.right(pos)
 
         letter_set_0 = list[str]()
         letter_set_1 = ['a', 'w', 's', 's', 'b', 'm', 'j']
-#       letter_set_2 = ['w', 'x', 'y', 'z', ' ']
-#       letter_set_3 = ['waldo', 'x', 'y', 'zebra', '']
+        #       letter_set_2 = ['w', 'x', 'y', 'z', ' ']
+        #       letter_set_3 = ['waldo', 'x', 'y', 'zebra', '']
 
         data0 = list(map(letter_left, letter_set_0))
         data1 = list(map(letter_left, letter_set_1))

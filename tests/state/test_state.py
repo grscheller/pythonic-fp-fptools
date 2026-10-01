@@ -14,6 +14,7 @@
 
 from pythonic_fp.fptools.state import State
 
+
 class Test_simple:
     def test_simple_counter(self) -> None:
         sc = State(lambda s: (s+1, s+1))

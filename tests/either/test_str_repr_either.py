@@ -21,7 +21,7 @@ def add_gt_42(x: int, y: int) -> Either[int, str]:
     if sum_xy > 42:
         return Either(sum_xy, LEFT)
     else:
-        return Either('too small', RIGHT)
+        return Either.right('too small')
 
     def test_Either_str(self) -> None:
         assert str(Either[int, str](10, LEFT)) == '< 10 | >'
@@ -32,8 +32,8 @@ def add_gt_42(x: int, y: int) -> Either[int, str]:
         assert str(Either[str, int]('foofoo', LEFT)) == "< foofoo | >"
 
     def test_either_repr(self) -> None:
-        e1: Either[int, str] = Either('Nobody home!', RIGHT)
-        e2: Either[int, str] = Either('Somebody not home!', RIGHT)
+        e1: Either[int, str] = Either.right('Nobody home!')
+        e2: Either[int, str] = Either.right('Somebody not home!')
         e3: Either[int, str] = Either(5, LEFT)
         assert e1 != e2
         e5 = eval(repr(e2))
@@ -54,7 +54,7 @@ def add_gt_42(x: int, y: int) -> Either[int, str]:
             if x < 5:
                 return Either(x, LEFT)
             else:
-                return Either(f'was to be {x}', RIGHT)
+                return Either.right(f'was to be {x}')
 
         e6 = lt5_or_nothing(2)
         e7 = lt5_or_str(2)

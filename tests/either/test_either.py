@@ -15,8 +15,6 @@
 from pythonic_fp.fptools.either import LEFT, RIGHT, Either
 from pythonic_fp.fptools.maybe import MayBe
 
-# -- Simple contrived tests ----------------------------------------------------
-
 
 def gt42(x: int) -> bool:
     """contrived function that fails for 42, returns a bool"""
@@ -39,13 +37,13 @@ def lt42bool(x: int) -> Either[bool, str]:
 def fail_int(x: int) -> int:
     """contrived function that fails for all but 1 unusual argument"""
     if x != -666:
-        raise ValueError
+        raise ValueError()
     return x
 
 
 def fail_str(s: str) -> str:
     if s != '-666':
-        raise ValueError
+        raise ValueError()
     return s
 
 
@@ -55,6 +53,7 @@ class TestSimple:
     def test_equal(self) -> None:
         """some type signature change ups"""
         xor41 = Either[int, str](40 + 1, LEFT)
+        foobar = Either[int, str](40 + 1, LEFT)
         xor42 = Either[int, str](40 + 2, LEFT)
         xor_42: Either[int, str] = Either.left(39 + 3)
         xor43: Either[int, str] = Either.left(40 + 3)
@@ -99,9 +98,9 @@ class TestSimple:
 
     def test_equality(self) -> None:
         """equality tests with consistent signatures"""
-        e1: Either[int, str] = Either.left(42)
+        e1 = Either[int, str](42, LEFT)
         e2: Either[int, str] = Either.left(42)
-        e3: Either[int, str] = Either.right('not 42')
+        e3 = Either[int, str]('not 42', RIGHT)
         e4: Either[int, str] = Either.right('not 42')
         e5: Either[int, str] = Either.right('also not 42')
         e6 = e3
@@ -146,9 +145,6 @@ class TestSimple:
         assert none_to_the_left_2 != none_to_the_right_2
 
 
-# -- Test map and map_right ----------------------------------------------------------
-
-
 def add2ifLT5(x: int) -> int:
     """Contrived function to fail if given 5"""
     if x < 5:
@@ -156,13 +152,13 @@ def add2ifLT5(x: int) -> int:
     elif x > 5:
         return x
     else:
-        raise ValueError
+        raise ValueError()
 
 
 def add_1_if_gt_5(x: int) -> int:
     """Contrived function to fail if given 5"""
     if x == 5:
-        raise ValueError
+        raise ValueError()
     if x > 5:
         return x + 1
     return x
@@ -173,7 +169,7 @@ def chk_str_starts_map(s: str) -> str:
     if s[0:3] == 'map':
         return f'{s}'
     else:
-        raise ValueError
+        raise ValueError()
 
 
 class TestMapExcept:
@@ -331,9 +327,6 @@ class TestMapExcept:
             assert False
         except ValueError:
             assert True
-
-
-# -- Test map and map_right ----------------------------------------------------------
 
 
 def lessThan2(x: int) -> Either[int, str]:
@@ -503,3 +496,31 @@ class TestEitherUsecases:
         assert hymie99 == Either('Hello Agent 99.', RIGHT)
         assert hymie21 == Either('Hey 21, got some oil?', LEFT)
         assert hymie42 == Either('I am a robot.', RIGHT)
+
+    def test_bitwise_operators(self) -> None:
+        # Not intended to be used this way,
+        # really just a test of TF_Bool subclassing.
+        assert ~LEFT is RIGHT
+        assert ~RIGHT is LEFT
+        assert ~RIGHT is not RIGHT
+        assert ~LEFT is not LEFT
+
+        assert LEFT & LEFT is LEFT
+        assert LEFT & RIGHT is RIGHT
+        assert RIGHT & LEFT is RIGHT
+        assert RIGHT & RIGHT is RIGHT
+
+        assert LEFT | LEFT is LEFT
+        assert LEFT | RIGHT is LEFT
+        assert RIGHT | LEFT is LEFT
+        assert RIGHT | RIGHT is RIGHT
+
+        assert LEFT ^ LEFT is RIGHT
+        assert LEFT ^ RIGHT is LEFT
+        assert RIGHT ^ LEFT is LEFT
+        assert RIGHT ^ RIGHT is RIGHT
+
+        assert LEFT ^ ~LEFT is LEFT
+        assert LEFT & ~RIGHT is LEFT
+        assert RIGHT | LEFT is LEFT
+        assert RIGHT | RIGHT is RIGHT

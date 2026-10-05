@@ -15,6 +15,12 @@ See [Semantic Versioning 2.0.0](https://semver.org).
 
 ## Releases and Important Milestones
 
+### PyPI 6.0.0 - 2026-10-05
+
+Replaced the EitherFlag SBool subclass with TF_Bool in Either monad.
+Updated for the 5.0.0 version pythonic-fp-booleans. A lot of typing
+cleanup done. 
+
 ### PyPI 5.4.0 - 2026-05-16
 
 EitherFlag changes.

@@ -21,7 +21,7 @@ from pythonic_fp.fptools.maybe import MayBe as MB
 
 def add2_if_pos(x: int) -> int:
     if x < 1:
-        raise ValueError
+        raise ValueError()
     return x + 2
 
 def evaluate_it(lz: Lazy[int, int]) -> int:
@@ -210,7 +210,7 @@ class TestLazy01:
             return value
 
         def buz() -> int:
-            value = 42 + 'forty-two'
+            value = 42 + 'forty-two'  # type: ignore
             return value
 
         lz_foo = lazy(foo)

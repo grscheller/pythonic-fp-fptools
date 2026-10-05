@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Geoffrey R. Scheller
+# Copyright 2024-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ from typing import final
 from pythonic_fp.circulararray.auto import CA
 
 __all__ = ['State']
+
 
 @final
 class State[S, A]:
@@ -50,17 +51,17 @@ class State[S, A]:
 
                 Static members:
 
-                - Method unit creates a State instance whose
+                - Method ``unit`` creates a State instance whose
                   run action returns the supplied constant value.
-                - Method get creates a State instance whose
+                - Method ``get`` creates a State instance whose
                   run action returns the current state.
-                - Method set creates a State which ignores
+                - Method ``set`` creates a State which ignores
                   the old state and swaps in a new one.
-                - Method modify creates a State instance which
+                - Method ``modify`` creates a State instance which
                   modifies the previous state via a function.
-                - Method sequence combine a list of State instances
-                  into a State whose run action returns the list
-                  of generated values.
+                - Method ``sequence`` combine a list of State instances
+                  into a ``State`` instance whose run action returns
+                  the ``list`` of generated values.
 
     """
 
@@ -71,7 +72,7 @@ class State[S, A]:
         .. admonition:: init
 
             :param run: State action.
-            :type run: ``S -> (A, S)`` where A is the type of the
+            :type run: S -> (A, S) where A is the type of the
                        generated value and S is the type of a state.
 
         """
@@ -81,13 +82,14 @@ class State[S, A]:
         """
         .. admonition:: state action composition
 
-            :param g: A function that produces a ``State[S, B]``
-                      from an ``A``.
-            :returns: A ``State[S, B]`` whose state action is the
-                      composition of the state actions from ``self``
-                      followed by the one produced by ``g``.
+            :param g: A function that produces a State[S, B]
+                      from an A.
+            :returns: A State[S, B] whose state action is the
+                      composition of the state actions from self
+                      followed by the one produced by g.
 
         """
+
         def compose(s: S) -> tuple[B, S]:
             a, s = self.run(s)
             return g(a).run(s)
@@ -127,13 +129,14 @@ class State[S, A]:
         """
         .. admonition:: map2
 
-            Combine two state monads, self and sb, with a function.
-            Resulting run action just propagates the current state.
+            Combine two state monads, ``self`` and ``sb``, with a
+            function ``f``. Resulting run action just propagates the
+            current state.
 
             :param sb: State instance to combine with the current instance.
             :param f: Function used by the resulting run action
                       on the values produced by the run actions
-                      of the current State instance and ``sb`` using
+                      of the current State instance and sb using
                       the same initial state.
 
         """
@@ -144,9 +147,10 @@ class State[S, A]:
         .. admonition:: both
 
             Return a State instance whose run action returns a tuple
-            from from the run actions of the current State and sb.
+            from the run actions of the current State and sb.
 
-            :param sb: A State instance to be combined with the current one.
+            :param rb: A State instance to be tupled together
+                       with the current one.
 
         """
         return self.map2(rb, lambda a, b: (a, b))
@@ -178,8 +182,8 @@ class State[S, A]:
             - will need type annotation
 
             :returns: A state monad wrapping a state action to return
-                    the current state. Propagates the current state
-                    unchanged.
+                      the current state. Propagates the current state
+                      unchanged.
 
         """
         return State[ST, ST](lambda s: (s, s))
@@ -239,7 +243,7 @@ class State[S, A]:
                       the values produced by the list of State actions
                       provided to the method.
             :rtype: State[ST, list[AA]]
- 
+
             .. note::
 
                 The run action evaluates the run actions of the list

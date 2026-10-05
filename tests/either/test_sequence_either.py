@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections.abc import Iterable
+
 from pythonic_fp.containers.functional_tuple import FTuple
 from pythonic_fp.queues.fifo import FIFOQueue
 
@@ -70,7 +72,7 @@ class TestEitherSequence:
         either_list_int = Either.sequence(list_of_either_int_str)
         either_tuple_int = Either.sequence(tuple_of_either_int_str)
         either_ftuple_int = Either.sequence(ftuple_of_either_int_str)
-        either_fifo_int: Either[FIFOQueue[int], str] = Either.sequence(fifo_of_either_int_str)
+        either_fifo_int = Either.sequence(fifo_of_either_int_str)
 
         assert either_list_int == Either.right('1')
         assert either_tuple_int == Either.right('2')
@@ -81,7 +83,7 @@ class TestEitherSequence:
         """Test with a multiple right value"""
 
         type Letter = Either[str, int]
-        type Letters = Either[list[str], int]
+        type Letters = Either[Iterable[str], int]
 
         ALPHABET: str = ' abcdefghijklmnopqrstuvwxyz'
 

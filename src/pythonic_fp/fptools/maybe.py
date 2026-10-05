@@ -14,10 +14,12 @@
 
 __all__ = ['MayBe']
 
-from collections.abc import Callable, Iterator, Sequence
-from typing import Final, Iterable, cast, final, overload
+from collections.abc import Callable, Iterable, Iterator
+from typing import Final, cast, final, overload
 
 from pythonic_fp.gadgets.sentinels.flavored import Sentinel
+
+from ._recoverable import RECOVERABLE
 
 type _Sentinel = Sentinel[str]
 _sentinel: Final[_Sentinel] = Sentinel('_MayBe_sentinel')
@@ -35,29 +37,29 @@ class MayBe[D]:
 
     """
 
-    __slots__ = '_hash', '_item'
-    __match_args__ = ('_item',)
+    __slots__ = '_data', '_hash'
+    __match_args__ = ('_data',)
 
     @overload
     def __init__(self) -> None: ...
     @overload
-    def __init__(self, item: D) -> None: ...
+    def __init__(self, data: D) -> None: ...
 
-    def __init__(self, item: D | _Sentinel = _sentinel) -> None:
+    def __init__(self, data: D | _Sentinel = _sentinel) -> None:
         """
         .. admonition:: init
 
-            Initialize MayBe with 1 or 0 items.
+            Initialize MayBe with 1 or 0 data items.
 
-            :param item: Optional item for the MayBe instance.
+            :param data: Optional data item for the MayBe instance.
 
             .. important::
 
                 - A ``MayBe`` is immutable once initialized.
-                - ``MayBe()`` is not a singleton.
+                - MayBe() is not a singleton.
 
         """
-        self._item: D | _Sentinel = item
+        self._data: D | _Sentinel = data
         self._hash: int | None = None
 
     def __hash__(self) -> int:
@@ -73,9 +75,9 @@ class MayBe[D]:
         """
         if self._hash is None:
             try:
-                self._hash = hash((self._item, type(self._item), _Sentinel))
+                self._hash = hash((self._data, _sentinel))
             except TypeError:
-                self._hash = hash((id(self._item), type(self._item), _Sentinel))
+                self._hash = hash((id(self._data), _sentinel))
 
         return self._hash
 
@@ -88,7 +90,7 @@ class MayBe[D]:
             :returns: True if not empty, False if empty.
 
         """
-        return self._item is not _sentinel
+        return self._data is not _sentinel
 
     def __len__(self) -> int:
         """
@@ -111,9 +113,9 @@ class MayBe[D]:
         """
         if not isinstance(other, type(self)):
             return False
-        if self._item is other._item:
+        if self._data is other._data:
             return True
-        return self._item == other._item
+        return self._data == other._data
 
     def __iter__(self) -> Iterator[D]:
         """
@@ -123,7 +125,7 @@ class MayBe[D]:
 
         """
         if self:
-            yield cast(D, self._item)
+            yield cast(D, self._data)
 
     def __repr__(self) -> str:
         """
@@ -140,7 +142,7 @@ class MayBe[D]:
 
         """
         if self:
-            return 'MayBe(' + repr(self._item) + ')'
+            return 'MayBe(' + repr(self._data) + ')'
         return 'MayBe()'
 
     def __str__(self) -> str:
@@ -158,7 +160,7 @@ class MayBe[D]:
 
         """
         if self:
-            return 'MayBe(' + str(self._item) + ')'
+            return 'MayBe(' + str(self._data) + ')'
         return 'MayBe()'
 
     @overload
@@ -179,17 +181,18 @@ class MayBe[D]:
 
             .. warning::
 
-                Unsafe method get will raise ValueError if the MayBe
+                Unsafe method get will raise ValueError() if the MayBe
                 is empty and an alternate return item not provided.
 
                 .. tip::
 
                     Best practice is to first check the MayBe in
-                    a boolean context.
+                    a boolean context. Threadsafe since a MayBe
+                    is immutable once created.
 
         """
-        if self._item is not _sentinel:
-            return cast(D, self._item)
+        if self._data is not _sentinel:
+            return cast(D, self._data)
 
         if alt is _sentinel:
             msg = 'MayBe: an alternate return item not provided to get method'
@@ -198,22 +201,57 @@ class MayBe[D]:
 
     def map[U](self, f: Callable[[D], U]) -> MayBe[U]:
         """
-        .. admonition:: Map
+        .. admonition:: map
 
             Map function f over the MayBe.
 
-            :param f: Function used for the map.
+            :param f: Mapping function.
             :returns: A new MayBe instance if not empty,
                       otherwise itself.
 
         """
         if self:
-            return MayBe(f(cast(D, self._item)))
+            return MayBe(f(cast(D, self._data)))
+        return cast(MayBe[U], self)
+
+    def map_except[U](self, f: Callable[[D], U]) -> MayBe[U]:
+        """
+        .. admonition:: map_except
+
+            Map function f over the MayBe.
+
+            :param f: Mapping function.
+            :returns: New MayBe instance if not empty and exception is
+                      not thrown, an empty Maybe if exception is thrown,
+                      otherwise itself.
+
+            .. note::
+
+                Swallows exceptions of types
+
+                - LookupError
+                - ValueError
+                - ArithmeticError
+                - RuntimeError
+
+                Does not attempt to stop exceptions
+
+                - TypeError
+                - AttributeError
+                - KeyboardInterrupt
+
+        """
+        if self:
+            try:
+                return MayBe(f(cast(D, self._data)))
+            except RECOVERABLE:
+                return MayBe()
+
         return cast(MayBe[U], self)
 
     def bind[U](self, f: Callable[[D], MayBe[U]]) -> MayBe[U]:
         """
-        .. admonition:: Bind
+        .. admonition:: bind
 
             Flatmap function f over the MayBe.
 
@@ -222,39 +260,72 @@ class MayBe[D]:
                       otherwise itself.
 
         """
-        return f(cast(D, self._item)) if self else cast(MayBe[U], self)
+        if self:
+            return f(cast(D, self._data)) 
+
+        return cast(MayBe[U], self)
+
+    def bind_except[U](self, f: Callable[[D], MayBe[U]]) -> MayBe[U]:
+        """
+        .. admonition:: bind_except
+
+            Flatmap function f over the MayBe.
+
+            :param f: Function to bind over contained values.
+            :returns: A successfully bound MayBe[U], a propagated
+            empty MayBe[U], or an empty MayBe[U] if an exception
+            is raised.
+
+            .. note::
+
+                Swallows exceptions of types
+
+                - LookupError
+                - ValueError
+                - ArithmeticError
+                - RuntimeError
+
+                Does not attempt to stop exceptions
+
+                - TypeError
+                - AttributeError
+                - KeyboardInterrupt
+
+        """
+        if self:
+            try:
+                return f(cast(D, self._data))
+            except RECOVERABLE:
+                return MayBe()
+
+        return cast(MayBe[U], self)
 
     @staticmethod
-    def sequence[U](sequence_mb_u: Iterable[MayBe[U]]) -> MayBe[Iterable[U]]:
+    def sequence[U](
+            iterable_mb_u: Iterable[MayBe[U]]
+    ) -> MayBe[Iterable[U]]:
         """
-        .. admonition:: Sequence
+        .. admonition:: MayBe.sequence
 
-            ``Sequence[MayBe[U]]`` -> ``MayBe[Sequence[U]]``
+            Iterable[MayBe[U]] -> MayBe[Iterable[U]]
 
-            :param sequence_mb_u: A ``Sequence`` of ``MayBe`` of the same type.
-            :returns: Empty ``MayBe`` if one of the ``MayBe`` is empty.
+            :param sequence_mb_u: An Iterable of MayBe[U] values.
+            :returns: Empty MayBe if one of the MayBe is empty,
+                      otherwise a MayBe of an Iterable of the
+                      contained values.
 
-            ,, note::
+            .. note::
 
-                A sequenced empty ``Sequence[MayBe[U]]`` would produce
-                a ``MayBe`` of an empty ``Sequence``, not an empty
-                ``MayBe``.
-
-                .. tip
-
-                    If above is confusing, replace the term "Sequence"
-                    above with a concrete example of a ``Sequence``
-                    like ``list`` or ``tuple``.
-
+                A sequenced empty Iterable[MayBe[U]] would produce
+                a MayBe of an empty Iterable, not an empty MayBe.
 
         """
         sequenced_list: list[U] = []
 
-        for mb_u in sequence_mb_u:
+        for mb_u in iterable_mb_u:
             if mb_u:
                 sequenced_list.append(mb_u.get())
             else:
                 return MayBe()
 
-        sequenced_items = type(sequence_mb_u)(sequenced_list)  # type: ignore
-        return MayBe(type(sequence_mb_u)(sequenced_items))
+        return MayBe(type(iterable_mb_u)(sequenced_list))

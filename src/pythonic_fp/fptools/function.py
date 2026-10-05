@@ -54,7 +54,7 @@ def compose[D, T, R](f: Callable[[D], T], g: Callable[[T], R]) -> Callable[[D], 
 
         :param f: Function called first with domain D and range T.
         :param g: Function called on result with domain T and range R.
-        :returns: The composite function ``g∘f(d) = g(f(d))``
+        :returns: The composite function g∘f(d) = g(f(d))
 
     """
     return lambda d: g(f(d))
@@ -66,8 +66,8 @@ def negate[**P](f: Callable[P, bool]) -> Callable[P, bool]:
 
         Take a predicate and return its negation.
 
-        :param f: A function ``f`` which returns a bool
-        :returns: the function ``not f``
+        :param f: A function which returns a bool
+        :returns: a negated version of f
 
     """
     def ff(*args: P.args, **kwargs: P.kwargs) -> bool:

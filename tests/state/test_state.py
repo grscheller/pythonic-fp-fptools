@@ -101,10 +101,9 @@ class Test_simple:
         def cnt(a: int) -> State[int, int]:
             return State(lambda s: (s, s+1))
 
-        def sqr_st(a: tuple[()]) -> State[int, tuple[()]]:
-            return State.modify(square)
+        sqr_st = State.modify(square)
 
-        do_it = count.bind(cnt).bind(cnt).bind(sqr_st).bind(cnt).bind(sqr_st).bind(cnt)
+        do_it = count.bind(cnt).bind(cnt).then(sqr_st).bind(cnt).then(sqr_st).bind(cnt)
         a, s = do_it.run(0)
         assert (a, s) == (100, 101)
 

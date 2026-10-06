@@ -41,8 +41,9 @@ class State[S, A]:
                 Instance members:
 
                 - Property *run* is the **state action**
-                - Method *bind* performs state action composition
-                - Method *eval* performs the **run action**
+                - Method ``bind`` performs state action composition
+                - Method ``then`` performs 
+                - Method ``eval`` performs the **run action**
 
                   - the **run action** evaluates the **state action** by
 
@@ -82,11 +83,18 @@ class State[S, A]:
         """
         .. admonition:: state action composition
 
+            Run the first action, use its result to compose
+            a new state action.
+
             :param g: A function that produces a State[S, B]
                       from an A.
             :returns: A State[S, B] whose state action is the
                       composition of the state actions from self
                       followed by the one produced by g.
+
+            .. note::
+
+                Same as the Haskell ``>>=`` operator.
 
         """
 
@@ -95,6 +103,20 @@ class State[S, A]:
             return g(a).run(s)
 
         return State(compose)
+
+    def then[B](self, sb: State[S, B]) -> State[S, B]:
+        """
+        .. admonition:: sequence two state actions
+
+            Run the first action, discard its result,
+            then run the second action.
+
+            .. note::
+
+                Same as the Haskell ``>>`` operator.
+
+        """
+        return self.bind(lambda _: sb)
 
     def eval(self, init: S) -> A:
         """

@@ -124,7 +124,7 @@ class Test_simple:
         assert (n, s) == (1, 21)
         n, s = sa1.run(21)
         assert (n, s) == (4, 21)
-        sa2: State[int, int] = sa1.get().map(lambda n: 2*n)
+        sa2: State[int, int] = State.get().map(lambda n: 2*n)
         n, s = sa2.run(21)
         assert (n, s) == (42, 21)
 

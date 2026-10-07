@@ -79,6 +79,20 @@ class State[S, A]:
         """
         self.run = run
 
+    def eval(self, init: S) -> A:
+        """
+        .. admonition:: run action
+
+            Evaluate the state action by passing in an initial state
+            and returning the produced value.
+
+            :param init: An initial state to pass into the state action.
+            :returns: The value produced by the run action.
+
+        """
+        a, _ = self.run(init)
+        return a
+
     def bind[B](self, g: Callable[[A], State[S, B]]) -> State[S, B]:
         """
         .. admonition:: state action composition
@@ -117,20 +131,6 @@ class State[S, A]:
 
         """
         return self.bind(lambda _: sb)
-
-    def eval(self, init: S) -> A:
-        """
-        .. admonition:: run action
-
-            Evaluate the state action by passing in an initial state
-            and returning the produced value.
-
-            :param init: An initial state to pass into the state action.
-            :returns: The value produced by the run action.
-
-        """
-        a, _ = self.run(init)
-        return a
 
     def map[B](self, f: Callable[[A], B]) -> State[S, B]:
         """
@@ -252,7 +252,7 @@ class State[S, A]:
         return State.get().bind(lambda a: State.put(f(a)))
 
     @staticmethod
-    def sequence[ST, AA](sas: list[State[ST, AA]]) -> State[ST, list[AA]]:
+    def sequence_list[ST, AA](sas: list[State[ST, AA]]) -> State[ST, list[AA]]:
         """
         .. admonition:: sequence a list
 
@@ -269,8 +269,8 @@ class State[S, A]:
             .. note::
 
                 The run action evaluates the run actions of the list
-                front to back. The state is also propagated, not
-                necessarily unchanged, front to back.
+                front to back. State changes are also propagated, front
+                to back.
 
         """
 

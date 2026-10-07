@@ -19,8 +19,7 @@ class Test_simple:
     def test_simple_counter(self) -> None:
         sc = State(lambda s: (s+1, s+1))
 
-        ss, aa = sc.run(0)
-        assert (ss, aa) == (1, 1)
+        assert sc.run(0) == (1, 1)
 
         ss, aa = sc.run(42)
         assert (ss, aa) == (43, 43)
@@ -99,9 +98,17 @@ class Test_simple:
         count: State[int, int] = State(lambda s: (s, s+1))
 
         def cnt(a: int) -> State[int, int]:
-            return State(lambda s: (s, s+1))
+            return State(lambda a: (a, a+1))
 
         sqr_st = State.modify(square)
+
+        assert count.run(0) == (0, 1)
+        assert count.bind(cnt).run(0) == (1, 2)
+        assert count.bind(cnt).bind(cnt).run(0) == (2, 3)
+        assert count.bind(cnt).bind(cnt).then(sqr_st).run(0) == ((), 9)
+        assert count.bind(cnt).bind(cnt).then(sqr_st).bind(cnt).run(0) == (9, 10)
+        assert count.bind(cnt).bind(cnt).then(sqr_st).bind(cnt).then(sqr_st).run(0) == ((), 100)
+        assert count.bind(cnt).bind(cnt).then(sqr_st).bind(cnt).then(sqr_st).bind(cnt).run(0) == (100, 101)
 
         do_it = count.bind(cnt).bind(cnt).then(sqr_st).bind(cnt).then(sqr_st).bind(cnt)
         a, s = do_it.run(0)

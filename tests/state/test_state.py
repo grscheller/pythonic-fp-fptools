@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from typing import assert_type
+
 from pythonic_fp.fptools.state import State
 
 
@@ -128,22 +130,31 @@ class Test_simple:
         def square(n1: int) -> int:
             return n1 * n1
 
-        count: State[int, int] = State(lambda s: (s, s + 1))
+        count: State[int, int] = State(lambda s: (s + 1, s + 1))
 
-        def cnt(a: int) -> State[int, int]:
-            return State(lambda a: (a, a + 1))
+        def cnt1(a: int) -> State[int, int]:
+            return State(lambda a: (a + 1, a + 1))
+
+        def cnt2(a: int) -> State[int, int]:
+            return State(lambda a: (a + 2, a + 2))
 
         sqr_st = State.modify(square)
 
-        assert count.run(0) == (0, 1)
-        assert count.bind(cnt).run(0) == (1, 2)
-        assert count.bind(cnt).bind(cnt).run(0) == (2, 3)
-        assert count.bind(cnt).bind(cnt).then(sqr_st).run(0) == ((), 9)
-        assert count.bind(cnt).bind(cnt).then(sqr_st).bind(cnt).run(0) == (9, 10)
+        assert count.run(41) == (42, 42)
+        assert count.eval(41) == 42
+        assert count.run(0) == (1, 1)
+        assert count.bind(cnt2).run(0) == (3, 3)
 
-        do_it = count.bind(cnt).bind(cnt).then(sqr_st).bind(cnt).then(sqr_st).bind(cnt)
-        a, s = do_it.run(0)
-        assert (a, s) == (100, 101)
+        do_it = count.bind(cnt2).bind(cnt1).then(sqr_st).bind(cnt2).then(sqr_st).bind(cnt1)
+
+        assert_type(do_it, State[int, int])
+        assert_type(count, State[int, int])
+        assert_type(count.bind(cnt2), State[int, int])
+        assert_type(count.bind(cnt2).bind(cnt1).then(sqr_st), State[int, tuple[()]])
+        assert_type(count.bind(cnt2).bind(cnt1).then(sqr_st).bind(cnt2), State[int, int])
+
+        assert do_it.eval(0) == 325
+        assert do_it.eval(-1) == 122
 
     def test_get(self) -> None:
         get_sa: State[object, object] = State.get()

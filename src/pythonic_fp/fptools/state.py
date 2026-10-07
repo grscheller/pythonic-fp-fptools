@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from collections.abc import Callable
-from typing import final
+from typing import cast, final
 
 from pythonic_fp.circulararray.auto import CA
 
@@ -42,7 +42,7 @@ class State[S, A]:
 
                 - Property *run* is the **state action**
                 - Method ``bind`` performs state action composition
-                - Method ``then`` performs 
+                - Method ``then`` performs
                 - Method ``eval`` performs the **run action**
 
                   - the **run action** evaluates the **state action** by
@@ -130,7 +130,11 @@ class State[S, A]:
                 Same as the Haskell ``>>`` operator.
 
         """
-        return self.bind(lambda _: sb)
+
+        def h(ignored: object) -> State[S, B]:
+            return sb
+
+        return self.bind(h)
 
     def map[B](self, f: Callable[[A], B]) -> State[S, B]:
         """
@@ -145,7 +149,11 @@ class State[S, A]:
                       instance and just propagates the current state.
 
         """
-        return self.bind(lambda a: State.unit(f(a)))
+
+        def h(a: A) -> State[S, B]:
+            return State.unit(f(a))
+
+        return self.bind(h)
 
     def map2[B, C](self, sb: State[S, B], f: Callable[[A, B], C]) -> State[S, C]:
         """
@@ -162,7 +170,15 @@ class State[S, A]:
                       the same initial state.
 
         """
-        return self.bind(lambda a: sb.map(lambda b: f(a, b)))
+
+        def h(a: A) -> State[S, C]:
+
+            def g(b: B) -> C:
+                return f(a, b)
+
+            return sb.map(g)
+
+        return self.bind(h)
 
     def both[B](self, rb: State[S, B]) -> State[S, tuple[A, B]]:
         """
@@ -175,7 +191,11 @@ class State[S, A]:
                        with the current one.
 
         """
-        return self.map2(rb, lambda a, b: (a, b))
+
+        def tup(a: A, b: B) -> tuple[A, B]:
+            return (a, b)
+
+        return self.map2(rb, tup)
 
     @staticmethod
     def unit[ST, B](b: B) -> State[ST, B]:
@@ -189,7 +209,11 @@ class State[S, A]:
             :returns: A new State[ST, B] from a value b: B.
 
         """
-        return State(lambda s: (b, s))
+
+        def h(s: ST) -> tuple[B, ST]:
+            return (b, s)
+
+        return State(h)
 
     @staticmethod
     def get[ST]() -> State[ST, ST]:
@@ -208,7 +232,11 @@ class State[S, A]:
                       unchanged.
 
         """
-        return State[ST, ST](lambda s: (s, s))
+
+        def h(state: ST) -> tuple[ST, ST]:
+            return (state, state)
+
+        return State(h)
 
     @staticmethod
     def put[ST](s: ST) -> State[ST, tuple[()]]:
@@ -228,7 +256,11 @@ class State[S, A]:
             :rtype: State[ST, tuple[()]]
 
         """
-        return State(lambda _: ((), s))
+
+        def h(ignore: object) -> tuple[tuple[()], ST]:
+            return ((), s)
+
+        return State(h)
 
     @staticmethod
     def modify[ST](f: Callable[[ST], ST]) -> State[ST, tuple[()]]:
@@ -249,7 +281,11 @@ class State[S, A]:
                 could be.
 
         """
-        return State.get().bind(lambda a: State.put(f(a)))
+
+        def g(s: ST) -> State[ST, tuple[()]]:
+            return State.put(f(s))
+
+        return State.get().bind(g)
 
     @staticmethod
     def sequence_list[ST, AA](sas: list[State[ST, AA]]) -> State[ST, list[AA]]:

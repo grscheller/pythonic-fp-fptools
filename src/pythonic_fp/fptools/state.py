@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from collections.abc import Callable
-from typing import cast, final
+from typing import final
 
 from pythonic_fp.circulararray.auto import CA
 
@@ -288,7 +288,7 @@ class State[S, A]:
         return State.get().bind(g)
 
     @staticmethod
-    def sequence_list[ST, AA](sas: list[State[ST, AA]]) -> State[ST, list[AA]]:
+    def sequence_tuple[ST, AA](sas: tuple[State[ST, AA]]) -> State[ST, tuple[AA, ...]]:
         """
         .. admonition:: sequence a list
 
@@ -309,11 +309,10 @@ class State[S, A]:
                 to back.
 
         """
+        def tup_append(tup: tuple[AA, ...], a: AA) -> tuple[AA, ...]:
+            return tup + (a,)
 
-        def append_ret(ls: list[AA], a: AA) -> list[AA]:
-            ls.append(a)
-            return ls
+        def folding(state: State[ST, AA], state_tup: State[ST, tuple[AA, ...]]) -> State[ST, tuple[AA, ...]]:
+            return state.map2(state_tup, tup_append)
 
-        return CA(sas).foldl(
-            lambda s1, sa: s1.map2(sa, append_ret), State.unit(list[AA]([]))
-        )
+        return CA(sas).foldl(folding, State.unit(()))

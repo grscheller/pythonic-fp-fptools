@@ -184,23 +184,10 @@ class Test_simple:
         n, s = sa42.run(0)
         assert (n, s) == (42, 0)
 
-    def test_sequence_list(self) -> None:
-        sa1 = State(lambda s: (str(s), s + 1))
-        sa2 = State(lambda s: (str(s), s + 2))
-        sa3 = State(lambda s: (str(s), s + 3))
-        sa4 = State(lambda s: (str(s), s + 4))
-        sas = [sa1, sa2, sa3, sa4]
-        sal = State.sequence_list(sas)
-        ll, ss = sal.run(0)
-        assert ss == 10
-        assert ll == ['0', '1', '3', '6']
-
-        sa1 = State(lambda s: (str(1), s))
-        sa2 = State(lambda s: (str(2), s))
-        sa3 = State(lambda s: (str(3), s))
-        sa4 = State(lambda s: (str(4), s))
-        sas = [sa1, sa2, sa3, sa4]
-        sal = State.sequence_list(sas)
-        ll, ss = sal.run(0)
-        assert ss == 0
-        assert ll == ['1', '2', '3', '4']
+    def test_sequence_tuple(self) -> None:
+        sa = State(lambda s: (str(s), s + 1))
+        sas = (sa, sa, sa, sa)
+        sat: State[tuple[str, ...], int] = State.sequence_tuple(sas)
+        tup, ss = sat.run(0)
+        assert ss == 4
+        assert tup == ('0', '1', '2', '3')

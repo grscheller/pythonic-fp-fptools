@@ -191,3 +191,5 @@ class Test_simple:
         tup, ss = sat.run(0)
         assert ss == 4
         assert tup == ('0', '1', '2', '3')
+
+        assert sat.eval(39) == ('39', '40', '41','42')

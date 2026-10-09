@@ -198,7 +198,7 @@ class State[S, A]:
         return self.map2(rb, tup)
 
     @staticmethod
-    def unit[ST, B](b: B) -> State[ST, B]:
+    def unit[ST, BB](b: BB) -> State[ST, BB]:
         """
         .. admonition:: unit
 
@@ -206,11 +206,11 @@ class State[S, A]:
             constant b  and propagate the present state.
 
             :param b: Value the new State's run action will return.
-            :returns: A new State[ST, B] from a value b: B.
+            :returns: A new State[ST, BB] from a value b: BB.
 
         """
 
-        def h(s: ST) -> tuple[B, ST]:
+        def h(s: ST) -> tuple[BB, ST]:
             return (b, s)
 
         return State(h)
@@ -288,7 +288,7 @@ class State[S, A]:
         return State.get().bind(g)
 
     @staticmethod
-    def sequence_tuple[ST, AA](sas: tuple[State[ST, AA]]) -> State[ST, tuple[AA, ...]]:
+    def sequence_tuple[ST, AA](sas: tuple[State[ST, State[ST, AA]]]) -> State[ST, tuple[AA, ...]]:
         """
         .. admonition:: sequence a list
 
@@ -312,7 +312,7 @@ class State[S, A]:
         def tup_append(tup: tuple[AA, ...], a: AA) -> tuple[AA, ...]:
             return tup + (a,)
 
-        def folding(state: State[ST, AA], state_tup: State[ST, tuple[AA, ...]]) -> State[ST, tuple[AA, ...]]:
+        def folding(state: State[ST, tuple[AA, ...]], state_tup: State[ST, tuple[AA, ...]]) -> State[ST, tuple[AA, ...]]:
             return state.map2(state_tup, tup_append)
 
         return CA(sas).foldl(folding, State.unit(()))

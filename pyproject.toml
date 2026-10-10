@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pythonic-fp-fptools"
-version = "6.1.0"
+version = "6.2.0"
 description = "Functional programming tools for Python."
 readme = "README.md"
 requires-python = ">=3.14"  # floor: PEP 649/749 deferred annotations — class-level self-reference NameErrors on <3.14

@@ -32,9 +32,9 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "pythonic-fp-booleans>=3.0.2",
-  "pythonic-fp-circulararray>=6.0.4",
-  "pythonic-fp-gadgets>=4.0.2",
+  "pythonic-fp-booleans>=5,<6",
+  "pythonic-fp-circulararray>=6.2.2,<6.4",
+  "pythonic-fp-gadgets>=4.5.0,<6",
 ]
 
 [project.urls]
@@ -50,9 +50,6 @@ docs = [
 ]
 test = [
   "pytest>=8.4.1",
-  "pythonic-fp-containers>=4.0.1",
-  "pythonic-fp-iterables>=5.1.3",
-  "pythonic-fp-queues>=5.1.1",
 ]
 
 [tool.flit.module]

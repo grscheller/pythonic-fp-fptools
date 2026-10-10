@@ -53,7 +53,6 @@ class TestSimple:
     def test_equal(self) -> None:
         """some type signature change ups"""
         xor41 = Either[int, str](40 + 1, LEFT)
-        foobar = Either[int, str](40 + 1, LEFT)
         xor42 = Either[int, str](40 + 2, LEFT)
         xor_42: Either[int, str] = Either.left(39 + 3)
         xor43: Either[int, str] = Either.left(40 + 3)

@@ -186,10 +186,10 @@ class Test_simple:
 
     def test_sequence_tuple(self) -> None:
         sa = State(lambda s: (str(s), s + 1))
-        sas = (sa, sa, sa, sa)
-        sat: State[tuple[str, ...], int] = State.sequence_tuple(sas)
-        tup, ss = sat.run(0)
+        sa_list = [sa, sa, sa, sa]
+        sat: State[list[str, ...], int] = State.sequence(sa_list)
+        ls, ss = sat.run(0)
         assert ss == 4
-        assert tup == ('0', '1', '2', '3')
+        assert ls == ['0', '1', '2', '3']
 
-        assert sat.eval(39) == ('39', '40', '41','42')
+        assert sat.eval(39) == ['39', '40', '41','42']

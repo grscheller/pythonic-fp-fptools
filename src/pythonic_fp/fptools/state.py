@@ -42,7 +42,7 @@ class State[S, A]:
 
                 - Property *run* is the **state action**
                 - Method ``bind`` performs state action composition
-                - Method ``then`` performs
+                - Method ``then`` performs 
                 - Method ``eval`` performs the **run action**
 
                   - the **run action** evaluates the **state action** by
@@ -130,11 +130,7 @@ class State[S, A]:
                 Same as the Haskell ``>>`` operator.
 
         """
-
-        def h(ignored: object) -> State[S, B]:
-            return sb
-
-        return self.bind(h)
+        return self.bind(lambda _: sb)
 
     def map[B](self, f: Callable[[A], B]) -> State[S, B]:
         """
@@ -149,11 +145,7 @@ class State[S, A]:
                       instance and just propagates the current state.
 
         """
-
-        def h(a: A) -> State[S, B]:
-            return State.unit(f(a))
-
-        return self.bind(h)
+        return self.bind(lambda a: State.unit(f(a)))
 
     def map2[B, C](self, sb: State[S, B], f: Callable[[A, B], C]) -> State[S, C]:
         """
@@ -170,15 +162,7 @@ class State[S, A]:
                       the same initial state.
 
         """
-
-        def h(a: A) -> State[S, C]:
-
-            def g(b: B) -> C:
-                return f(a, b)
-
-            return sb.map(g)
-
-        return self.bind(h)
+        return self.bind(lambda a: sb.map(lambda b: f(a, b)))
 
     def both[B](self, rb: State[S, B]) -> State[S, tuple[A, B]]:
         """
@@ -191,14 +175,10 @@ class State[S, A]:
                        with the current one.
 
         """
-
-        def tup(a: A, b: B) -> tuple[A, B]:
-            return (a, b)
-
-        return self.map2(rb, tup)
+        return self.map2(rb, lambda a, b: (a, b))
 
     @staticmethod
-    def unit[ST, BB](b: BB) -> State[ST, BB]:
+    def unit[ST, B](b: B) -> State[ST, B]:
         """
         .. admonition:: unit
 
@@ -206,14 +186,10 @@ class State[S, A]:
             constant b  and propagate the present state.
 
             :param b: Value the new State's run action will return.
-            :returns: A new State[ST, BB] from a value b: BB.
+            :returns: A new State[ST, B] from a value b: B.
 
         """
-
-        def h(s: ST) -> tuple[BB, ST]:
-            return (b, s)
-
-        return State(h)
+        return State(lambda s: (b, s))
 
     @staticmethod
     def get[ST]() -> State[ST, ST]:
@@ -232,11 +208,7 @@ class State[S, A]:
                       unchanged.
 
         """
-
-        def h(state: ST) -> tuple[ST, ST]:
-            return (state, state)
-
-        return State(h)
+        return State[ST, ST](lambda s: (s, s))
 
     @staticmethod
     def put[ST](s: ST) -> State[ST, tuple[()]]:
@@ -256,11 +228,7 @@ class State[S, A]:
             :rtype: State[ST, tuple[()]]
 
         """
-
-        def h(ignore: object) -> tuple[tuple[()], ST]:
-            return ((), s)
-
-        return State(h)
+        return State(lambda _: ((), s))
 
     @staticmethod
     def modify[ST](f: Callable[[ST], ST]) -> State[ST, tuple[()]]:
@@ -281,14 +249,10 @@ class State[S, A]:
                 could be.
 
         """
-
-        def g(s: ST) -> State[ST, tuple[()]]:
-            return State.put(f(s))
-
-        return State.get().bind(g)
+        return State.get().bind(lambda a: State.put(f(a)))
 
     @staticmethod
-    def sequence_tuple[ST, AA](sas: tuple[State[ST, State[ST, AA]]]) -> State[ST, tuple[AA, ...]]:
+    def sequence[ST, AA](sa_list: list[State[ST, AA]]) -> State[ST, list[AA]]:
         """
         .. admonition:: sequence a list
 
@@ -305,14 +269,16 @@ class State[S, A]:
             .. note::
 
                 The run action evaluates the run actions of the list
-                front to back. State changes are also propagated, front
-                to back.
+                front to back. The state is also propagated, not
+                necessarily unchanged, front to back.
 
         """
-        def tup_append(tup: tuple[AA, ...], a: AA) -> tuple[AA, ...]:
-            return tup + (a,)
 
-        def folding(state: State[ST, tuple[AA, ...]], state_tup: State[ST, tuple[AA, ...]]) -> State[ST, tuple[AA, ...]]:
-            return state.map2(state_tup, tup_append)
+        def append_ret(ls: list[AA], a: AA) -> list[AA]:
+            copy = ls.copy()
+            copy.append(a)
+            return copy
 
-        return CA(sas).foldl(folding, State.unit(()))
+        return CA(sa_list).foldl(
+            lambda s1, sa: s1.map2(sa, append_ret), State.unit(list[AA]([]))
+        )

@@ -3,29 +3,39 @@
 PyPI **pythonic-fp.fptools** project. Tools to facilitate Functional
 Programming in Python.
 
-## Semantic Versioning
+## Release Versioning
 
-Strict 3 digit semantic versioning adopted 2025-05-19.
+A tiered strict 3 digit semantic versioning will be used
 
-- **MAJOR** version incremented for incompatible API changes
-- **MINOR** version incremented for backward compatible added functionality
-- **PATCH** version incremented for backward compatible bug fixes
+- **MAJOR** incremented for incompatible API changes across Pythonic FP libraries
+- **MINOR** incremented for backward compatible added functionality
+- **PATCH** incremented for backward compatible bug fixes
 
-See [Semantic Versioning 2.0.0](https://semver.org).
+All versions with the same major release numbers should be consistent
+with each other. Note that lower floors will still be used.
 
 ## Releases and Important Milestones
 
+### PyPI release 6.2.0 - 2026-10-TBA
+
+The State Monad's sequence method was changed to use tuples instead
+of lists.
+
+Going forward, consistent releases of the Pythonic FP libraries will
+share a common major release number. Will use caps to keep the major
+release lines from mixing.
+
 ### PyPI release 6.1.0 - 2026-10-10
 
-Put <6 caps on dependencies, all pythonic-fp projects will be bumped
-up to the 6.0.0 release level, if not already at the 6.x.y level.
-The next pythonic-fp release will be 6.0.0 to track these for
+Put `<6` caps on dependencies, all pythonic-fp projects will be bumped
+up to the `6.0.0` release level, if not already at the `6.x.y` level.
+The next pythonic-fp release will be `6.0.0` to track these for
 integration testing.
 
 ### PyPI 6.0.0 - 2026-10-05
 
 Replaced the EitherFlag SBool subclass with TF_Bool in Either monad.
-Updated for the 5.0.0 version pythonic-fp-booleans. A lot of typing
+Updated for the `5.0.0` version pythonic-fp-booleans. A lot of typing
 cleanup done. 
 
 ### PyPI 5.4.0 - 2026-05-16

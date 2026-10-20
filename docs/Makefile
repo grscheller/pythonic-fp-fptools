@@ -1,23 +1,18 @@
 # Makefile for Sphinx documentation
 
-# Last and future releases
-#  - former needs to agree with PyPI
-#  - later needs to agree with pyproject.toml
+# Next four are the source of truth - what is in pyproject.toml
+# should agree with first two and one of the last two.
 PROJECT_NAME = FP Tools Array
 PYPI_NAME = fptools
 RELEASE_VERSION = 6.1.0
 DEVEL_VERSION = 6.2.0
-CUSTOM_VERSION = 0.0.0
 
 SPHINXOPTS ?=
 SPHINXBUILD ?= sphinx-build
 SOURCEDIR = source
 BUILDDIR = build
 
-STATICDIR = source/_static
-TEMPLATEDIR = source/_templates
-
-# Put help first so that "make" without argument is like "make help".
+# Put help first so that "make" without argument is like "make help"
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
@@ -30,49 +25,41 @@ clean_devel:
 clean_release:
 	@rm -rf "$(BUILDDIR)"/release
 
-clean_custom:
-	@rm -rf "$(BUILDDIR)"/custom
+clean_index_html:
+	@rm -f "$(BUILDDIR)"/index.html
 
-clean: clean_devel clean_release clean_custom clean_source
-	@rm -rf $(BUILDDIR)
+clean: clean_devel clean_release clean_source clean_index_html
 	@echo Removed all doc build artifacts.
 
-setup_devel: clean_devel
+setup_devel: clean_devel clean_index_html
 	@./gen_conf.py devel "$(DEVEL_VERSION)" "$(PROJECT_NAME)" "$(PYPI_NAME)" > "$(SOURCEDIR)"/conf.py
+	@echo Generating source/conf.py for devel
 
-setup_release: clean_release
+setup_release: clean_release clean_index_html
 	@./gen_conf.py release "$(RELEASE_VERSION)" "$(PROJECT_NAME)" "$(PYPI_NAME)" > "$(SOURCEDIR)"/conf.py
+	@echo Generating source/conf.py for release
 
-setup_custom: clean_custom
-	@./gen_conf.py custom "$(CUSTOM_VERSION)" "$(PROJECT_NAME)" "$(PYPI_NAME)" > "$(SOURCEDIR)"/conf.py
+$(BUILDDIR)/index.html: index.html.in Makefile
+	@sed -e 's/@RELEASE@/$(RELEASE_VERSION)/g' \
+	     -e 's/@DEVEL@/$(DEVEL_VERSION)/g' \
+	     -e 's/@PROJECTNAME@/$(PROJECT_NAME)/g' \
+	     -e 's/@PYPINAME@/$(PYPI_NAME)/g' \
+	     $< > $@
 
-setup_redo: clean_custom
-	@echo Redoing custom build with a possibly reeditted conf.py
-	@./gen_conf.py redo "" "" ""
+# Build development labeled docs
+devel: setup_devel $(BUILDDIR)/index.html
+	@$(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)"/development $(SPHINXOPTS)
 
-# Build development labeled html docs.
-devel: Makefile setup_devel
-	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/development $(SPHINXOPTS)
+# Build release labeled docs
+release: setup_release $(BUILDDIR)/index.html
+	@$(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)"/release $(SPHINXOPTS)
 
-# Build release labeled html docs.
-release: Makefile setup_release
-	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/release $(SPHINXOPTS)
+# Expose Makefile variables to scripts: make print-RELEASE_VERSION
+print-%:
+	@echo $($*)
 
-# Build custom labeled html docs.
-custom: Makefile setup_custom
-	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/custom $(SPHINXOPTS)
+.PHONY: help setup_devel setup_release devel release
+.PHONY: clean_source clean_devel clean_release clean_index_html clean
 
-# Build HTML docs with previous generated (possibly hand edited) source/conf.py,
-# put results in $(BUILDDIR)/custom.
-redo: Makefile setup_redo
-	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/custom $(SPHINXOPTS)
-
-# Catch-all target: route all unknown targets to Sphinx and save to $(BUILDDIR)/custom.
-# Reuse a previously generated source/conf.py.
-%: Makefile setup_redo
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)"/custom $(SPHINXOPTS)
-
-.PHONY: help Makefile
-.PHONY: setup_devel setup_release setup_custom
-.PHONY: devel release
-.PHONY: clean_source clean_devel clean_release clean_custom clean
+# Due to both builds needing to share the generated source/conf.py
+.NOTPARALLEL:

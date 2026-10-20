@@ -1,4 +1,4 @@
-name: Build and Deploy Furo Themed Sphinx Documentation
+name: Deploy Sphinx last release and devel docs
 
 on:
   push:
@@ -6,8 +6,6 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE: '6.1.0'
-  DEVEL: '6.2.0'
   PYTHON: '3.14'
 
 permissions:
@@ -27,29 +25,35 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      - name: Select Python
-        uses: actions/setup-python@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
-          python-version: '3.14'
+          python-version: ${{ env.PYTHON }}
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
 
-      - name: Install Sphinx Dependencies
+      - name: Install Graphviz
         run: |
-          pip install -r docs/requirements.txt
+          sudo apt-get update
           sudo apt-get install -y graphviz
 
       - name: Build Release Docs
+        env:
+          UV_PROJECT_ENVIRONMENT: .venv-release
         run: |
-          pip install pythonic-fp-fptools
-          docs/gen_conf.py release ${{ env.RELEASE }} "FP Tools" fptools > docs/source/conf.py
-          sphinx-build -M html docs/source docs/build/release
+          RELEASE=$(make -C docs -s --no-print-directory print-RELEASE_VERSION)
+          PROJECT=pythonic-fp-$(make -C docs -s --no-print-directory print-PYPI_NAME)
+          uv sync --only-group docs
+          uv pip install --python .venv-release "${PROJECT}==${RELEASE}"
+          PATH="$PWD/.venv-release/bin:$PATH" make -C docs release
 
       - name: Build Development Docs
+        env:
+          UV_PROJECT_ENVIRONMENT: .venv-devel
         run: |
-          pip install -e .
-          docs/gen_conf.py devel ${{ env.DEVEL }} "FP Tools" fptools > docs/source/conf.py
-          sphinx-build -M html docs/source docs/build/development
+          uv run --no-default-groups --group docs -- make -C docs devel
 
       - name: Setup Pages
         uses: actions/configure-pages@v6

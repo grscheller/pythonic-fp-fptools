@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Pythonic FP @PROJECTNAME@ documentation</title>
+<style>
+/* Palette lifted from Furo's own CSS so this page matches the Sphinx builds. */
+:root {
+  --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+                sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-stack--monospace: "SFMono-Regular", Menlo, Consolas, Monaco,
+                           "Liberation Mono", "Lucida Console", monospace;
+
+  --color-foreground-primary: #000;
+  --color-foreground-secondary: #5a5c63;
+  --color-foreground-muted: #6b6f76;
+  --color-background-primary: #fff;
+  --color-background-secondary: #f8f9fb;
+  --color-background-hover: #efeff4;
+  --color-background-border: #eeebee;
+  --color-brand-primary: #0a4bff;
+  --color-brand-content: #2757dd;
+  --color-brand-visited: #872ee0;
+  --color-card-background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-foreground-primary: #cfd0d0;
+    --color-foreground-secondary: #9ca0a5;
+    --color-foreground-muted: #81868d;
+    --color-background-primary: #131416;
+    --color-background-secondary: #1a1c1e;
+    --color-background-hover: #1e2124;
+    --color-background-border: #303335;
+    --color-brand-primary: #3d94ff;
+    --color-brand-content: #5ca5ff;
+    --color-brand-visited: #b27aeb;
+    --color-card-background: #18181a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--color-background-primary);
+  color: var(--color-foreground-primary);
+  font-family: var(--font-stack);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  margin: 0;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 46em;
+  padding: 3rem 1.5rem 2rem;
+}
+
+h1 {
+  font-size: 2.5em;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  color: var(--color-foreground-secondary);
+  margin: 0 0 2.5rem;
+}
+
+a {
+  color: var(--color-brand-content);
+  text-decoration: underline;
+  text-decoration-color: var(--color-background-border);
+}
+a:hover { text-decoration-color: var(--color-foreground-muted); }
+a:visited { color: var(--color-brand-visited); }
+
+.builds {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  margin-bottom: 2.5rem;
+}
+
+.build {
+  background: var(--color-card-background);
+  border: 1px solid var(--color-background-border);
+  border-radius: 0.4rem;
+  color: inherit;
+  display: block;
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  transition: background 0.15s ease-out, border-color 0.15s ease-out;
+}
+.build:hover, .build:focus-visible {
+  background: var(--color-background-hover);
+  border-color: var(--color-foreground-muted);
+}
+.build:visited { color: inherit; }
+
+.build .name {
+  color: var(--color-brand-primary);
+  display: block;
+  font-size: 1.25em;
+  font-weight: 700;
+}
+
+.build .version {
+  color: var(--color-foreground-primary);
+  display: block;
+  font-family: var(--font-stack--monospace);
+  font-size: 0.8125em;
+  margin-top: 0.3rem;
+}
+
+.build .note {
+  color: var(--color-foreground-secondary);
+  display: block;
+  font-size: 0.875em;
+  margin-top: 0.6rem;
+}
+
+h2 {
+  font-size: 0.8125em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  color: var(--color-foreground-muted);
+}
+
+ul.links {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+ul.links li { margin: 0.3rem 0; }
+
+footer {
+  border-top: 1px solid var(--color-background-border);
+  color: var(--color-foreground-secondary);
+  font-size: 0.875em;
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Pythonic FP @PROJECTNAME@</h1>
+  <p class="lede">
+    A collection of miscellaneous self-contained functions and classes with
+    minimal dependencies.
+  </p>
+
+  <div class="builds">
+    <a class="build" href="release/">
+      <span class="name">Release documentation</span>
+      <span class="version">pythonic-fp-@PYPINAME@ @RELEASE@</span>
+      <span class="note">Documents the version currently published on PyPI.</span>
+    </a>
+    <a class="build" href="development/">
+      <span class="name">Development documentation</span>
+      <span class="version">pythonic-fp-@PYPINAME@ @DEVEL@</span>
+      <span class="note">Built from the tip of the <code>main</code> branch. Unreleased.</span>
+    </a>
+  </div>
+
+  <h2>Elsewhere</h2>
+  <ul class="links">
+    <li>PyPI project
+      <a href="https://pypi.org/project/pythonic-fp-@PYPINAME@/">pythonic-fp-@PYPINAME@</a>.</li>
+    <li>GitHub source code repo
+      <a href="https://github.com/grscheller/pythonic-fp-@PYPINAME@">grscheller/pythonic-fp-@PYPINAME@</a>.</li>
+    <li>Part of the
+      <a href="https://grscheller.github.io/pythonic-fp/projects/@PYPINAME@.html">Pythonic FP</a>
+      family of projects.</li>
+  </ul>
+
+  <footer>Copyright &copy; 2023-2026, Geoffrey R. Scheller</footer>
+</main>
+</body>
+</html>

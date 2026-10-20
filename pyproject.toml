@@ -32,9 +32,12 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "pythonic-fp-booleans>=6",
-  "pythonic-fp-circulararray>=6.4",
-  "pythonic-fp-gadgets>=6",
+  # "pythonic-fp-booleans>=6",
+  # "pythonic-fp-circulararray>=6.4",
+  # "pythonic-fp-gadgets>=6",
+  "pythonic-fp-booleans",
+  "pythonic-fp-circulararray",
+  "pythonic-fp-gadgets",
 ]
 
 [project.urls]

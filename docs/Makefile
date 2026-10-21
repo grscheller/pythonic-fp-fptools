@@ -2,7 +2,7 @@
 
 # Next four are the source of truth - what is in pyproject.toml
 # should agree with first two and one of the last two.
-PROJECT_NAME = FP Tools Array
+PROJECT_NAME = FPTools
 PYPI_NAME = fptools
 RELEASE_VERSION = 6.1.0
 DEVEL_VERSION = 6.2.0

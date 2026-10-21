@@ -153,8 +153,7 @@ footer {
 <main>
   <h1>Pythonic FP @PROJECTNAME@</h1>
   <p class="lede">
-    A collection of miscellaneous self-contained functions and classes with
-    minimal dependencies.
+    Functional programming tools.
   </p>
 
   <div class="builds">

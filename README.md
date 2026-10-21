@@ -6,13 +6,13 @@ endeavoring to be Pythonic.
 PyPI project
 [pythonic-fp.fptools](https://pypi.org/project/pythonic-fp-fptools).
 Part of the
-[pythonic-fp](https://grscheller.github.io/pythonic-fp/)
+[pythonic-fp](https://grscheller.github.io/pythonic-fp)
 PyPI projects.
 
 ## Documentation
 
 Documentation and other links for this project are hosted on
-[GitHub Pages](https://grscheller.github.io/pythonic-fp/projects/fptools.html).
+[GitHub Pages](https://grscheller.github.io/pythonic-fp-fptools).
 
 - Functions as first class objects
 - Lazy (non-strict) function evaluation
@@ -22,7 +22,10 @@ Documentation and other links for this project are hosted on
 - State monad implementation
   - pure FP handling of state (the state monad)
   - Classic FP implementation
-    - the monad encapsulates a state transformation, not a "state"
+    - the monad encapsulates a state transformation
+      - not a "state"
+      - not a "(value, state)" pair
+      - a "state -> (value, state)"
 
 ## Copyright and License
 

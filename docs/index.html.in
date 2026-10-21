@@ -169,14 +169,14 @@ footer {
     </a>
   </div>
 
-  <h2>Elsewhere</h2>
+  <h2>Project Links</h2>
   <ul class="links">
     <li>PyPI project
       <a href="https://pypi.org/project/pythonic-fp-@PYPINAME@/">pythonic-fp-@PYPINAME@</a>.</li>
     <li>GitHub source code repo
       <a href="https://github.com/grscheller/pythonic-fp-@PYPINAME@">grscheller/pythonic-fp-@PYPINAME@</a>.</li>
     <li>Part of the
-      <a href="https://grscheller.github.io/pythonic-fp/projects/@PYPINAME@.html">Pythonic FP</a>
+      <a href="https://grscheller.github.io/pythonic-fp">Pythonic FP</a>
       family of projects.</li>
   </ul>
 

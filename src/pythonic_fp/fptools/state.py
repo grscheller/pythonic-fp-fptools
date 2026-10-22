@@ -183,7 +183,7 @@ class State[S, A]:
         .. admonition:: unit
 
             Create a State whose run action returns the given
-            constant b  and propagate the present state.
+            constant b and propagate the present state.
 
             :param b: Value the new State's run action will return.
             :returns: A new State[ST, B] from a value b: B.
@@ -252,33 +252,25 @@ class State[S, A]:
         return State.get().bind(lambda a: State.put(f(a)))
 
     @staticmethod
-    def sequence[ST, AA](sa_list: list[State[ST, AA]]) -> State[ST, list[AA]]:
+    def sequence[ST, AA](sas: tuple[State[ST, AA], ...]) -> State[ST, tuple[AA, ...]]:
         """
-        .. admonition:: sequence a list
+        .. admonition:: sequence a tuple of actions
 
-            Combine a list of state monads into a state monad whose
-            run action returns a list of the values returned by each
+            Combine a tuple of state monads into a state monad whose
+            run action returns a tuple of the values returned by each
             run action from the original list.
 
-            :param sas: A list of state monads all of type ``State[ST, AA]``.
-            :returns: A state monad whose run action produces a list of
-                      the values produced by the list of State actions
-                      provided to the method.
-            :rtype: State[ST, list[AA]]
-
-            .. note::
-
-                The run action evaluates the run actions of the list
-                front to back. The state is also propagated, not
-                necessarily unchanged, front to back.
+            :param sas: A tuple of state monads all of type ``State[ST, AA]``.
+            :returns: A state monad whose run action produces a tuple of
+                      the values produced by the provided tuple of State
+                      actions front to back.
+            :rtype: State[ST, tuple[AA, ...]]
 
         """
 
-        def append_ret(ls: list[AA], a: AA) -> list[AA]:
-            copy = ls.copy()
-            copy.append(a)
-            return copy
+        def append(tup: tuple[AA, ...], a: AA) -> tuple[AA, ...]:
+            return tup + (a,)
 
-        return CA(sa_list).foldl(
-            lambda s1, sa: s1.map2(sa, append_ret), State.unit(list[AA]([]))
+        return CA(sas).foldl(
+            lambda s1, sa: s1.map2(sa, append), State.unit(tuple[AA](()))
         )

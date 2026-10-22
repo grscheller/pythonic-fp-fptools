@@ -17,7 +17,7 @@ from typing import assert_type
 from pythonic_fp.fptools.state import State
 
 
-class Test_simple:
+class Test_Naive:
     def test_simple_counter(self) -> None:
         sc = State(lambda s: (s + 1, s + 1))
 
@@ -126,46 +126,43 @@ class Test_simple:
         assert countdown.eval(6) == 0
         assert countdown.eval(4) == 5
 
-    def test_modify(self) -> None:
-        def square(n1: int) -> int:
-            return n1 * n1
 
-        count: State[int, int] = State(lambda s: (s + 1, s + 1))
+class TestBindAndThen:
+    def test_bind_threads_the_value(self) -> None:
+        emit: State[int, int] = State(lambda s: (s, s + 1))
 
-        def cnt1(a: int) -> State[int, int]:
-            return State(lambda a: (a + 1, a + 1))
+        def doubled(a: int) -> State[int, int]:
+            return State(lambda s: (a * 2, s))
 
-        def cnt2(a: int) -> State[int, int]:
-            return State(lambda a: (a + 2, a + 2))
+        assert emit.bind(doubled).run(10) == (20, 11)
 
-        sqr_st = State.modify(square)
+    def test_then_discards_value_keeps_state(self) -> None:
+        emit: State[int, int] = State(lambda s: (s, s + 1))
+        assert emit.then(emit).run(10) == (11, 12)
 
-        assert count.run(41) == (42, 42)
-        assert count.eval(41) == 42
-        assert count.run(0) == (1, 1)
-        assert count.bind(cnt2).run(0) == (3, 3)
+    def test_bind_after_then_consumes_new_value(self) -> None:
+        def square(n: int) -> int:
+            return n * n
 
-        do_it = count.bind(cnt2).bind(cnt1).then(sqr_st).bind(cnt2).then(sqr_st).bind(cnt1)
+        def tag(a: int) -> State[int, str]:
+            return State(lambda s: (f'state={a}', s))
 
-        assert_type(do_it, State[int, int])
-        assert_type(count, State[int, int])
-        assert_type(count.bind(cnt2), State[int, int])
-        assert_type(count.bind(cnt2).bind(cnt1).then(sqr_st), State[int, tuple[()]])
-        assert_type(count.bind(cnt2).bind(cnt1).then(sqr_st).bind(cnt2), State[int, int])
+        read: State[int, int] = State.get()
 
-        assert do_it.eval(0) == 325
-        assert do_it.eval(-1) == 122
+        chain = State.modify(square).then(read).bind(tag)
+        assert_type(chain, State[int, str])
+        assert chain.run(7) == ('state=49', 49)
 
-    def test_get(self) -> None:
-        get_sa: State[object, object] = State.get()
-        t = get_sa.run('foo')
-        assert (t[0], t[1]) == ('foo', 'foo')
+    def test_then_equals_bind_discarding(self) -> None:
+        def square(n: int) -> int:
+            return n * n
 
-    def test_put(self) -> None:
-        put_sa: State[object, tuple[()]] = State.put('bar')
-        t = put_sa.run('foo')
-        assert (t[0], t[1]) == ((), 'bar')
+        emit: State[int, int] = State(lambda s: (s, s + 1))
+        sqr = State.modify(square)
+        assert emit.then(sqr).run(3) == emit.bind(lambda _: sqr).run(3)
 
+
+class Test_Other_Methods:
     def test_map(self) -> None:
         sa0: State[int, int] = State(lambda s: (1, s))
         sa1 = sa0.map(lambda n: n * 4)
@@ -184,12 +181,64 @@ class Test_simple:
         n, s = sa42.run(0)
         assert (n, s) == (42, 0)
 
-    def test_sequence_tuple(self) -> None:
-        sa = State(lambda s: (str(s), s + 1))
-        sa_list = [sa, sa, sa, sa]
-        sat: State[list[str, ...], int] = State.sequence(sa_list)
-        ls, ss = sat.run(0)
-        assert ss == 4
-        assert ls == ['0', '1', '2', '3']
 
-        assert sat.eval(39) == ['39', '40', '41','42']
+class Test_Static_Methods:
+    def test_unit(self) -> None:
+        foo: State[int, str] = State.unit('Forty-Two')
+        assert foo.run(7) == ('Forty-Two', 7)
+
+    def test_get(self) -> None:
+        get_sa: State[object, object] = State.get()
+        t = get_sa.run('foo')
+        assert (t[0], t[1]) == ('foo', 'foo')
+
+    def test_put(self) -> None:
+        put_sa: State[object, tuple[()]] = State.put('bar')
+        t = put_sa.run('foo')
+        assert (t[0], t[1]) == ((), 'bar')
+
+    def test_modify_transforms_state_yields_unit(self) -> None:
+        def square(n: int) -> int:
+            return n * n
+
+        sqr = State.modify(square)
+        assert_type(sqr, State[int, tuple[()]])
+        assert sqr.run(5) == ((), 25)
+        assert sqr.run(0) == ((), 0)
+        assert sqr.eval(5) == ()
+
+    def test_modify_ignores_incoming_value(self) -> None:
+        def square(n: int) -> int:
+            return n * n
+
+        produce: State[int, str] = State(lambda s: ('ignored', s))
+        assert produce.then(State.modify(square)).run(5) == ((), 25)
+
+    def test_modify_composes(self) -> None:
+        def square(n: int) -> int:
+            return n * n
+
+        def incr(n: int) -> int:
+            return n + 1
+
+        square_then_incr = State.modify(square).then(State.modify(incr))
+        combined = State.modify(lambda s: incr(square(s)))
+        assert square_then_incr.run(5) == combined.run(5) == ((), 26)
+
+    def test_modify_vs_put(self) -> None:
+        def square(n: int) -> int:
+            return n * n
+
+        assert State.put(99).run(5) == ((), 99)
+        assert State.modify(square).run(5) == ((), 25)
+
+    def test_sequence(self) -> None:
+        sa = State(lambda s: (str(s), s + 1))
+        sas = (sa, sa, sa, sa)
+        sat: State[int, tuple[str, ...]] = State.sequence(sas)
+
+        tup, ss = sat.run(0)
+        assert ss == 4
+        assert tup == ('0', '1', '2', '3')
+
+        assert sat.eval(39) == ('39', '40', '41', '42')

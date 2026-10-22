@@ -116,7 +116,7 @@ class State[S, A]:
             a, s = self.run(s)
             return g(a).run(s)
 
-        return State(compose)
+        return State[S, B](compose)
 
     def then[B](self, sb: State[S, B]) -> State[S, B]:
         """
@@ -189,7 +189,7 @@ class State[S, A]:
             :returns: A new State[ST, B] from a value b: B.
 
         """
-        return State(lambda s: (b, s))
+        return State[ST, B](lambda s: (b, s))
 
     @staticmethod
     def get[ST]() -> State[ST, ST]:
@@ -228,7 +228,7 @@ class State[S, A]:
             :rtype: State[ST, tuple[()]]
 
         """
-        return State(lambda _: ((), s))
+        return State[ST, tuple[()]](lambda _: ((), s))
 
     @staticmethod
     def modify[ST](f: Callable[[ST], ST]) -> State[ST, tuple[()]]:

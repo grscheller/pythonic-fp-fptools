@@ -24,6 +24,7 @@ from ._recoverable import RECOVERABLE
 type _Sentinel = Sentinel[str]
 _sentinel: Final[_Sentinel] = Sentinel('_MayBe_sentinel')
 
+
 @final
 class MayBe[D]:
     """
@@ -72,14 +73,67 @@ class MayBe[D]:
             - should be safe, the MayBe holds a reference to the item.
             - Lazily calculates hash value, then caches it.
 
+            .. warning::
+
+                When the contained item is unhashable, such as a list,
+                the hash falls back to the item's identity. Two MayBe
+                instances holding equal but distinct unhashable items
+                will then compare equal while hashing differently.
+
+                .. tip::
+
+                    Safer if MayBe instances are used as dict keys or
+                    set members when the contained items are hashable.
+
+                    Care should be taken if the contained item's
+                    identity is truly what is important.
+
         """
         if self._hash is None:
             try:
-                self._hash = hash((self._data, _sentinel))
+                self._hash = hash((self._data, _Sentinel))
             except TypeError:
-                self._hash = hash((id(self._data), _sentinel))
+                self._hash = hash((id(self._data), _Sentinel))
 
         return self._hash
+
+    def __eq__(self, other: object) -> bool:
+        """
+        .. admonition:: equality comparison
+
+            Compare MayBe instance to another object. Compare first
+            by identity, then value.
+
+            :returns: True only if other object is a MayBe with
+                      a corresponding item, or both empty.
+
+        """
+        if not isinstance(other, type(self)):
+            return False
+        if self._data is other._data:
+            return True
+        return self._data == other._data
+
+    def __getstate__(self) -> dict[str, object]:
+        """
+        .. admonition:: getstate
+
+           Don't carry the hash value across pickling and spawn-based
+           multiprocessing (the default on Windows and Mac-OS).
+
+        """
+        return {'_data': self._data}
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        """
+        .. admonition:: setstate
+
+           Don't carry the hash value across pickling and spawn-based
+           multiprocessing (the default on Windows and Mac-OS).
+
+        """
+        self._data = cast(D, state['_data'])
+        self._hash = None
 
     def __bool__(self) -> bool:
         """
@@ -100,22 +154,6 @@ class MayBe[D]:
 
         """
         return 1 if self else 0
-
-    def __eq__(self, other: object) -> bool:
-        """
-        .. admonition:: equality comparison
-
-            Compare MayBe instance to another object. Compare first
-            by identity, then value.
-
-            :returns: True only if other object is a MayBe with
-                      a corresponding item, or both empty.
-        """
-        if not isinstance(other, type(self)):
-            return False
-        if self._data is other._data:
-            return True
-        return self._data == other._data
 
     def __iter__(self) -> Iterator[D]:
         """
@@ -261,7 +299,7 @@ class MayBe[D]:
 
         """
         if self:
-            return f(cast(D, self._data)) 
+            return f(cast(D, self._data))
 
         return cast(MayBe[U], self)
 
@@ -301,9 +339,7 @@ class MayBe[D]:
         return cast(MayBe[U], self)
 
     @staticmethod
-    def sequence[U](
-            iterable_mb_u: Iterable[MayBe[U]]
-    ) -> MayBe[Iterable[U]]:
+    def sequence[U](iterable_mb_u: Iterable[MayBe[U]]) -> MayBe[Iterable[U]]:
         """
         .. admonition:: MayBe.sequence
 

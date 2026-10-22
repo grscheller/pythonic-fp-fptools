@@ -136,30 +136,6 @@ class Either[L, R]:
                 self._hash = hash((id(self._value), self._side))
         return self._hash
 
-    def __bool__(self) -> bool:
-        """
-        .. admonition:: bool
-
-            - left Either instances are truthy
-            - right Either instances are falsy
-
-            :returns: ``True`` if ``Either`` is a left,
-                      ``False`` if a right.
-
-        """
-        return self._side is LEFT
-
-    def __len__(self) -> int:
-        """
-        .. admonition:: len
-
-            An Either always contains just one value.
-
-            :returns: 1
-
-        """
-        return 1
-
     def __eq__(self, other: object) -> bool:
         """
         .. admonition:: equality comparison
@@ -194,6 +170,52 @@ class Either[L, R]:
             return (self._value is other._value) or (self._value == other._value)
 
         return False
+
+    def __getstate__(self) -> dict[str, object]:
+        """
+        .. admonition:: getstate
+
+           Don't carry the hash value across pickling and spawn-based
+           multiprocessing (the default on Windows and Mac-OS).
+
+        """
+        return {'_side': self._side, '_value': self._value}
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        """
+        .. admonition:: setstate
+
+           Don't carry the hash value across pickling and spawn-based
+           multiprocessing (the default on Windows and Mac-OS).
+
+        """
+        self._side = cast(TF_Bool, state['_side'])
+        self._value = cast(L | R, state['_value'])
+        self._hash = None
+
+    def __bool__(self) -> bool:
+        """
+        .. admonition:: bool
+
+            - left Either instances are truthy
+            - right Either instances are falsy
+
+            :returns: ``True`` if ``Either`` is a left,
+                      ``False`` if a right.
+
+        """
+        return self._side is LEFT
+
+    def __len__(self) -> int:
+        """
+        .. admonition:: len
+
+            An Either always contains just one value.
+
+            :returns: 1
+
+        """
+        return 1
 
     def __iter__(self) -> Iterator[L]:
         """

@@ -34,7 +34,7 @@ class MayBe[D]:
 
         - immutable semantics
         - can store any item of any type, including ``None``
-        - hashable
+        - hashable when contents are hashable
 
     """
 

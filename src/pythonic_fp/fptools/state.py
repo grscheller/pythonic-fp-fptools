@@ -50,7 +50,7 @@ class State[S, A]:
                     - supplying an initial state
                     - returning the resulting value
 
-                Static members:
+                Static methods:
 
                 - Method ``unit`` creates a State instance whose
                   run action returns the supplied constant value.
@@ -60,9 +60,9 @@ class State[S, A]:
                   the old state and swaps in a new one.
                 - Method ``modify`` creates a State instance which
                   modifies the previous state via a function.
-                - Method ``sequence`` combine a list of State instances
-                  into a ``State`` instance whose run action returns
-                  the ``list`` of generated values.
+                - Method ``sequence`` combines a ``tuple`` of State
+                  instances into a ``State`` instance whose run action
+                  returns the ``tuple`` of generated values.
 
     """
 

@@ -12,43 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-.. admonition:: The Either monad
-
-    Data structure semantically containing either
-    a "left" value or a "right" value, but not both.
-
-    - Module implements a left biased either monad
-
-      - Left values is intended for "expected" results.
-      - Right value gives information on the "unexpected"
-        perhaps "exceptional" result.
-
-    - left and right values can be the same or different types
-    - in a boolean context
-
-      - left values are truthy
-      - right values are falsy
-
-    .. tip::
-
-        Happy path without exceptions.
-
-        Instead of catching an exception whenever the "happy path"
-        fails, process the left values then deal with or propagate
-        right values.
-
-    .. tip::
-
-        Users of this module can avoid explicitly importing sentinel
-        values LEFT and RIGHT by the static Either.left and Either.right
-        class methods.
-
-        - left_either: Either[int, str] = Either.left(42)
-        - right_either: Either[int, str] = Either.right('Not forty-two')
-
-"""
-
 from collections.abc import Callable, Iterable, Iterator
 from typing import Final, cast, final, overload
 
@@ -83,13 +46,35 @@ RIGHT: Final[F_Bool] = F_Bool()
 @final
 class Either[L, R]:
     """
-    .. admonition:: either monad
+    .. admonition:: left biased either monad
 
-        Left biased Either monad.
+        Data structure semantically containing either
+        a "left" value or a "right" value, but not both.
 
-        - immutable
-        - contains either a "left" or a "right" item, but not both
-        - hashable
+        - immutable, hashable when contents are hashable
+        - Left values is intended for "expected" results.
+        - Right value gives information on the "unexpected"
+          perhaps "exceptional" result.
+        - left and right values can be the same or different types
+        - in a boolean context
+
+            - left values are truthy
+            - right values are falsy
+
+        .. tip::
+
+            Happy path without exceptions.
+
+            Instead of catching an exception whenever the "happy path"
+            fails, deal with or propagate right values.
+
+        .. tip::
+
+            Avoid explicitly importing values ``LEFT`` and ``RIGHT`` by
+            using the static Either.left and Either.right class methods.
+
+            - left_either: Either[int, str] = Either.left(42)
+            - right_either: Either[int, str] = Either.right('Not forty-two')
 
     """
 

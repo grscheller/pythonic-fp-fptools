@@ -157,7 +157,7 @@ class MayBe[D]:
         """
         .. admonition:: iterate
 
-           :yields: The contained item if non-empty.
+           :yields: The contained item.
 
         """
         if self:
@@ -167,14 +167,16 @@ class MayBe[D]:
         """
         .. admonition:: repr string
 
-            Return the strings
-
-            - 'MayBe()' if empty
-            - 'MayBe(repr_item)' if not empty
-
-            Where ``repr_item = repr(item)``.
-
             :returns: A string to reproduce the MayBe.
+
+            .. note::
+
+                Return the strings
+
+                - 'MayBe()' if empty
+                - 'MayBe(repr_item)' if not empty
+
+                Where ``repr_item = repr(item)``.
 
         """
         if self:
@@ -185,14 +187,16 @@ class MayBe[D]:
         """
         .. admonition:: user string
 
-            Return the strings
-
-            - 'MayBe(str_item)' when not empty
-            - 'MayBe()' when empty
-
-            Where ``str_item = str(item)``.
-
             :returns: A string meaningful to an end user.
+
+            .. note::
+
+                Return the strings
+
+                - 'MayBe(str_item)' when not empty
+                - 'MayBe()' when empty
+
+                Where ``str_item = str(item)``.
 
         """
         if self:

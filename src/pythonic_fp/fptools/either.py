@@ -71,7 +71,7 @@ class Either[L, R]:
         .. tip::
 
             Avoid explicitly importing values ``LEFT`` and ``RIGHT`` by
-            using the static Either.left and Either.right class methods.
+            using the static Either.left and Either.right static methods.
 
             - left_either: Either[int, str] = Either.left(42)
             - right_either: Either[int, str] = Either.right('Not forty-two')
@@ -221,14 +221,16 @@ class Either[L, R]:
         """
         .. admonition:: representation string
 
-            Return the strings
-
-            - 'Either(repr_value, LEFT)' if a left
-            - 'Either(repr_value, RIGHT)' if if a right
-
-            Where ``repr_value = repr(value)``.
-
             :returns: A string to reproduce the Either.
+
+            .. note::
+
+                Return the strings
+
+                - 'Either(repr_value, LEFT)' if a left
+                - 'Either(repr_value, RIGHT)' if if a right
+
+                Where ``repr_value = repr(value)``.
 
         """
         if self:
@@ -239,14 +241,16 @@ class Either[L, R]:
         """
         .. admonition:: user string
 
-            Return the strings
-
-            - 'Either(str_value)' when a left
-            - 'Either(str_value, RIGHT)' when a right
-
-            Where ``str_value = str(value)``.
-
             :returns: A string meaningful to an end user.
+
+            .. note::
+
+                Return the strings
+
+                - 'Either(str_value)' when a left
+                - 'Either(str_value, RIGHT)' when a right
+
+                Where ``str_value = str(value)``.
 
         """
         if self:

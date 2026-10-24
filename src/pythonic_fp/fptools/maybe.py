@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__all__ = ['MayBe']
-
 from collections.abc import Callable, Iterable, Iterator
 from typing import Final, cast, final, overload
 
 from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
 from ._recoverable import RECOVERABLE
+
+__all__ = ['MayBe']
 
 type _Sentinel = Sentinel[str]
 _sentinel: Final[_Sentinel] = Sentinel('_MayBe_sentinel')
@@ -56,46 +56,44 @@ class MayBe[D]:
 
             .. important::
 
-                - A ``MayBe`` is immutable once initialized.
-                - MayBe() is not a singleton.
+                - a ``MayBe`` is immutable once initialized
+                - MayBe() is not a singleton
 
         """
         self._data: D | _Sentinel = data
-        self._hash: int | None = None
+        self._hash: int | None | _Sentinel = _sentinel
 
     def __hash__(self) -> int:
         """
         .. admonition:: hash
 
             If contained item hashable, use its hash value in
-            the hash calculation, otherwise use item's identity.
+            the hash calculation, otherwise the MayBe will be
+            unhashable.
 
-            - should be safe, the MayBe holds a reference to the item.
-            - Lazily calculates hash value, then caches it.
+            - should be safe, the MayBe holds a reference to the item
+            - lazily calculates hash value, then caches it
+            - if contained value unhashable, MayBe will be unhashable
 
             .. warning::
 
-                When the contained item is unhashable, such as a list,
-                the hash falls back to the item's identity. Two MayBe
-                instances holding equal but distinct unhashable items
-                will then compare equal while hashing differently.
+                Use MayBe instances as dict keys or set members
+                only when the contained items are hashable.
 
-                .. tip::
+                .. note::
 
-                    Safer if MayBe instances are used as dict keys or
-                    set members when the contained items are hashable.
-
-                    Care should be taken if the contained item's
-                    identity is truly what is important.
+                    Python's data model requires that objects comparing
+                    equal have the same hash value. MayBe equality
+                    delegates to the contained item's ``__eq__``, so this
+                    holds whenever the contained item is hashable.
 
         """
-        if self._hash is None:
+        if self._hash is _sentinel:
             try:
                 self._hash = hash((self._data, _Sentinel))
             except TypeError:
-                self._hash = hash((id(self._data), _Sentinel))
-
-        return self._hash
+                self._hash = None
+        return cast(int, self._hash)
 
     def __eq__(self, other: object) -> bool:
         """
@@ -122,7 +120,7 @@ class MayBe[D]:
            multiprocessing (the default on Windows and Mac-OS).
 
         """
-        return {'_data': self._data}
+        return {'_data': self._data, '_hash': _sentinel}
 
     def __setstate__(self, state: dict[str, object]) -> None:
         """
@@ -133,7 +131,7 @@ class MayBe[D]:
 
         """
         self._data = cast(D, state['_data'])
-        self._hash = None
+        self._hash = _sentinel
 
     def __bool__(self) -> bool:
         """

@@ -53,12 +53,15 @@ from collections.abc import Callable, Iterable, Iterator
 from typing import Final, cast, final, overload
 
 from pythonic_fp.booleans.truthy_falsy import F_Bool, T_Bool, TF_Bool
+from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
 from ._recoverable import RECOVERABLE
 from .maybe import MayBe
 
-__all__ = ['Either', 'LEFT', 'RIGHT']
+type _Sentinel = Sentinel[str]
+_sentinel: Final[_Sentinel] = Sentinel('_MayBe_sentinel')
 
+__all__ = ['Either', 'LEFT', 'RIGHT']
 
 LEFT: Final[T_Bool] = T_Bool()
 """
@@ -114,7 +117,7 @@ class Either[L, R]:
         self._side: TF_Bool
         self._value = value
         self._side = side
-        self._hash: int | None = None
+        self._hash: int | None | _Sentinel = _sentinel
 
     def __hash__(self) -> int:
         """
@@ -129,12 +132,12 @@ class Either[L, R]:
             - The hash also depends if the Either is a left or right.
 
         """
-        if self._hash is None:
+        if self._hash is _sentinel:
             try:
                 self._hash = hash((self._value, self._side))
             except TypeError:
-                self._hash = hash((id(self._value), self._side))
-        return self._hash
+                self._hash = None
+        return cast(int, self._hash)
 
     def __eq__(self, other: object) -> bool:
         """

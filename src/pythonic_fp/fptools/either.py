@@ -22,7 +22,7 @@ from ._recoverable import RECOVERABLE
 from .maybe import MayBe
 
 type _Sentinel = Sentinel[str]
-_sentinel: Final[_Sentinel] = Sentinel('_MayBe_sentinel')
+_sentinel: Final[_Sentinel] = Sentinel('_Either_sentinel')
 
 __all__ = ['Either', 'LEFT', 'RIGHT']
 
@@ -102,26 +102,34 @@ class Either[L, R]:
         self._side: TF_Bool
         self._value = value
         self._side = side
-        self._hash: int | None | _Sentinel = _sentinel
+        self._hash: int | _Sentinel = _sentinel
 
     def __hash__(self) -> int:
         """
         .. admonition:: hash
 
-            If contained value hashable, use its hash value in
-            the hash calculation, otherwise use the value's identity.
+            :returns: The integer hash for the Either instance.
+            :raises TypeError: When contained value is not hashable. 
 
-            - Should be safe, the ``Either`` holds
-              a reference to the value.
-            - Lazily calculates hash value, then caches it.
-            - The hash also depends if the Either is a left or right.
+            .. note::
+
+                If contained value hashable, use its hash value in
+                the hash calculation, otherwise the Either will be
+                unhashable.
+
+                - should be safe, the Either holds a reference to its value
+                - only calculates its hash value when necessary
+                - if contained value unhashable, Either will be unhashable
+
+                .. tip::
+
+                    Use Either instances as dict keys or set members
+                    only when both left and right value types are
+                    hashable types.
 
         """
         if self._hash is _sentinel:
-            try:
-                self._hash = hash((self._value, self._side))
-            except TypeError:
-                self._hash = None
+            self._hash = hash((self._value, self._side))
         return cast(int, self._hash)
 
     def __eq__(self, other: object) -> bool:

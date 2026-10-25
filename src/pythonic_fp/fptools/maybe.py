@@ -61,38 +61,33 @@ class MayBe[D]:
 
         """
         self._data: D | _Sentinel = data
-        self._hash: int | None | _Sentinel = _sentinel
+        self._hash: int | _Sentinel = _sentinel
 
     def __hash__(self) -> int:
         """
         .. admonition:: hash
 
-            If contained item hashable, use its hash value in
-            the hash calculation, otherwise the MayBe will be
-            unhashable.
+            :returns: The integer hash for the MayBe instance.
+            :raises TypeError: When contained object is not hashable. 
 
-            - should be safe, the MayBe holds a reference to the item
-            - lazily calculates hash value, then caches it
-            - if contained value unhashable, MayBe will be unhashable
+            .. note::
 
-            .. warning::
+                If contained item hashable, use its hash value in
+                the hash calculation, otherwise the MayBe will be
+                unhashable.
 
-                Use MayBe instances as dict keys or set members
-                only when the contained items are hashable.
+                - should be safe, the MayBe holds a reference to the item
+                - only calculates its hash value when necessary
+                - if contained value unhashable, MayBe will be unhashable
 
-                .. note::
+                .. tip::
 
-                    Python's data model requires that objects comparing
-                    equal have the same hash value. MayBe equality
-                    delegates to the contained item's ``__eq__``, so this
-                    holds whenever the contained item is hashable.
+                    Use MayBe instances as dict keys or set members
+                    only when the type of contained data is hashable.
 
         """
         if self._hash is _sentinel:
-            try:
-                self._hash = hash((self._data, _Sentinel))
-            except TypeError:
-                self._hash = None
+            self._hash = hash((self._data,))
         return cast(int, self._hash)
 
     def __eq__(self, other: object) -> bool:

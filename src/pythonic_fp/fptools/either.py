@@ -187,7 +187,7 @@ class Either[L, R]:
         """
         self._side = cast(TF_Bool, state['_side'])
         self._value = cast(L | R, state['_value'])
-        self._hash = None
+        self._hash = _sentinel
 
     def __bool__(self) -> bool:
         """

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Pickle tests for the flavored Sentinel."""
+"""Pickle tests for MayBe."""
 
 import copy
 import pickle

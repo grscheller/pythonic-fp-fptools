@@ -19,6 +19,8 @@ import os
 import pickle
 import subprocess
 import sys
+from subprocess import CompletedProcess
+from typing import Any
 
 import pytest
 
@@ -33,7 +35,14 @@ mb_tuple = MayBe((42, 'Forty-Two'))
 mb_notuple_no = MayBe(((mb_no_tuple, 0), 'no'))
 mb_tuple_yes = MayBe(((mb_tuple, 0), 'yes'))
 
-maybe_test_cases = (mb_no_str, mb_str, mb_no_tuple, mb_tuple, mb_notuple_no, mb_tuple_yes)
+maybe_test_cases = (
+    mb_no_str,
+    mb_str,
+    mb_no_tuple,
+    mb_tuple,
+    mb_notuple_no,
+    mb_tuple_yes,
+)
 
 
 class TestMayBePickle:
@@ -85,7 +94,6 @@ class TestMayBePickle:
             hash(restored)
 
 
-
 _DUMP = """
 import pickle, sys
 from pythonic_fp.fptools.maybe import MayBe
@@ -106,7 +114,7 @@ print('ok')
 """
 
 
-def _run(script, seed, data=None):
+def _run(script: str, seed: str, data: Any=None) -> CompletedProcess[Any]:
     env = dict(os.environ, PYTHONHASHSEED=seed)
     return subprocess.run(
         [sys.executable, '-c', script],

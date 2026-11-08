@@ -18,8 +18,8 @@ from typing import Final, cast, final, overload
 from pythonic_fp.booleans.truthy_falsy import F_Bool, T_Bool, TF_Bool
 from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
-from ._recoverable import RECOVERABLE
 from .maybe import MayBe
+from .recoverable import RECOVERABLE
 
 type _Sentinel = Sentinel[str]
 _sentinel: Final[_Sentinel] = Sentinel('_Either_sentinel')

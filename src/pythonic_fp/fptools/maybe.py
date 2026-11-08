@@ -17,7 +17,7 @@ from typing import Final, cast, final, overload
 
 from pythonic_fp.gadgets.sentinels.flavored import Sentinel
 
-from ._recoverable import RECOVERABLE
+from .recoverable import RECOVERABLE
 
 __all__ = ['MayBe']
 

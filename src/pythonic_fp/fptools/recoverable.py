@@ -14,6 +14,8 @@
 
 from typing import Final
 
+__all__ = ['RECOVERABLE']
+
 RECOVERABLE: Final[tuple[type[Exception], ...]] = (
     LookupError,        # KeyError, IndexError
     ValueError,         # includes UnicodeError

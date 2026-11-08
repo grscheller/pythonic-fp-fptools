@@ -23,6 +23,7 @@ def add_gt_42(x: int, y: int) -> Either[int, str]:
     else:
         return Either.right('too small')
 
+class Test_either_repr:
     def test_Either_str(self) -> None:
         assert str(Either[int, str](10, LEFT)) == '< 10 | >'
         assert str(add_gt_42(10, -4)) == '< | too small >'

@@ -26,7 +26,7 @@
 from collections.abc import Callable
 from typing import Any, cast
 
-from ._recoverable import RECOVERABLE
+from .recoverable import RECOVERABLE
 from .either import LEFT, RIGHT, Either
 from .function import sequenced
 from .maybe import MayBe

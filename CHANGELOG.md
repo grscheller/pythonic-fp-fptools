@@ -11,8 +11,9 @@ A tiered strict 3 digit semantic versioning will be used
 - **MINOR** incremented for backward compatible added functionality
 - **PATCH** incremented for backward compatible bug fixes
 
-All versions with the same major release numbers should be consistent
-with each other. Note that lower floors will still be used.
+All versions with the same major release numbers should be
+consistent with each other. Note that lower floors will still
+be used.
 
 ## Releases and Important Milestones
 

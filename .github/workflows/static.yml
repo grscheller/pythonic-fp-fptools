@@ -40,15 +40,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y graphviz
 
-      - name: Build Release Docs
+      - name: Build Current Rolling Release Docs
         env:
-          UV_PROJECT_ENVIRONMENT: .venv-release
+          UV_PROJECT_ENVIRONMENT: .venv-curr-release
         run: |
-          RELEASE=$(make -C docs -s --no-print-directory print-RELEASE_VERSION)
+          RELEASE=$(make -C docs -s --no-print-directory print-CURR_ROLLING_RELEASE_VERSION)
           PROJECT=pythonic-fp-$(make -C docs -s --no-print-directory print-PYPI_NAME)
           uv sync --only-group docs
-          uv pip install --python .venv-release "${PROJECT}==${RELEASE}"
-          PATH="$PWD/.venv-release/bin:$PATH" make -C docs release
+          uv pip install --python .venv-curr-release "${PROJECT}==${RELEASE}"
+          PATH="$PWD/.venv-curr-release/bin:$PATH" make -C docs curr_release
+
+      - name: Build Previous Rolling Release Docs
+        env:
+          UV_PROJECT_ENVIRONMENT: .venv-prev-release
+        run: |
+          RELEASE=$(make -C docs -s --no-print-directory print-PREV_ROLLING_RELEASE_VERSION)
+          PROJECT=pythonic-fp-$(make -C docs -s --no-print-directory print-PYPI_NAME)
+          uv sync --only-group docs
+          uv pip install --python .venv-prev-release "${PROJECT}==${RELEASE}"
+          PATH="$PWD/.venv-prev-release/bin:$PATH" make -C docs prev_release
 
       - name: Build Development Docs
         env:

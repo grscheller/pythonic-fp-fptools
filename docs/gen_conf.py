@@ -16,18 +16,22 @@ if num_args == 4:
     project = project_prefix + ' - ' + project_name
     pypi_project_repo = pypi_prefix + '-' + pypi_name
     project_url_rst = f'`{project} <https://pypi.org/project/{pypi_project_repo}/>`_'
-    homepage_url_rst = f'`{project_prefix} <https://grscheller.github.io/{pypi_prefix}/>`_'
-
+    homepage_url_rst = (
+        f'`{project_prefix} <https://grscheller.github.io/{pypi_prefix}/>`_'
+    )
 else:
     sys.exit('Error: gen_conf.py takes exactly 4 arguments')
 
+release = f'{version}'
 match build_type:
+    case 'curr_release':
+        release_string = f'**Current PyPI release {release}**'
     case 'devel':
-        release = f'{version}'
-        release_string = f'**Proposed PyPI release version {release}**'
-    case 'release':
-        release = f'{version}'
-        release_string = f'**PyPI release version {release}**'
+        release_string = f'**Proposed PyPI release {release}**'
+    case 'prev_release':
+        release_string = (
+            f'**Last PyPI release {release} from previous rolling release**'
+        )
     case _:
         sys.exit(f'Error: unknown built_type {build_type} given')
 
@@ -41,23 +45,6 @@ author = '{author}'
 copyright = '{copyright}'
 release = '{release}'
 release_string = '{release_string}'
-
-def skip_abc_methods(
-    app: Any, what: str, name: str, obj: Any, skip: bool, options: Any
-) -> bool:
-    if name in [
-        '__init_subclass__',
-        '__subclasshook__',
-        '__class_getitem__',
-        '__weakref__',
-    ]:
-        return True  # Skip these members
-    return skip
-
-
-def setup(app: Sphinx) -> None:
-    app.connect('autodoc-skip-member', skip_abc_methods)
-
 
 extensions = [
     'sphinx.ext.autodoc',

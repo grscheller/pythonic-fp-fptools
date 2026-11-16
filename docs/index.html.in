@@ -177,19 +177,13 @@
 
     <div class="builds">
       <a class="build" href="curr_release/">
-        <span class="name">Current Rolling Release documentation</span>
+        <span class="name">Current release documentation</span>
         <span class="version">pythonic-fp-@PYPINAME@ @CURR_RELEASE@</span>
         <span class="note">Documents the latest PyPI version for the current
           rolling release.</span>
       </a>
-      <a class="build" href="devel/">
-        <span class="name">Development documentation</span>
-        <span class="version">pythonic-fp-@PYPINAME@ @DEVEL@</span>
-        <span class="note"> Proposed documentation for the next PyPI release. Built
-          from the tip of the <code>main</code> branch.</span>
-      </a>
       <a class="build" href="prev_release/">
-        <span class="name">Previous Rolling Release documentation</span>
+        <span class="name">Previous release documentation</span>
         <span class="version">pythonic-fp-@PYPINAME@ @PREV_RELEASE@</span>
         <span class="note">Documents the last PyPI version from the previous rolling release.</span>
       </a>
